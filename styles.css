@@ -1,0 +1,33 @@
+
+
+p.source {
+	font-size: 8pt;
+	font-family: Lucidatypewriter, monospace;
+	fill:#6b6b6d;
+}
+
+g.xaxis,
+g.yaxis {
+	font-family: Lucidatypewriter, monospace;
+	font-size: 8pt;
+}
+
+text.title {
+	font-size: 17pt;
+	font-family: Lucidatypewriter, monospace;
+}
+
+text.subtitle {
+	font-size: 13pt;
+	font-family: Lucidatypewriter, monospace;
+	fill:#6b6b6d;
+}
+
+text.ltext,
+text.xText,
+text.yText {
+  	font-size: 10pt;
+  	font-family: Lucidatypewriter, monospace;
+  	fill: #2d2e2e;
+  	font-style: italic;
+}
