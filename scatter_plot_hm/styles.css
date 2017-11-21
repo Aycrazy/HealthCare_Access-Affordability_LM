@@ -3,7 +3,7 @@ text.year {
     font-family: monospace;
     pointer-events: none;
 }
-#chart {
+#controls {
     position: absolute;
     top: 15px; right: 15px;
 }
