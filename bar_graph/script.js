@@ -12,32 +12,48 @@ var svg = d3.select('#chart')
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-var xScale = d3.scaleBand()
-  .rangeRound([0,width])
-  .padding(0.1);
-
-var yScale = d3.scaleLinear()
-  .rangeRound([height,0]);
-
-var color = d3.scaleOrdinal()
-  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+options = {state: "all"}
+options.state = d3.selectAll(("input[name='all-each']")).on("change", function() {console.log(this.value)})
+//var radio = document.getElementByID("all-each").value;
+//var radio = d3.selectAll(("input[name='all-each']")).on("change", function() {console.log(this.value)})
 
 d3.json("bar_graph_data.json", function(d) {  
-  dataset = d;
+  all = d.filter(function(d) {return d.state == "all"; });
+  Illinois = d.filter(function(d) {return d.state == "Illinois"; });
+  Indiana = d.filter(function(d) {return d.state == "Indiana"; });
+  Michigan = d.filter(function(d) {return d.state == "Michigan"; });
+  Wisconsin = d.filter(function(d) {return d.state == "Wisconsin"; });
+  //pleasework = d3.selectAll(("input[name='all-each']")).on("change", function() {console.log(this.value)});
+  ///console.log(pleasework)
+
+  dataset = Illinois;
+  //if (this.value == "Illinois") {
+  //  dataset = Illinois;
+ // }
+
   console.log(dataset);
   makeBarGraph();
 });
 
 function makeBarGraph() {
   // set up scales
-  var yMaxDomain = d3.max(dataset, function(d){return d.health_status;});
-      xScale.domain(dataset.map(function(d) {return d.range_income; }));
-      yScale.domain([0, yMaxDomain]);
-      x1Scale = d3.scaleBand()
+var xScale = d3.scaleBand()
+  .rangeRound([0,width])
+  .padding(0.1)
+  .domain(dataset.map(function(d) {return d.range_income; }));
+
+var x1Scale = d3.scaleBand()
         .rangeRound([0, xScale.bandwidth()])
         .domain(dataset.map(function(d) { return d.year;}));
+
+var yScale = d3.scaleLinear()
+  .rangeRound([height,0])
+  .domain([0, d3.max(dataset, function(d){return d.health_status;})]);
+
+var color = d3.scaleOrdinal()
+  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
   // draw x axis
   svg.append("g")
@@ -79,7 +95,7 @@ function makeBarGraph() {
   svg.selectAll("bar")
     .data(dataset)
     .enter().append("rect")
-    .filter(function(d) {return d.state == "all"; })
+    //.filter(function(d) {return d.state == "all"; })
       .attr("x", function(d) {return (xScale(d.range_income)+x1Scale(d.year)); })
       .attr("y", function(d) {return yScale(d.health_status); })
       .attr("width", x1Scale.bandwidth())
@@ -94,6 +110,7 @@ function makeBarGraph() {
         })
       .on("mouseout", function(d){ tooltip.style("display", "none");});
 
+// create 2013 legend
 var legend1 = svg.append('g')
   .attr('class', 'legend')
     .attr('height', 100)
@@ -116,7 +133,7 @@ var legend1 = svg.append('g')
     .attr('class', 'ltext')
     .text('2013')
 
-// create the legend for not the lowest uninsured rate
+// create the 2014 legend
 var legend2 = svg.append('g')
   .attr('class', 'legend')
     .attr('height', 100)
@@ -139,6 +156,7 @@ var legend2 = svg.append('g')
     .attr('class', 'ltext')
     .text('2014')
 
+// create the 2015 legend
 var legend3 = svg.append('g')
   .attr('class', 'legend')
     .attr('height', 100)
@@ -160,4 +178,5 @@ var legend3 = svg.append('g')
     .attr('y', height + 73)
     .attr('class', 'ltext')
     .text('2015')
+
 };
