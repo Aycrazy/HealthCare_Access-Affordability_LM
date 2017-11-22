@@ -1,3 +1,9 @@
+h1,h3
+ { 
+ 	font-family: Lucidatypewriter, monospace;}
+ 	
+p{
+ font-family: Lucidatypewriter, monospace;}
 text { fill: #333; }
 text.year {
     font-family: monospace;
