@@ -1,9 +1,0 @@
-text { fill: #333; }
-text.year {
-    font-family: monospace;
-    pointer-events: none;
-}
-#chart {
-    position: absolute;
-    top: 15px; right: 15px;
-}
