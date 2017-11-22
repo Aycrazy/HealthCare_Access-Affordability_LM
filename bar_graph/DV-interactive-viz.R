@@ -33,10 +33,10 @@ hs_statelevel <- aggregate(health_status ~ range_income + year, countyhealthinfo
 pop_statelevel <- aggregate(num_18plus ~ range_income + year, countyhealthinfo, sum)
 
 # join heath status and population over 18 dfs
-countyhealthinfo_meh <- join(hs_statelevel, pop_statelevel)
-countyhealthinfo_meh$state <- "state"
+countyhealthinfo_overallagg <- join(hs_statelevel, pop_statelevel)
+countyhealthinfo_overallagg$state <- "all"
 countyhealthinfo_aj <- join(hs_countyhealthinfo, pop_countyhealthinfo)
-countyhealthinfo_maybe <- bind_rows(countyhealthinfo_aj, countyhealthinfo_meh)
+countyhealthinfo_overallandstate <- bind_rows(countyhealthinfo_aj, countyhealthinfo_overallagg)
 
 # write the json
-write_json(countyhealthinfo_aj, "C:\\Users\\Alix\ Gates\\Documents\\GitHub\\group_project\\HealthCare_Access-Affordability_LM\\bar_graph_data.json")
+write_json(countyhealthinfo_overallandstate, "C:\\Users\\Alix\ Gates\\Documents\\GitHub\\group_project\\HealthCare_Access-Affordability_LM\\bar_graph_data.json")

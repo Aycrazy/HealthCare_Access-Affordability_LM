@@ -22,6 +22,8 @@ var yScale = d3.scaleLinear()
 var color = d3.scaleOrdinal()
   .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
+var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
 d3.json("bar_graph_data.json", function(d) {  
   dataset = d;
   console.log(dataset);
@@ -71,17 +73,26 @@ function makeBarGraph() {
   svg.append('text')
     .attr('transform', 'translate(' + (-40) + ' ,' + (-35) + ')')
     .attr('class', 'title')
-    .text('Income Level, State/County, Year, and Population Size')
+    .text('Income Level, and Year')
 
       // add bars
   svg.selectAll("bar")
     .data(dataset)
     .enter().append("rect")
-    .attr("x", function(d,i) {return (xScale(d.range_income)+x1Scale(d.year)); })
-    .attr("y", function(d) {return yScale(d.health_status); })
-    .attr("width", x1Scale.bandwidth())
-    .attr("height", function(d) { return height - yScale(d.health_status); })
-    .attr("fill", function(d,i) { return color(d.year); });
+    .filter(function(d) {return d.state == "all"; })
+      .attr("x", function(d) {return (xScale(d.range_income)+x1Scale(d.year)); })
+      .attr("y", function(d) {return yScale(d.health_status); })
+      .attr("width", x1Scale.bandwidth())
+      .attr("height", function(d) { return height - yScale(d.health_status); })
+      .attr("fill", function(d) { return color(d.year); })
+      .on("mousemove", function(d){
+            tooltip
+              .style("left", d3.event.pageX - 50 + "px")
+              .style("top", d3.event.pageY - 70 + "px")
+              .style("display", "inline-block")
+              .html("year: " + (d.year) + "<br>" + "health status: "  + "<br>" + (d.health_status)  + "%" + "<br>" + "population size: "  + "<br>" + (d.num_18plus) + "<br>" + "state: " + "<br>" + (d.state));
+        })
+      .on("mouseout", function(d){ tooltip.style("display", "none");});
 
 var legend1 = svg.append('g')
   .attr('class', 'legend')

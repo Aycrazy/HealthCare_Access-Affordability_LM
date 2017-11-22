@@ -31,3 +31,16 @@ text.yText {
   	fill: #2d2e2e;
   	font-style: italic;
 }
+
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  padding: 5px;
+  font-size: 8pt;
+  font-family: Lucidatypewriter, monospace;
+  fill: #2d2e2e;
+  font-style: italic;
+}
