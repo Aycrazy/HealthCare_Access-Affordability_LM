@@ -11,8 +11,13 @@
 		<h1>Exploding Bubble Chart of Average Premium Price Post ACA</h1>
 		<h3>The size of the bubble indicates the relative percentage of plans that were purchased with Advanced Premium Tax Credit</h3>
 		<div class="container">
-			<script type="text/javascript" src = "./script.js"></script>
-	  	<div id="chart"><script type="text/javascript" src = "./script.js"></script>
+			<div id="controls">
+		    <button id="explode">Explode All</button>
+		    <button id="collapse">Collapse</button>
+		    <button id="reset">Reset</button>
+		  </div>
+	  	<div id="chart">
+	  		<script type="text/javascript" src = "./script.js"></script>
 	  	</div>
 	  <p id = 'source'> Source: Health.Data.Gov, https://github.com/hrecht/marketplace-data for rating areas csv, CMS Public Use Files</p>
 
