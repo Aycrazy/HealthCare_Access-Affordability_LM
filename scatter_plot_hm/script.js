@@ -33,7 +33,7 @@ var yAxis = d3.axisLeft()
 						.scale(y);
 var dataset;
 
-var f = d3.format(".2f")
+var f = d3.format(".3f")
 
 var yearLabel = svg.append('text')
     .attr('class', 'year')
@@ -55,7 +55,7 @@ function initialize(error, data) {
   	//could the issue be here?
     x.domain([200, d3.max(data, function (d) { return d.avg_silver_27 })]).nice()
     y.domain([0, 400000]).nice()
-    r.domain([0, 100])
+    r.domain([0.0, 100.0])
    
    console.log(r(0));
 
@@ -70,9 +70,11 @@ function initialize(error, data) {
     data.forEach(function (d) {
         d.values.forEach(function (e) {
             e.total_plan_selections = d3.sum(e.values, function (f) { return f.total_plan_selections })
-            e.yes_aptc = +d3.sum(e.values, function (f) { 
-                return f.yes_aptc/f.total_plan_selections
-            })/+e.values.length
+            //e.yes_aptc = +d3.sum(e.values, function (f) { 
+            //    return f.yes_aptc/f.total_plan_selections
+            //})/+e.values.length
+            e.yes_aptc =   d3.sum(e.values , function (f) {
+                return f.yes_aptc})
             e.avg_silver_27 = +d3.sum(e.values, function (f) {
                 return f.avg_silver_27
             })/+e.values.length
@@ -165,10 +167,11 @@ function initialize(error, data) {
 
       d3.select('#reset')
       .on('click', function () {
+
           yearIndex = 0
           year = 2015
           update()
-            d3.interval(incrementYear, interval)
+            //d3.interval(incrementYear, interval)
           console.log(yearIndex,'reset worked');
       })
 
@@ -192,6 +195,7 @@ function initialize(error, data) {
         //    return 10*i;
         //})
         .style('fill', function (d) { return color(d.key) })
+        .style('opacity','.7')
         .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
         .append('title').text(function (d) { return d.key })
 
@@ -199,7 +203,7 @@ function initialize(error, data) {
     d3.interval(incrementYear, interval)
     
     function incrementYear() {
-            if(year < 2017){ console.log(years.length, 'years length');
+        if(year < 2017){ console.log(years.length, 'years length');
         year = '' + years[++yearIndex >= years.length ? yearIndex = 0 : yearIndex]
         console.log(year,'year');
         update()
@@ -208,13 +212,16 @@ function initialize(error, data) {
     }
     
     function update() {
-        console.log(year,"year in update()")
-        yearLabel.transition().duration(0).delay(interval / 2).text(year)
+
+        yearLabel.transition().duration(0).delay(interval/2).text(year)
+    
+
+
         states = states.data(
             data.find(function (d) { return d.key === year }).values,
             function (d) { console.log(d,"updating data for states"); return d.key }
         )
-/*
+
         var counties = states.selectAll('.county')
             .data(function (d) { return d.values }, function (d) { return d.county_name })
 
@@ -230,13 +237,31 @@ function initialize(error, data) {
         enterCounties.append('title').text(function (d) { return d.county_name })
 
         counties = counties.merge(enterCounties)
+
+        console.log(counties,'counties after merge');
+
+/*        var t = function(year) {
+            if(year == 2015){ 
+                    return
+                    d3.transition()
+                    .ease(d3.easeLinear)
+                     .duration(0)
+                    }
+                else{
+                    return 
+                    d3.transition()
+                    .ease(d3.easeLinear)
+                     .duration(interval)
+                }
+            }
 */
-        var t = d3.transition()
-            .ease(d3.easeLinear)
-            .duration(interval)
+        var t =  d3.transition()
+                    .ease(d3.easeLinear)
+                     .duration(interval)
 
         console.log("before selecting .aggregate");
         console.log(exploded,"exploded")
+
         states.select('.aggregate')
             .transition(t)
             .attr('r', function (d) { 
@@ -244,26 +269,37 @@ function initialize(error, data) {
                 console.log(d.key) 
                 console.log(exploded.has(d.key))
                 console.log(d.yes_aptc/d.total_plan_selections*100)
-                console.log(f(d.yes_aptc/d.total_plan_selections*100))
-                console.log(r(f(d.yes_aptc/d.total_plan_selections*100)))
-                var retval = exploded.has(d.key) ? 0 : r(f(d.yes_aptc/d.total_plan_selections*20000000));
+                console.log(f(d.yes_aptc/d.total_plan_selections*100), 'better?')
+                //console.log(r(f(d.yes_aptc/d.total_plan_selections*20000000)),'huge #')
+                var retval = exploded.has(d.key) ? 0 : r(f(d.yes_aptc/d.total_plan_selections*100));
                 return retval
                 //console.log(retval,"retval");
                 //return retval;
             })
             .attr('cx', function (d) { return x(d.avg_silver_27) })
             .attr('cy', function (d) { return y(d.total_plan_selections) })
+
         console.log("after selecting .aggregate");
-/*
+
         counties
             .transition(t)
             //.attr('r', function (d) {  return r(f(d.yes_aptc/d.total_plan_selections)*100)})
-            .attr('r', function (d) { console.log(d,"looping through counties");  return r(f(d.yes_aptc/d.total_plan_selections)*10)})
+            .attr('r', function (d) { 
+                // console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc,'mystery value');
+                // console.log(d.parent.yes_aptc, d.parent, 'parent')
+                // console.log(r(f(
+                // d.yes_aptc/(exploded.has(d.state_name) ? d : d.parent).yes_aptc))*100,"looping through counties");
+
+              return 
+                r(f(d.yes_aptc/(exploded.has(d.state_name) ? d : d.parent).yes_aptc)*100)
+               
+           })
+
             .attr('cx', function (d) { return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
             .attr('cy', function (d) { return y((exploded.has(d.state_name) ? d : d.parent).total_plan_selections) })
             //.attr('cx',function(d,i) {return i*10})
             //.attr('cy',function(d,i) {return i*10})
-*/
+
 
         blurValues
             .transition(t)
