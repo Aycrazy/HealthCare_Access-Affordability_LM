@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8">
+	<head>
+		<title>Impact of the ACA on Lake Michigan States</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript" src="d3/d3.min.js"></script>
+
+	</head>
+	<body>
+		<h1>Bump Chart Displaying Change in Rankings of Uninsured by State/County</h1>
+		<div class="container">
+			<div id ='radio'>
+		<label class='radio-inline'>
+			<input type="radio" id = "all" name="all-each" value="all" onclick="changeState(this.value)"> all
+		</label>
+		<label class='radio-inline'>
+			<input type="radio" id = "Illinois" name="all-each" value="Illinois" onclick="changeState(this.value)"> Illinois
+		</label>
+		<label class='radio-inline'>
+			<input type="radio" id = "Indiana" name="all-each" value="Indiana" onclick="changeState(this.value)"> Indiana
+		</label>
+		<label class='radio-inline'>
+			<input type="radio" id = "Michigan" name="all-each" value="Michigan" onclick="changeState(this.value)"> Michigan
+		</label>
+		<label class='radio-inline'>
+			<input type="radio" id = "Wisconsin" name="all-each" value="Wisconsin" onclick="changeState(this.value)"> Wisconsin
+		</label>
+		
+	  	<div id="chart">
+	  		<script type="text/javascript" src = "./script.js"></script>
+	  	</div>
+	  <p id = 'source'> Source: County Health Rankings</p>
+	  <p id = 'attribution'> Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a </p>
+	  </div>
+
+	</body>
+</html>
