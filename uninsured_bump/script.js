@@ -6,17 +6,21 @@ var margin = { top: 35, right: 0, bottom: 30, left: 70 };
 var width = 960 - margin.left - margin.right;
 var height = 800 - margin.top - margin.bottom;
 
-options = {State: "Illinois"}
+options = {state: "Illinois"}
 //Load in JSON Data
 
 d3.json('bump_chart_data.json', function(d){
-		dataset = d.filter(function(d) {return d.State == options.State; });
+		dataset = d.filter(function(d) {return d.State == options.state; });
     console.log(dataset);
+
     makeBumpChart(dataset);
  });
 
 function makeBumpChart(data){
 	
+	d3.select('body')
+		.append('div')
+		.attr('id','chart')
 
 	console.log(data);
 
@@ -47,12 +51,15 @@ function makeBumpChart(data){
     d['class'] = d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'');
      })
 
+
+
   var chart = d3.select('#chart')
     .append('svg')
     .attr('width', width + margin.left + margin.top)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
 
   ///////////////////////
   // Scales
@@ -68,6 +75,13 @@ function makeBumpChart(data){
       .domain(d3.extent(data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
+  // /
+  
+  var color = d3.scaleThreshold()
+    .domain([0, 25000, 50000, 75000, 100000])
+    .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
+
+  //console.log(d3.extent(data, function(d) { return d.position; }));
   ///////////////////////
   // Axis
   var xAxis = d3.axisBottom(x);
@@ -78,6 +92,8 @@ function makeBumpChart(data){
       .attr("class", "x axis")
       .attr("transform", "translate(-"+ x.bandwidth()/2.0 +"," + height + ")")
       .call(xAxis);
+
+  console.log('worked2');
 
   chart.append("g")
       .attr("class", "y axis")
@@ -112,29 +128,32 @@ function makeBumpChart(data){
         .attr("d", line);
   });
 
+
   ///////////////////////
   // Nodes
   var node = chart.append("g")
-    .selectAll("circle")
+    .selectAll("text")
     .data(data)
-    .enter().append("circle")
+    .enter().append("text")
     .attr("class", "uninsured")
-    .attr("cx", function(d) { return x(d['year']); })
-    .attr("cy", function(d) { return y(d['position']); })
-    .attr('fill', 'blue')
+    .text( function(d){ return d.County;})
+    .attr("x", function(d) { return x(d['year'])-15; })
+    .attr("y", function(d) { return y(d['position']); })
+    .style('fill',function(d) { console.log(d.median_income,color(d.median_income));
+    	return color(d.median_income)})
     // replace spaces with - and remove '.' (from d.c. united)
     .attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
-    .attr("r", 3)
-    //.attr("r", function(d) { return size(d['goals_for']) })
-    .attr("stroke-width", .3)
-    .attr('opacity', '0.6');
+    .attr("font-family", 'monospace')
+    .attr('font-size', '8px')
+    //.attr("stroke-width", .3)
+    .attr('opacity', '0.8');
 
 	///////////////////////
 	  // Tooltips
 	  var tooltip = d3.select("body").append("div")
 	      .attr("class", "tooltip");
 
-	  chart.selectAll("circle")
+	  chart.selectAll("text")
 	      .on("mouseover", function(d) {
 	        chart.selectAll('.' + d['class'])
 	            .classed('active', true);
@@ -163,11 +182,24 @@ function makeBumpChart(data){
 	              return !d3.select(this).classed('click-active');
 	            });
 	      })
-	  };
+
+				};
 
 function changeState(value){
+	
+	// console.log(value);
+	chart.remove()
+	
+	d3.select('body')
+		.append('div')
+		.attr('#chart')
+
   options.state = value;
+
   d3.json("bump_chart_data.json", function(d) {  
-    dataset = d.filter(function(d) {return d.State == options.State; });
-    makeBumpChart(dataset);
-});};
+    dataset = d.filter(function(d) {return d.State == options.state; });
+  makeBumpChart(dataset);
+	});
+}
+
+

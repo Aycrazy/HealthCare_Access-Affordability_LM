@@ -63,7 +63,6 @@ ui_17<- read_xls('2017CountyHealthRankingsData.xls', sheet='Ranked Measure Data'
 uni_all_years <- rbind(ui_10, ui_11, ui_12, ui_13, ui_14, ui_15, ui_16, ui_17)
 
 subset(uni_all_years, !is.na(County)) %>%
-    subset(uni_all_years, !is.na(County)) %>%
     toJSON() %>%
     write_lines('~/Documents/uninsured_bump/bump_chart_data.json')
 
