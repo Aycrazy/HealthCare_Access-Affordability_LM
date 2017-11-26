@@ -379,7 +379,7 @@ function makeBumpChartState(data){
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 2)
-        .attr("stroke-opacity", 0.1)
+        .attr("stroke-opacity", 0.4)
         .attr("d", line);
   });
 
