@@ -56,7 +56,7 @@ function makeBumpChart(data){
   var chart = d3.select('#chart')
     .append('svg')
     .attr('width', width + margin.left + margin.top)
-    .attr('height', height + margin.top + margin.bottom)
+    .attr('height', height + margin.top*3 + margin.bottom*3)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -194,13 +194,13 @@ function makeBumpChart(data){
 
 
 
-by_year.forEach(function (d){
+	  	by_year.forEach(function (d){
 	  		by_year_median_income.push([d3.max(d.values,function(e){
-	  				return e['Uninsured'];}),
+	  				return e['% Uninsured'];}),
 	  		d3.max(d.values,function(e){
 	  				return e.year;}),
 	  		d3.min(d.values,function(e){
-	  				return e['Uninsured'];})])
+	  				return e['% Uninsured'];})])
 	  		//return d.median_income
 	  	});
 
@@ -214,22 +214,23 @@ by_year.forEach(function (d){
 				.data(by_year_median_income)
 				.enter()
 				.append("text")
-  			.attr("x", function (d){ return x(d[1]);})
-  			.attr("height", margin.top)
-  			.text(function (d){return d[0];})
-  			.style('font-size', '14px')
-  			.style('font-weight','bold')
-  			.style('font-family','monospace')
+				.attr("x", function (d){ return x(d[1]);})
+				.attr("height", -10)
+				.text(function (d){return d[2];})
+				.style('font-size', '14px')
+				.style('font-weight','bold')
+				.style('font-family','monospace')
+				.call(xAxis)
 
-		chart.append("g")
+				chart.append("g")
 				.selectAll("text")
 				.data(by_year_median_income)
 				.enter()
 				.append("text")
   			.attr("x", function (d){ return x(d[1]);})
   			//.attr('transform', 'translate( 0,0)')
-  			.attr("y", height+margin.bottom)
-  			.text(function (d){ console.log(d[2]); return d[2];})
+  			.attr("y", height+margin.bottom*1.25)
+  			.text(function (d){ return d[0];})
   			.style('font-size', '14px')
   			.style('font-family','monospace')
   			.style('font-weight','bold')
@@ -238,7 +239,7 @@ by_year.forEach(function (d){
 			chart.append("text")
 			.attr("x",  width/12)
 			//.attr('transform', 'translate( 0,0)')
-			.attr("y", height+margin.bottom*2)
+			.attr("y", height+margin.bottom*3)
 			.text('Source: Source: County Health Rankings')
 			.style('font-size', '14px')
 			.style('font-family','monospace')
@@ -247,12 +248,27 @@ by_year.forEach(function (d){
 			chart.append("text")
 			.attr("x",  width/12)
 			//.attr('transform', 'translate( 0,0)')
-			.attr("y", height+margin.bottom*3)
+			.attr("y", height+margin.bottom*4)
 			.text('Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a')
 			.style('font-size', '14px')
 			.style('font-family','monospace')
 			.append("text")
-					
+
+			chart.append("text")
+			.attr("x",  (width-margin.left*2)/2 )
+			.attr("y", -15)
+			.text('Lowest % Uninsured')
+			.style('font-size', '14px')
+			.style('font-family','monospace')
+			.append("text")
+
+			chart.append("text")
+			.attr("x",  (width-margin.left*2)/2 )
+			.attr("y", height+margin.bottom*2)
+			.text('Highest % Uninsured')
+			.style('font-size', '14px')
+			.style('font-family','monospace')
+			.append("text")
 					};
 
 function makeBumpChartState(data){
@@ -495,7 +511,7 @@ function makeBumpChartState(data){
 			chart.append("text")
 			.attr("x",  (width-margin.left*2)/2 )
 			.attr("y", -15)
-			.text('Highest % Uninsured')
+			.text('Lowest % Uninsured')
 			.style('font-size', '14px')
 			.style('font-family','monospace')
 			.append("text")
@@ -503,7 +519,7 @@ function makeBumpChartState(data){
 			chart.append("text")
 			.attr("x",  (width-margin.left*2)/2 )
 			.attr("y", height+margin.bottom*2)
-			.text('Lowest % Uninsured')
+			.text('Highest % Uninsured')
 			.style('font-size', '14px')
 			.style('font-family','monospace')
 			.append("text")
