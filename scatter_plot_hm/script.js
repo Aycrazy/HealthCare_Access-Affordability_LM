@@ -22,6 +22,8 @@ var x = d3.scaleLinear()
 				.range([0, width]);
 var y = d3.scaleLinear()
 				.range([height, 0]);
+var y_alt = d3.scaleLinear()
+                .range([height, 0]);
 var r = d3.scaleLinear()
 				.range([0, 50]);
 var color = d3.scaleOrdinal()
@@ -35,6 +37,8 @@ var dataset;
 
 var f = d3.format(".3f")
 
+var first_time = true;
+
 var yearLabel = svg.append('text')
     .attr('class', 'year')
     .attr('x', width / 2)
@@ -43,49 +47,48 @@ var yearLabel = svg.append('text')
     .style('font-size', width / 3)
     .style('text-anchor', 'middle')
     .style('font-weight', 'bold')
-    .style('opacity', 0.2)
+    .style('opacity', 0.4)
     .text('2015');
 
 
 d3.json("scatter_area_data.json", initialize);
 
-function initialize(error, data) {
+function initialize(error, data,first_time) {
     if (error) { throw error }
 
   	//could the issue be here?
     x.domain([200, d3.max(data, function (d) { return d.avg_silver_27 })]).nice()
     y.domain([0, 400000]).nice()
-    r.domain([0.0, 100.0])
+    y_alt.domain([4,400000])
+    r.domain([0.00, 100.00])
    
    console.log(r(0));
 
     console.log(f(d3.max(data.map(function (d) { 
     	return d.yes_aptc/d.total_plan_selections})))*100, 'mad max');
 
-    data = d3.nest()
-        .key(function (d) { return d.year })
-        .key(function (d) { return d.state_name })
-        .entries(data)
+    if(first_time = true){
+        data = d3.nest()
+            .key(function (d) { return d.year })
+            .key(function (d) { return d.state_name })
+            .entries(data)
 
-    data.forEach(function (d) {
-        d.values.forEach(function (e) {
-            e.total_plan_selections = d3.sum(e.values, function (f) { return f.total_plan_selections })
-            //e.yes_aptc = +d3.sum(e.values, function (f) { 
-            //    return f.yes_aptc/f.total_plan_selections
-            //})/+e.values.length
-            e.yes_aptc =   d3.sum(e.values , function (f) {
-                return f.yes_aptc})
-            e.avg_silver_27 = +d3.sum(e.values, function (f) {
-                return f.avg_silver_27
-            })/+e.values.length
-            e.values.forEach(function (f) { f.parent = e })
+        data.forEach(function (d) {
+            d.values.forEach(function (e) {
+                e.total_plan_selections = d3.sum(e.values, function (f) { return f.total_plan_selections })
+                e.yes_aptc =   d3.sum(e.values , function (f) {
+                    return f.yes_aptc})
+                e.avg_silver_27 = +d3.sum(e.values, function (f) {
+                    return f.avg_silver_27
+                })/+e.values.length
+                e.values.forEach(function (f) { f.parent = e })
 
+            })
         })
-    })
+    }
 
-    //var max_total_plan_selection = d3.max(data[3].values, function (d) { return d.total_plan_selections })
-    
     console.log(data);
+    dataset = data 
 
     var uniqueStates = data[0].values.map(function (d) { console.log(d,'unique'); return d.key });
 
@@ -169,10 +172,29 @@ function initialize(error, data) {
       .on('click', function () {
 
           yearIndex = 0
-          year = 2015
-          update()
-            //d3.interval(incrementYear, interval)
+          year = '2015'
           console.log(yearIndex,'reset worked');
+          first_time=false;
+          var states = svg.selectAll('.state')
+                    .data(data[0].values)
+                    .enter().append('g')
+                    .attr('class', 'state')
+
+    console.log("HERE")
+
+
+    states.append('circle')
+        .attr('class', 'aggregate')
+        .attr('cx', width/2)
+        .attr('cy', height / 2)
+
+        .style('fill', function (d) { return color(d.key) })
+        .style('opacity','.9')
+        .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
+        .append('title').text(function (d) { return d.key })
+
+        update()
+
       })
 
    console.log(data,"data before year");
@@ -181,7 +203,6 @@ function initialize(error, data) {
                     .data(data[0].values)
                     .enter().append('g')
                     .attr('class', 'state')
-                    //.style('filter', function (d) { return 'url(#gooeyCodeFilter-' + d.key.replace(' ', '-') + ')' })
 
     console.log("HERE")
     //console.log(years);
@@ -191,11 +212,8 @@ function initialize(error, data) {
         .attr('class', 'aggregate')
         .attr('cx', width/2)
         .attr('cy', height / 2)
-        //.attr('r',function(d,i) {
-        //    return 10*i;
-        //})
         .style('fill', function (d) { return color(d.key) })
-        .style('opacity','.7')
+        .style('opacity','.9')
         .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
         .append('title').text(function (d) { return d.key })
 
@@ -207,6 +225,8 @@ function initialize(error, data) {
         year = '' + years[++yearIndex >= years.length ? yearIndex = 0 : yearIndex]
         console.log(year,'year');
         update()
+        
+
         }
         //make a button to reset
     }
@@ -232,7 +252,7 @@ function initialize(error, data) {
             .attr('cx', width / 2)
             .attr('cy', height / 2)
             .style('fill', function (d) { return color(d.state_name) })
-            .on('click', function (d) { exploded.remove(d.state_name); blurTransition.add(d.state_name) })
+            .on('click', function (d) { exploded.remove(d.state_name); blurTransition.add(d.state_name);})
 
         enterCounties.append('title').text(function (d) { return d.county_name })
 
@@ -240,24 +260,10 @@ function initialize(error, data) {
 
         console.log(counties,'counties after merge');
 
-/*        var t = function(year) {
-            if(year == 2015){ 
-                    return
-                    d3.transition()
-                    .ease(d3.easeLinear)
-                     .duration(0)
-                    }
-                else{
-                    return 
-                    d3.transition()
-                    .ease(d3.easeLinear)
-                     .duration(interval)
-                }
-            }
-*/
         var t =  d3.transition()
                     .ease(d3.easeLinear)
-                     .duration(interval)
+                    .duration(100)
+                     .delay(interval/2)
 
         console.log("before selecting .aggregate");
         console.log(exploded,"exploded")
@@ -265,11 +271,6 @@ function initialize(error, data) {
         states.select('.aggregate')
             .transition(t)
             .attr('r', function (d) { 
-                console.log(d,"inside .aggregate");
-                console.log(d.key) 
-                console.log(exploded.has(d.key))
-                console.log(d.yes_aptc/d.total_plan_selections*100)
-                console.log(f(d.yes_aptc/d.total_plan_selections*100), 'better?')
                 //console.log(r(f(d.yes_aptc/d.total_plan_selections*20000000)),'huge #')
                 var retval = exploded.has(d.key) ? 0 : r(f(d.yes_aptc/d.total_plan_selections*100));
                 return retval
@@ -284,19 +285,26 @@ function initialize(error, data) {
         counties
             .transition(t)
             //.attr('r', function (d) {  return r(f(d.yes_aptc/d.total_plan_selections)*100)})
-            .attr('r', function (d) { 
-                // console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc,'mystery value');
-                // console.log(d.parent.yes_aptc, d.parent, 'parent')
-                // console.log(r(f(
-                // d.yes_aptc/(exploded.has(d.state_name) ? d : d.parent).yes_aptc))*100,"looping through counties");
+           //  .attr('r', function (d) { 
+           //      // console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc,'mystery value');
+           //      // console.log(d.parent.yes_aptc, d.parent, 'parent')
+           //      console.log((exploded.has(d.state_name) ? d : d.parent).county_name, (exploded.has(d.state_name) ? d : d.parent).state_name);
+           //      console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
+           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000,d.county_name,"looping through counties");
 
-              return 
-                r(f(d.yes_aptc/(exploded.has(d.state_name) ? d : d.parent).yes_aptc)*100)
+           //    return 
+           //      r(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
+           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000))
                
-           })
-
-            .attr('cx', function (d) { return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
-            .attr('cy', function (d) { return y((exploded.has(d.state_name) ? d : d.parent).total_plan_selections) })
+           // })
+            .attr('r', 10)
+            .attr('cx', function (d) {
+                //console.log((exploded.has(d.state_name) ? d : d.parent));
+                return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
+            .attr('cy', function (d) {
+                //console.log(x((exploded.has(d.state_name) ? d : d.parent).values),'county_plans')}
+                return y((exploded.has(d.state_name) ? d: d.parent).total_plan_selections) })
+            .attr('opacity', .4)
             //.attr('cx',function(d,i) {return i*10})
             //.attr('cy',function(d,i) {return i*10})
 
@@ -317,7 +325,7 @@ function initialize(error, data) {
                 return function () { return blurStable }
             })
 
-     }
+        }
 
 	  };
 
