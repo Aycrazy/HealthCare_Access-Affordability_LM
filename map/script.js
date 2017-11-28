@@ -13,22 +13,31 @@ var zoom = d3.zoom()
 var path = d3.geoPath()
     .projection(projection);
 
-var svg = d3.select("body").append("svg")
+var state_name;
+var state_abbr;
+
+var svg = d3.select("#chart").append("svg")
+    .attr('value',state_name)
     .attr("width", width)
     .attr("height", height)
     .on("click", stopped, true);
 
-svg.append("rect")
-    .attr("class", "background")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", reset);
+var state_name;
+var state_abbr;
+
+var options = {state: "Illinois"}
+
+// svg.append("rect")
+//     .attr("class", "background")
+//     .attr("width", width)
+//     .attr("height", height)
+//     .on("click", reset);
 
 var g = svg.append("g");
 
 d3.json("state_level_geojson.json", function(error, us) {
   if (error) throw error;
-  console.log(us.feautres)
+
   g.selectAll("path")
       .data(us.features)
     .enter().append("path")
@@ -41,6 +50,11 @@ function clicked(d) {
   if (active.node() === this) return reset();
   active.classed("active", false);
   active = d3.select(this).classed("active", true);
+  
+  state_name = d.properties.NAME;
+  state_abbr = d.properties.STUSPS;
+
+  console.log(state_name, state_abbr);
 
   var bounds = path.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
@@ -53,7 +67,9 @@ function clicked(d) {
   svg.transition()
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+
 }
+
 
 function reset() {
   active.classed("active", false);
@@ -74,4 +90,16 @@ function zoomed() {
 function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
+
+// function changeState(value){
+
+//   console.log(state_name);
+//   options.state = value;
+
+//   console.log(options.state);
+
+//   };
+
+
+
 
