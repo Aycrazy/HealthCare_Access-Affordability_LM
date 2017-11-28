@@ -1,70 +1,77 @@
 
-// clickable map code from: http://d3indepth.com/geographic/
-  var geojson = {}
-  var context = d3.select('#content canvas')
-    .node()
-    .getContext('2d');
+var width = 960,
+    height = 500,
+    active = d3.select(null);
 
-  var projection = d3.geoMercator();
+var projection = d3.geoAlbersUsa()
+    .scale(1500);
 
-  var geoGenerator = d3.geoPath()
-    .projection(projection)
-    .context(context);
+var zoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed);
 
-  var state = {
-    clickedLocation: null
-  };
+var path = d3.geoPath()
+    .projection(projection);
 
-  function handleClick() {
-    var pos = d3.mouse(this)
-    state.clickedLocation = projection.invert(pos)
-    update()
-  };
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", stopped, true);
 
-  function initialise() {
-    d3.select('canvas')
-      .on('click', handleClick);
-  };
+svg.append("rect")
+    .attr("class", "background")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", reset);
 
-  function update() {
-    projection.fitExtent([[20, 20], [620, 420]], geojson);
-    context.clearRect(0, 0, 800, 400);
-    geojson.features.forEach(function(d) {
-      if(state.clickedLocation) {
-        if(d3.geoContains(d, state.clickedLocation)) {
-          state_name = d.properties.NAME
-          console.log(state_name)
-        };
-      }
-      context.beginPath();
-      context.fillStyle = state.clickedLocation && d3.geoContains(d, state.clickedLocation) ? 'rgba(77, 182, 172, .5)' : 'rgba(77, 182, 172, .2)';
-      geoGenerator(d);
-      context.fill(); 
-      //context.strokeStyle = state.clickedLocation && d3.geoContains(d, state.clickedLocation) ? 'rgba(77, 182, 172, .5)' : 'rgba(77, 182, 172, .2)';
-      //context.stroke();    
-    })
-  };
+var g = svg.append("g");
 
-  // REQUEST state level DATA
-  d3.json('state_level_geojson.json', function(err, json) {
-    geojson = json;
-    initialise();
-    update();
-  });
+d3.json("state_level_geojson.json", function(error, us) {
+  if (error) throw error;
+  console.log(us.feautres)
+  g.selectAll("path")
+      .data(us.features)
+    .enter().append("path")
+      .attr("d", path)
+      .attr("class", "feature")
+      .on("click", clicked);
+});
 
-  function countyUpdate(counties) {
-    projection.fitExtent([[20, 20], [620, 420]], counties);
+function clicked(d) {
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
 
-    context.lineWidth = 0.5;
-    context.strokeStyle = '#888';
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-    context.beginPath();
-    geoGenerator({type: 'FeatureCollection', features: counties.features})
-    context.stroke();
-  };
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+}
 
-  // REQUEST county level DATA
-  d3.json('county_level_geojson.json', function(err, json) {
-    counties = json;
-    countyUpdate(counties);
-  });
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  svg.transition()
+      .duration(750)
+      .call( zoom.transform, d3.zoomIdentity );
+}
+
+function zoomed() {
+  g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+  g.attr("transform", d3.event.transform); 
+}
+
+// If the drag behavior prevents the default click,
+// also stop propagation so we don’t click-to-zoom.
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+
