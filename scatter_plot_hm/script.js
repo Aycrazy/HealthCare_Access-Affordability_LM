@@ -11,7 +11,7 @@ var width = 960 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
 
 
-var svg = d3.select('#chart')
+var svg = d3.select('#scatterHealthBubbleChart')
     .append('svg')
     .attr('width', width + margin.left + margin.top)
     .attr('height', height + margin.top + margin.bottom)

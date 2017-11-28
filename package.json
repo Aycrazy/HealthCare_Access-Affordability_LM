@@ -1,0 +1,28 @@
+{
+  "name": "healthcare_access_project",
+  "version": "1.0.0",
+  "description": "health care access project following the impact of the ACA on uninsurance rates and the affordability of health insurance, as well as perception of quality of life afterwards",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aycrazy/HealthCare_Access-Affordability_LM.git"
+  },
+  "keywords": [
+    "health",
+    "project",
+    "d3",
+    "v4"
+  ],
+  "author": "Alix Gates and Andrew Yaspan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aycrazy/HealthCare_Access-Affordability_LM/issues"
+  },
+  "homepage": "https://github.com/Aycrazy/HealthCare_Access-Affordability_LM#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
