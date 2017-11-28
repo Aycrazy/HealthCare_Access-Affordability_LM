@@ -1,10 +1,12 @@
+//lots of code from here: https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
 
 var width = 960,
     height = 500,
     active = d3.select(null);
 
-var projection = d3.geoAlbersUsa()
-    .scale(1500);
+var projection = d3.geoMercator()
+    .scale(1900)
+    .center([-90,42.5]);
 
 var zoom = d3.zoom()
     .scaleExtent([1, 8])
@@ -22,24 +24,35 @@ var svg = d3.select("#chart").append("svg")
     .attr("height", height)
     .on("click", stopped, true);
 
-var state_name;
-var state_abbr;
-
 var options = {state: "Illinois"}
 
-// svg.append("rect")
-//     .attr("class", "background")
-//     .attr("width", width)
-//     .attr("height", height)
-//     .on("click", reset);
+// allows user to zoom back out if they click away from the
+ svg.append("rect")
+     .attr("class", "background")
+     .attr("width", width)
+     .attr("height", height)
+     .on("click", reset);
 
-var g = svg.append("g");
+var countyG = svg.append("g"),
+    stateG = svg.append("g");
 
-d3.json("state_level_geojson.json", function(error, us) {
+
+d3.json("county_level_geojson.json", function(error, county) {
   if (error) throw error;
 
-  g.selectAll("path")
-      .data(us.features)
+  countyG.selectAll("path")
+      .data(county.features)
+    .enter().append("path")
+      .attr("d", path)
+      .attr("class", "feature")
+      .on("click", clicked);
+});
+
+d3.json("state_level_geojson.json", function(error, state) {
+  if (error) throw error;
+
+  stateG.selectAll("path")
+      .data(state.features)
     .enter().append("path")
       .attr("d", path)
       .attr("class", "feature")
@@ -77,12 +90,14 @@ function reset() {
 
   svg.transition()
       .duration(750)
-      .call( zoom.transform, d3.zoomIdentity );
+     .call( zoom.transform, d3.zoomIdentity );
 }
 
 function zoomed() {
-  g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-  g.attr("transform", d3.event.transform); 
+  stateG.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+  stateG.attr("transform", d3.event.transform);
+  countyG.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+  countyG.attr("transform", d3.event.transform); 
 }
 
 // If the drag behavior prevents the default click,
