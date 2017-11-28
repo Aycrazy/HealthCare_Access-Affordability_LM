@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
 <head>
   <title>AlixPlayingWithMap</title>
+  <link rel="stylesheet" type="text/css" href="styles.css"/>  
 </head>
-
-<style>
-body {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 14px;
-  color: #333;
-}
-</style>
 
 <body>
   <div id="content">
@@ -18,55 +12,8 @@ body {
     <canvas width="800" height="400"></canvas>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.min.js"></script>
+  <script type="text/javascript" src="./d3/d3.min.js"></script>
+  <script type="text/javascript" src="./script.js"></script>
 
-  <script>
-var geojson = {}
-
-var context = d3.select('#content canvas')
-  .node()
-  .getContext('2d');
-
-var projection = d3.geoMercator();
-
-var geoGenerator = d3.geoPath()
-  .projection(projection)
-  .context(context);
-
-var state = {
-  clickedLocation: null
-}
-
-function handleClick() {
-  var pos = d3.mouse(this)
-  state.clickedLocation = projection.invert(pos)
-  update()
-}
-
-function initialise() {
-  d3.select('canvas')
-    .on('click', handleClick);
-}
-
-function update() {
-  projection.fitExtent([[20, 20], [620, 420]], geojson);
-  context.clearRect(0, 0, 800, 400);
-
-  geojson.features.forEach(function(d) {
-    context.beginPath();
-    context.fillStyle = state.clickedLocation && d3.geoContains(d, state.clickedLocation) ? 'red' : '#aaa';
-    geoGenerator(d);
-    context.fill();
-  })
-}
-
-// REQUEST DATA
-d3.json('state_level.json', function(err, json) {
-  geojson = json;
-  initialise();
-  update();
-})
-
-  </script>
 </body>
 </html>
