@@ -19,7 +19,7 @@ var path = d3.geoPath()
     .projection(projection);
 
 // initialize the state name and abbreviation variables
-var state_name;
+var state_name = 'all';
 var state_abbr;
 
 //create general svg
@@ -30,11 +30,11 @@ var map_svg = d3.select("#map").append("svg")
     .on("click", stopped, true);
 
 // allows user to zoom back out if they click away from the
- map_svg.append("rect")
-     .attr("class", "background")
-     .attr("width", map_width)
-     .attr("height", map_height)
-     .on("click", reset);
+map_svg.append("rect")
+  .attr("class", "background")
+  .attr("width", map_width)
+  .attr("height", map_height)
+  .on("click", reset);
 
 // attaches two separate g layers, one for the county map, one for the state map
 var countyG = map_svg.append("g"),
@@ -66,9 +66,11 @@ d3.json("state_level_geojson.json", function(error, state) {
 
 // when a state is clicked, it zooms in, prints the state name and abbreviation and classifies it as active
 function clicked(d) {
-  if (active.node() === this) return reset();
-  active.classed("active", false);
-  active = d3.select(this).classed("active", true);
+  if (active.node() === this) return reset(); // if you click on the state again, reset the chart.
+  active.classed("active", false); // set active as false
+  active = d3.select(this) // set active as true for clicked instance
+    .classed("active", true);
+    //.on("click", changeState(d.properties.NAME));
   
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
@@ -86,15 +88,21 @@ function clicked(d) {
   map_svg.transition()
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
+
+  active.on("click", changeState(state_name));
 }
 
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
+    //.on("click", changeState('all'));
+  var state_name = 'all';
+  console.log(state_name)
 
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
+  //active.on("click", changeState('all'));
 }
 
 function zoomed() {
