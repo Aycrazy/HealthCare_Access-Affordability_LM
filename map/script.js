@@ -1,42 +1,46 @@
 //lots of code from here: https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
 
-var width = 960,
-    height = 500,
+var map_width = 960,
+    map_height = 500,
     active = d3.select(null);
 
+// make the projection
 var projection = d3.geoMercator()
     .scale(1900)
     .center([-90,42.5]);
 
+// start the zooom
 var zoom = d3.zoom()
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
 
+// make the path
 var path = d3.geoPath()
     .projection(projection);
 
+// initialize the state name and abbreviation variables
 var state_name;
 var state_abbr;
 
-var svg = d3.select("#chart").append("svg")
+//create general svg
+var map_svg = d3.select("#chart").append("svg")
     .attr('value',state_name)
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", map_width)
+    .attr("height", map_height)
     .on("click", stopped, true);
 
-var options = {state: "Illinois"}
-
 // allows user to zoom back out if they click away from the
- svg.append("rect")
+ map_svg.append("rect")
      .attr("class", "background")
-     .attr("width", width)
-     .attr("height", height)
+     .attr("width", map_width)
+     .attr("height", map_height)
      .on("click", reset);
 
-var countyG = svg.append("g"),
-    stateG = svg.append("g");
+// attaches two separate g layers, one for the county map, one for the state map
+var countyG = map_svg.append("g"),
+    stateG = map_svg.append("g");
 
-
+// pull the county level data and make it into a map
 d3.json("county_level_geojson.json", function(error, county) {
   if (error) throw error;
 
@@ -48,6 +52,7 @@ d3.json("county_level_geojson.json", function(error, county) {
       .on("click", clicked);
 });
 
+// pull the state level data and make it into a map
 d3.json("state_level_geojson.json", function(error, state) {
   if (error) throw error;
 
@@ -59,6 +64,7 @@ d3.json("state_level_geojson.json", function(error, state) {
       .on("click", clicked);
 });
 
+// when a state is clicked, it zooms in, prints the state name and abbreviation and classifies it as active
 function clicked(d) {
   if (active.node() === this) return reset();
   active.classed("active", false);
@@ -74,21 +80,19 @@ function clicked(d) {
       dy = bounds[1][1] - bounds[0][1],
       x = (bounds[0][0] + bounds[1][0]) / 2,
       y = (bounds[0][1] + bounds[1][1]) / 2,
-      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-      translate = [width / 2 - scale * x, height / 2 - scale * y];
+      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / map_width, dy / map_height))),
+      translate = [map_width / 2 - scale * x, map_height / 2 - scale * y];
 
-  svg.transition()
+  map_svg.transition()
       .duration(750)
-      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
-
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 }
-
 
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
 
-  svg.transition()
+  map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
 }
@@ -106,14 +110,6 @@ function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
 
-// function changeState(value){
-
-//   console.log(state_name);
-//   options.state = value;
-
-//   console.log(options.state);
-
-//   };
 
 
 
