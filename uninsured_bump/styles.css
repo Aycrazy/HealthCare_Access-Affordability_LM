@@ -11,6 +11,11 @@ text.year {
     pointer-events: none;
 }
 
+#container_button{
+  position:absolute;
+  top:15;
+  right:15;
+}
 .click-active, .active {
   opacity: 1.0;
   stroke-opacity: 1.0;

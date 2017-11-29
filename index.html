@@ -6,6 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 		<script type="text/javascript" src="d3/d3.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"3>
 	</head>
 	<body>
 		<h1>Explore How the Affordable Care Act Has Impacted Health Care Access and Health in the Lake Michigan Area</h1>
@@ -17,52 +18,50 @@
 			</div>
 
 			<div class="row">  <!-- this is going to go in the top of the page (map and scatter) -->
-		  	<div class="col-6" id="chart3"></div>
+		  	<div class="col-6">
 		  	<!-- <script type="text/javascript" src="bar_graph/script.js"></script> -->
 				<h1>Exploding Bubble Chart of Average Premium Price Post ACA</h1>
 				<h3>The size of the bubble indicates the relative percentage of plans that were purchased with Advanced Premium Tax Credit</h3>
 
-		  	<div class=" col-6" id="scatterHealthBubbleChart">
-		  		<div id="controls">
-				    <button id="explode">Explode All</button>
-				    <button id="collapse">Collapse</button>
-				    <button id="reset">Reset</button>
-				  </div>
-		  	</div>
-		  	<p id = 'source'> Source: Health.Data.Gov, https://github.com/hrecht/marketplace-data for rating areas csv, CMS Public Use Files</p>
-	  		<p id = 'attribution'> Credit: Heavily inspired by Chris Given http://bl.ocks.org/cmgiven/e5dfe0888968ee8c507f5469a4d62b6f </p>
-  	<script type="text/javascript" src="bubble_script.js"></script> 	
-
-		  <div class="row"> <!-- This will go to the left -->
-		  	<div class="col-6" id="chart5"></div>
-		  	<!-- <script type="text/javascript" src="area_graph/script.js"></script> -->
-			  	<h1>Bump Chart Displaying Change in Rankings of Uninsured by State/County</h1>
-					
-
-			  	
-			  	<div class="container">
+				  	<div id="scatterHealthBubbleChart">
+				  		<div id="controls">
+						    <button id="explode">Explode All</button>
+						    <button id="collapse">Collapse</button>
+						    <button id="reset">Reset</button>
+						  </div>
+				  	</div>
+				  	<p id = 'source'> Source: Health.Data.Gov, https://github.com/hrecht/marketplace-data for rating areas csv, CMS Public Use Files</p>
+			  		<p id = 'attribution'> Credit: Heavily inspired by Chris Given http://bl.ocks.org/cmgiven/e5dfe0888968ee8c507f5469a4d62b6f </p>
+			  	<script type="text/javascript" src="bubble_script.js"></script> 	
+  			</div>
+			  <h1>Bump Chart Displaying Change in Rankings of Uninsured by State/County</h1>
+				
+				<div class = "col-6">
+			  	<div id="container_button">
 						<div id ='radio'>
-					<label class='radio-inline'>
-						<input type="radio" id = "all" name="all-each" value="all" onclick="changeState(this.value)"> all
-					</label>
-					<label class='radio-inline'>
-						<input type="radio" id = "Illinois" name="all-each" value="Illinois" onclick="changeState(this.value)"> Illinois
-					</label>
-					<label class='radio-inline'>
-						<input type="radio" id = "Indiana" name="all-each" value="Indiana" onclick="changeState(this.value)"> Indiana
-					</label>
-					<label class='radio-inline'>
-						<input type="radio" id = "Michigan" name="all-each" value="Michigan" onclick="changeState(this.value)"> Michigan
-					</label>
-					<label class='radio-inline'>
-						<input type="radio" id = "Wisconsin" name="all-each" value="Wisconsin" onclick="changeState(this.value)"> Wisconsin
-					</label>
-			  	 <div id="container"></div>
-			  	 <div class="col-6" id= "bump_chart"></div>
-		  	<script type="text/javascript" src="bump_script.js"></script> 
-		  </div>
-
-	</div>
-	
+							<label class='radio-inline'>
+								<input type="radio" id = "all" name="all-each" value="all" onclick="changeState(this.value)"> all
+							</label>
+							<label class='radio-inline'>
+								<input type="radio" id = "Illinois" name="all-each" value="Illinois" onclick="changeState(this.value)"> Illinois
+							</label>
+							<label class='radio-inline'>
+								<input type="radio" id = "Indiana" name="all-each" value="Indiana" onclick="changeState(this.value)"> Indiana
+							</label>
+							<label class='radio-inline'>
+								<input type="radio" id = "Michigan" name="all-each" value="Michigan" onclick="changeState(this.value)"> Michigan
+							</label>
+							<label class='radio-inline'>
+								<input type="radio" id = "Wisconsin" name="all-each" value="Wisconsin" onclick="changeState(this.value)"> Wisconsin
+							</label>
+					  	 <div id="container"></div>
+			  		</div>
+			  	 <div  id= "bump_chart"></div>
+			  		<script type="text/javascript" src="bump_script.js"></script>
+		  		
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
