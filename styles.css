@@ -8,4 +8,77 @@ text.year {
 }
 
 
+.background {
+  fill: none;
+  pointer-events: all;
+}
 
+.feature {
+  fill: transparent;
+  stroke: #cecece;
+  cursor: pointer;
+}
+
+.feature.active { 
+  stroke: #00b5b5;
+  stroke-width: 2;
+}
+
+h1,h3
+ { 
+ 	font-family: Lucidatypewriter, monospace;}
+ 	
+p{
+ font-family: Lucidatypewriter, monospace;}
+text { fill: #333; }
+text.year {
+    font-family: monospace;
+    pointer-events: none;
+}
+#controls {
+    position: absolute;
+    top: 15px; right: 15px;
+}
+
+.click-active, .active {
+  opacity: 1.0;
+  stroke-opacity: 1.0;
+  z-index: 1000;
+  /*r: 8;*/
+}
+
+path.click-active {
+  stroke-width: 3.0;
+}
+
+path.active {
+  stroke-width: 3.0;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 10px;
+  font: 12px sans-serif;
+  background: #222;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.9;
+  visibility: hidden;
+}
