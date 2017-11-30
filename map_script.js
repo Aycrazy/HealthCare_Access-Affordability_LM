@@ -15,7 +15,7 @@ var zoom = d3.zoom()
     .on("zoom", zoomed);
 
 // make the path
-var path = d3.geoPath()
+var path_map = d3.geoPath()
     .projection(projection);
 
 // initialize the state name and abbreviation variables
@@ -41,25 +41,25 @@ var countyG = map_svg.append("g"),
     stateG = map_svg.append("g");
 
 // pull the county level data and make it into a map
-d3.json("county_level_geojson.json", function(error, county) {
+d3.json("county_level_geojson.json", function(error, county_map) {
   if (error) throw error;
 
   countyG.selectAll("path")
-      .data(county.features)
+      .data(county_map.features)
     .enter().append("path")
-      .attr("d", path)
+      .attr("d", path_map)
       .attr("class", "feature")
       .on("click", clicked);
 });
 
 // pull the state level data and make it into a map
-d3.json("state_level_geojson.json", function(error, state) {
+d3.json("state_level_geojson.json", function(error, state_map) {
   if (error) throw error;
 
   stateG.selectAll("path")
-      .data(state.features)
+      .data(state_map.features)
     .enter().append("path")
-      .attr("d", path)
+      .attr("d", path_map)
       .attr("class", "feature")
       .on("click", clicked);
 });
@@ -78,7 +78,7 @@ function clicked(d) {
   console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
 
-  var bounds = path.bounds(d),
+  var bounds = path_map.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
       x = (bounds[0][0] + bounds[1][0]) / 2,

@@ -1,35 +1,31 @@
 
 
-// Chart Size Setup
-var margin = { top: 35, right: 0, bottom: 30, left: 70 };
-
-var width = 960 - margin.left - margin.right;
-var height = 800 - margin.top - margin.bottom;
-
-var chart = d3.select('#chart')
-  .append('svg')
-    .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-  .append('g')
-  	.classed('bump_temp',true)
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-
-options = {state: "Illinois"}
-//Load in JSON Data
-
-d3.json('bump_chart_state_data.json', function(d){
-		//dataset = d.filter(function(d) {return d.State == options.state; });
-    console.log(d);
-
-    makeBumpChart(d);
- });
-
-function makeBumpChart(data){
+var bumpChart = function(chart_data){
 	
-	console.log(data);
+	//load in data
+	if(d3.select('.bump_temp')){
+		d3.select('.bump_temp').remove()
+	}
 
-	data.sort(function(a,b){
+	this.data  = chart_data
+	this.margin = { top: 35, right: 0, bottom: 30, left: 70 };
+	this.width = 960 - this.margin.left - this.margin.right;
+	this.height = 800 - this.margin.top - this.margin.bottom;
+
+
+		//create chart
+		chart_bump = d3.select('#bump_chart')
+		  .append('svg')
+		    .attr('width', this.width + this.margin.left + this.margin.right)
+		    .attr('height', this.height + this.margin.top + this.margin.bottom*5)
+		    .classed('bump_temp',true)
+		  .append('g')
+		  	.classed('bump_temp',true)
+		    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
+	console.log(this.data);
+
+	this.data.sort(function(a,b){
 		if(b['year'] != a['year']) {
       return b['year'] - a['year'];
     }
@@ -38,43 +34,37 @@ function makeBumpChart(data){
 		}
 	})
 	
+	console.log(this.data);
 
-	var pos = 1;
-	data[0].position = pos;
-	for(var i=1; i<data.length; i++) {
+	var pos_bump = 1;
+	this.data[0].position = pos_bump;
+	for(var i=1; i<this.data.length; i++) {
 	  // this is a new year, so start over
-	  if(data[i - 1].year != data[i].year) {
-	    pos = 1;
+	  if(this.data[i - 1].year != this.data[i].year) {
+	    pos_bump = 1;
 	  } else {
-	    pos++;
+	    pos_bump++;
 	  }
-	  data[i].position = pos;
+	  this.data[i].position = pos_bump;
 	}
 
-	data.forEach(function(d) {
+	this.data.forEach(function(d) {
     d['class'] = d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'');
      })
 
 
-  // chart.append('svg')
-  //   .attr('width', width + margin.left + margin.top)
-  //   .attr('height', height + margin.top*3 + margin.bottom*3)
-  //   .append('g')
-  //   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-
   ///////////////////////
   // Scales
-  var x = d3.scaleBand()
-      .domain(data.map(function(d) { return d['year']; }).reverse())
-      .rangeRound([25, width - 15]);
+  var x_bump = d3.scaleBand()
+      .domain(this.data.map(function(d) { return d['year']; }).reverse())
+      .rangeRound([25, this.width - 15]);
 
-  var y = d3.scaleLinear()
-      .domain([d3.min(data, function(d) { return d['position'] }), d3.max(data, function(d) { return d['position']; })])
-      .range([20, height - 30]);
+  var y_bump = d3.scaleLinear()
+      .domain([d3.min(this.data, function(d) { return d['position'] }), d3.max(this.data, function(d) { return d['position']; })])
+      .range([20, this.height - 30]);
 
   var size = d3.scaleLinear()
-      .domain(d3.extent(data, function(d) { return d['% Uninsured']; }))
+      .domain(d3.extent(this.data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
   // /
@@ -86,41 +76,52 @@ function makeBumpChart(data){
   //console.log(d3.extent(data, function(d) { return d.position; }));
   ///////////////////////
   // Axis
-  var xAxis = d3.axisBottom(x);
+  var xAxis_bump = d3.axisBottom(x_bump);
 
-  var yAxis = d3.axisLeft(y);
+  var yAxis_bump = d3.axisLeft(y_bump);
 
-  chart.append("g")
+  chart_bump.append("g")
       .classed('bump_temp',true)
-      .attr("class", "bump_temp")
-      .attr("transform", "translate(-"+ x.bandwidth()/2.0 +"," + height + ")")
-      .call(xAxis);
+      .attr("transform", "translate(-"+ this.margin.left/2 +"," + this.height + ")")
+      .call(xAxis_bump);
 
   console.log('worked2');
 
-  chart.append("g")
+  chart_bump.append("g")
       .attr("class", "y axis")
       .classed('bump_temp',true)
-      .call(yAxis);
+      .call(yAxis_bump);
 
   ///////////////////////
   // Lines
-  var counties = d3.map(data, function(d) {
+
+  
+
+  var counties = d3.map(this.data, function(d) {
     return d['County'];
   }).keys();
 
+
+  console.log(this.data.filter(function(d) {
+      if(d.County == 'Illinois') {
+        return d;
+      }}));
+
+
+  var data = this.data;
+
   counties.forEach(function(county) {
-    var currData = data.filter(function(d) {
+    currData = data.filter( function(d) {
       if(d.County == county) {
         return d;
       }
     });
 
   var line = d3.line()
-      .x(function(d) { return x(d['year']); })
-      .y(function(d) { return y(d['position']); });
+      .x(function(d) { return x_bump(d['year']); })
+      .y(function(d) { return y_bump(d['position']); });
 
-    chart.append("path")
+    chart_bump.append("path")
         .datum(currData)
         .attr("class", county.toLowerCase().replace(/ /g, '-').replace(/\./g,'') )
     		.attr("style", "fill:none !important")
@@ -136,14 +137,14 @@ function makeBumpChart(data){
   
   ///////////////////////
   // Nodes
-  var node = chart.append("g")
+  var node = chart_bump.append("g")
     .selectAll("text")
-    .data(data)
+    .data(this.data)
     .enter().append("text")
     .attr("class", "uninsured")
     .text( function(d){ return d.County;})
-    .attr("x", function(d) { return x(d['year'])-15; })
-    .attr("y", function(d) { return y(d['position']); })
+    .attr("x", function(d) { return x_bump(d['year'])-15; })
+    .attr("y", function(d) { return y_bump(d['position']); })
     .style('fill',function(d) {
     	return color(d.median_income)})
     // replace spaces with - and remove '.' (from d.c. united)
@@ -159,9 +160,9 @@ function makeBumpChart(data){
 	  var tooltip = d3.select("body").append("div")
 	      .attr("class", "tooltip");
 
-	  chart.selectAll("text")
+	  chart_bump.selectAll("text")
 	      .on("mouseover", function(d) {
-	        chart.selectAll('.' + d['class'])
+	        chart_bump.selectAll('.' + d['class'])
 	            .classed('active', true);
 
 	        var tooltip_str = "Uninsured %: " + d['% Uninsured'] +
@@ -177,25 +178,25 @@ function makeBumpChart(data){
 	            .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");
 	      })
 	      .on("mouseout", function(d) {
-	        chart.selectAll('.'+d['class'])
+	        chart_bump.selectAll('.'+d['class'])
 	            .classed('active', false);
 
 	        tooltip.style("visibility", "hidden");
 	      })
 	      .on('click', function(d) {
-	        chart.selectAll('.' + d['class'])
+	        chart_bump.selectAll('.' + d['class'])
 	            .classed('click-active', function(d) {
 	              // toggle state
 	              return !d3.select(this).classed('click-active');
-	            });
+	            })
+	            
 	      })
 	      .classed('bump_temp',true)
+	      .classed('active',false)
 
 	  	by_year = d3.nest()
 	  							.key(function (d){return d.year;})
-	  							.entries(data)
-
-	  	console.log(by_year.length);
+	  							.entries(this.data)
 
 	  	var by_year_median_income = [];
 
@@ -216,101 +217,114 @@ function makeBumpChart(data){
 
 	  	console.log(by_year_median_income);
 
-			chart.append("g")
+			chart_bump.append("g")
 				.selectAll("text")
 				.data(by_year_median_income)
 				.enter()
 				.append("text")
-				.attr("x", function (d){ return x(d[1]);})
+				.attr("x", function (d){ return x_bump(d[1]);})
 				.attr("height", -10)
 				.attr("class", "bump_temp")
 				.text(function (d){return d[2];})
 				.style('font-size', '14px')
 				.style('font-weight','bold')
 				.style('font-family','monospace')
-				.call(xAxis)
+				.call(xAxis_bump)
 
-				chart.append("g")
+			chart_bump.append("g")
 				.selectAll("text")
 				.data(by_year_median_income)
 				.enter()
 				.append("text")
-  			.attr("x", function (d){ return x(d[1]);})
-  			//.attr('transform', 'translate( 0,0)')
-  			.attr("y", height+margin.bottom*1.25)
-  			.attr("class", "bump_temp")
-  			.text(function (d){ return d[0];})
-  			.style('font-size', '14px')
-  			.style('font-family','monospace')
-  			.style('font-weight','bold')
-  			.call(xAxis)
+	  			.attr("x", function (d){ return x_bump(d[1]);})
+	  			//.attr('transform', 'translate( 0,0)')
+	  			.attr("y", this.height+this.margin.bottom)
+	  			.attr("class", "bump_temp")
+	  			.text(function (d){ return d[0];})
+	  			.style('font-size', '14px')
+	  			.style('font-family','monospace')
+	  			.style('font-weight','bold')
+	  			.call(xAxis_bump)
 
-			chart.append("text")
-			.attr("x",  width/12)
-			//.attr('transform', 'translate( 0,0)')
-			.attr("y", height+margin.bottom*3)
-			.attr("class", "bump_temp")
-			.text('Source: Source: County Health Rankings')
-			.style('font-size', '14px')
-			.style('font-family','monospace')
-			.append("text")
+			chart_bump.append("text")
+				.attr("x",  this.width/12)
+				.attr("y", this.height+this.margin.bottom*3)
+				.attr("class", "bump_temp")
+				.text('Source: Source: County Health Rankings')
+				.style('font-size', '14px')
+				.style('font-family','monospace')
+				.append("text")
 
-			chart.append("text")
-			.attr("x",  width/12)
-			//.attr('transform', 'translate( 0,0)')
-			.attr("y", height+margin.bottom*4)
-			.attr("class", "bump_temp")
-			.text('Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a')
-			.style('font-size', '14px')
-			.style('font-family','monospace')
-			.append("text")
+			chart_bump.append("text")
+				.attr("x",  this.width/12)
+				.attr("y", this.height+this.margin.bottom*4)
+				.attr("class", "bump_temp")
+				.text('Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a')
+				.style('font-size', '14px')
+				.style('font-family','monospace')
+				.append("text")
 
-			chart.append("text")
-			.attr("x",  (width-margin.left*2)/2 )
-			.attr("y", -15)
-			.attr("class", "bump_temp")
-			.text('Lowest % Uninsured')
-			.style('font-size', '14px')
-			.style('font-family','monospace')
-			.append("text")
+			chart_bump.append("text")
+				.attr("x",  (this.width-this.margin.left*2)/2 )
+				.attr("y", -15)
+				.attr("class", "bump_temp")
+				.text('Lowest % Uninsured')
+				.style('font-size', '14px')
+				.style('font-family','monospace')
+				.append("text")
 
-			chart.append("text")
-			.attr("x",  (width-margin.left*2)/2 )
-			.attr("y", height+margin.bottom*2)
-			.attr("class", "bump_temp")
-			.text('Highest % Uninsured')
-			.style('font-size', '14px')
-			.style('font-family','monospace')
-			.append("text")
-					};
+			chart_bump.append("text")
+				.attr("x",  (this.width-this.margin.left*2)/2 )
+				.attr("y", this.height+this.margin.bottom*2)
+				.attr("class", "bump_temp")
+				.text('Highest % Uninsured')
+				.style('font-size', '14px')
+				.style('font-family','monospace')
+				.append("text")
+						};
 
 
-function changeState(value){
+ function changeState(value){
 
-  options.state = value;
 
-	if(options.state != 'all'){
-  	d3.json("bump_chart_data.json", function(d) {  
+		options_bump.state_bump = value;
 
-  			chart.selectAll(".bump_temp")
-			    .remove()
-			    .exit();
+		if(options_bump.state_bump != 'all'){
 
-    	dataset = d.filter(function(d) {return d.State == options.state;});
-    	makeBumpChart(dataset);
-  	 }
-  	 )}
-  else{
+	  	d3.json("bump_chart_data.json", function(d) {  
+		
 
-	  	chart.selectAll(".bump_temp")
-				    .remove()
-				    .exit();
+	    	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
+	    	
+	    	bumpChart(dataset) 
 
-  	 	d3.json("bump_chart_state_data.json", function(d) {  
-    	makeBumpChart(d);
-  	 	}) 
-  	 }
-  
+	  		}
+	  	)}
+	  else{
+
+	  	 	d3.json("bump_chart_state_data.json", function(d) { 
+
+	  	 	bumpChart(d)
+
+
+	  	 	}) 
+	  	}
+	  
 	};
+
+var options_bump = {state_bump: "all"}
+
+var bump = d3.json('bump_chart_state_data.json', function (d){ 
+
+		var bump = new bumpChart(d)
+
+
+	});
+
+
+
+
+
+
 
 
