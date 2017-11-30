@@ -25,7 +25,7 @@ var y = d3.scaleLinear()
 var y_alt = d3.scaleLinear()
                 .range([height, 0]);
 var r = d3.scaleLinear()
-				.range([20, 50]);
+				.range([10, 50]);
 var color = d3.scaleOrdinal()
     .range(([ "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]));
 
