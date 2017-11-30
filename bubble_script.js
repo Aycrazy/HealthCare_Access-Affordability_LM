@@ -13,8 +13,8 @@ var height = 500 - margin.top - margin.bottom;
 
 var svg = d3.select('#scatterHealthBubbleChart')
     .append('svg')
-    .attr('width', width + margin.left + margin.top)
-    .attr('height', height + margin.top + margin.bottom)
+    .attr('width', width + margin.left + margin.top*2)
+    .attr('height', height + margin.top*2 + margin.bottom)
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -25,7 +25,7 @@ var y = d3.scaleLinear()
 var y_alt = d3.scaleLinear()
                 .range([height, 0]);
 var r = d3.scaleLinear()
-				.range([0, 50]);
+				.range([20, 50]);
 var color = d3.scaleOrdinal()
     .range(([ "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]));
 
@@ -35,7 +35,7 @@ var yAxis = d3.axisLeft()
 						.scale(y);
 var dataset;
 
-var f = d3.format(".3f")
+var f = d3.format(".2f")
 
 var first_time = true;
 
@@ -58,14 +58,9 @@ function initialize(error, data,first_time) {
 
   	//could the issue be here?
     x.domain([200, d3.max(data, function (d) { return d.avg_silver_27 })]).nice()
-    y.domain([0, 400000]).nice()
-    y_alt.domain([4,400000])
-    r.domain([0.00, 100.00])
+    y.domain([0.00, 100.00]).nice()
+    r.domain([0, 400000])
    
-   console.log(r(0));
-
-    console.log(f(d3.max(data.map(function (d) { 
-    	return d.yes_aptc/d.total_plan_selections})))*100, 'mad max');
 
     if(first_time = true){
         data = d3.nest()
@@ -87,7 +82,6 @@ function initialize(error, data,first_time) {
         })
     }
 
-    console.log(data);
     dataset = data 
 
     var uniqueStates = data[0].values.map(function (d) { console.log(d,'unique'); return d.key });
@@ -141,7 +135,7 @@ function initialize(error, data,first_time) {
 	      .attr('y', -55)
 	      .style('text-anchor', 'end')
 	      .style('font-weight', 'bold')
-	      .text('Total Plan Selections (Policy)');
+	      .text('Percentage with Tax Credits');
 
 	  var yearIndex = 0;
 	  var year = '' + years[yearIndex];
@@ -161,6 +155,10 @@ function initialize(error, data,first_time) {
 
 	  d3.select('#collapse').on('click', function () {
         uniqueStates.forEach(function (d) {
+
+            svg.selectAll('.scatter_temp')
+                    .remove().exit();
+
             if (exploded.has(d)) {
                 exploded.remove(d)
                 blurTransition.add(d)
@@ -171,6 +169,9 @@ function initialize(error, data,first_time) {
       d3.select('#reset')
       .on('click', function () {
 
+        svg.selectAll('.scatter_temp')
+                    .remove().exit();
+
           yearIndex = 0
           year = '2015'
           console.log(yearIndex,'reset worked');
@@ -180,7 +181,6 @@ function initialize(error, data,first_time) {
                     .enter().append('g')
                     .attr('class', 'state')
 
-    console.log("HERE")
 
 
     states.append('circle')
@@ -195,17 +195,13 @@ function initialize(error, data,first_time) {
 
         update()
 
-      })
+      }).classed('bump_temp',true)
 
-   console.log(data,"data before year");
 
     var states = svg.selectAll('.state')
                     .data(data[0].values)
                     .enter().append('g')
                     .attr('class', 'state')
-
-    console.log("HERE")
-    //console.log(years);
 
 
     states.append('circle')
@@ -215,7 +211,7 @@ function initialize(error, data,first_time) {
         .style('fill', function (d) { return color(d.key) })
         .style('opacity','.9')
         .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
-        .append('title').text(function (d) { return d.key })
+        .append('title').text(function (d) { return d.key }).classed('bump_temp',true)
 
     update()
     d3.interval(incrementYear, interval)
@@ -270,41 +266,32 @@ function initialize(error, data,first_time) {
 
         states.select('.aggregate')
             .transition(t)
-            .attr('r', function (d) { 
-                //console.log(r(f(d.yes_aptc/d.total_plan_selections*20000000)),'huge #')
-                var retval = exploded.has(d.key) ? 0 : r(f(d.yes_aptc/d.total_plan_selections*100));
-                return retval
-                //console.log(retval,"retval");
-                //return retval;
+
+            .attr('r', function (d) { return
+                r(d.total_plan_selections);
             })
             .attr('cx', function (d) { return x(d.avg_silver_27) })
-            .attr('cy', function (d) { return y(d.total_plan_selections) })
+            .attr('cy', function (d) { var retval = exploded.has(d.key) ? 0 : y(f(d.yes_aptc/d.total_plan_selections*100));
+                return retval
+            })
 
         console.log("after selecting .aggregate");
 
         counties
             .transition(t)
-            //.attr('r', function (d) {  return r(f(d.yes_aptc/d.total_plan_selections)*100)})
-           //  .attr('r', function (d) { 
-           //      // console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc,'mystery value');
-           //      // console.log(d.parent.yes_aptc, d.parent, 'parent')
-           //      console.log((exploded.has(d.state_name) ? d : d.parent).county_name, (exploded.has(d.state_name) ? d : d.parent).state_name);
-           //      console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
-           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000,d.county_name,"looping through counties");
-
-           //    return 
-           //      r(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
-           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000))
-               
-           // })
-            .attr('r', 10)
+            .attr('r', function (d) {
+                var retval = (exploded.has(d.state_name) ? d: d.parent).total_plan_selections;
+                return r(retval); })
             .attr('cx', function (d) {
                 //console.log((exploded.has(d.state_name) ? d : d.parent));
                 return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
             .attr('cy', function (d) {
-                //console.log(x((exploded.has(d.state_name) ? d : d.parent).values),'county_plans')}
-                return y((exploded.has(d.state_name) ? d: d.parent).total_plan_selections) })
-            .attr('opacity', .4)
+                var retval = y(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections *100));
+                console.log(retval);
+                if(retval){
+
+                    return retval}})
+                        
             //.attr('cx',function(d,i) {return i*10})
             //.attr('cy',function(d,i) {return i*10})
 
