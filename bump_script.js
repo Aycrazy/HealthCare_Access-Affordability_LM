@@ -1,6 +1,6 @@
 
 
-var bumpChart = function(chart_data){
+var bumpChart = function(chart_data, options_bump){
 	
 	//load in data
 	if(d3.select('.bump_temp')){
@@ -8,11 +8,11 @@ var bumpChart = function(chart_data){
 	}
 
 	this.data  = chart_data
-	this.margin = { top: 35, right: 0, bottom: 30, left: 70 };
+	this.margin = { top: 65, right: 0, bottom: 30, left: 70 };
 	this.width = 960 - this.margin.left - this.margin.right;
 	this.height = 800 - this.margin.top - this.margin.bottom;
 
-
+	console.log(this.data)
 		//create chart
 		chart_bump = d3.select('#bump_chart')
 		  .append('svg')
@@ -23,7 +23,7 @@ var bumpChart = function(chart_data){
 		  	.classed('bump_temp',true)
 		    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
-	console.log(this.data);
+
 
 	this.data.sort(function(a,b){
 		if(b['year'] != a['year']) {
@@ -34,7 +34,6 @@ var bumpChart = function(chart_data){
 		}
 	})
 	
-	console.log(this.data);
 
 	var pos_bump = 1;
 	this.data[0].position = pos_bump;
@@ -281,6 +280,16 @@ var bumpChart = function(chart_data){
 				.style('font-size', '14px')
 				.style('font-family','monospace')
 				.append("text")
+
+
+			chart_bump.append('text')
+		    .attr("transform", "translate(" + ( this.margin.left/3 ) + " ," + -this.margin.top/1.5 + ")")
+		    .text("Bump Chart Displaying Change in Rankings of Uninsured by State/County in " + options_bump.state_bump)
+		    .style('font-size','16')
+		    .style('font-weight', 'bold')
+		    .style('font-family','monospace')
+		    .append('text')
+
 						};
 
 
@@ -289,22 +298,28 @@ var bumpChart = function(chart_data){
 
 		options_bump.state_bump = value;
 
-		if(options_bump.state_bump != 'all'){
+		console.log(options_bump)
+
+		if(options_bump.state_bump != 'All'){
+
+			console.log('i ran a state');
 
 	  	d3.json("bump_chart_data.json", function(d) {  
 		
 
 	    	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
 	    	
-	    	bumpChart(dataset) 
+	    	new bumpChart(dataset,options_bump) 
 
 	  		}
 	  	)}
 	  else{
 
+	  		console.log('i ran all');
+
 	  	 	d3.json("bump_chart_state_data.json", function(d) { 
 
-	  	 	bumpChart(d)
+	  	 	new bumpChart(d,options_bump)
 
 
 	  	 	}) 
@@ -312,11 +327,11 @@ var bumpChart = function(chart_data){
 	  
 	};
 
-var options_bump = {state_bump: "all"}
+var options_bump = {state_bump: "All"}
 
 var bump = d3.json('bump_chart_state_data.json', function (d){ 
 
-		var bump = new bumpChart(d)
+		var bump = new bumpChart(d,options_bump)
 
 
 	});

@@ -66,18 +66,20 @@ d3.json("state_level_geojson.json", function(error, state_map) {
 
 // when a state is clicked, it zooms in, prints the state name and abbreviation and classifies it as active
 function clicked(d) {
+  console.log('clicked ran');
+  console.log(this,'this in clicked');
   if (active.node() === this) return reset(); // if you click on the state again, reset the chart.
-  active.classed("active", false); // set active as false
   active = d3.select(this) // set active as true for clicked instance
     .classed("active", true)
-    .on("click", changeState(d.properties.NAME));
-  
+    
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
 
   console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
 
+  
+    
   var bounds = path_map.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
@@ -90,20 +92,27 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
-  //active.on("click", changeState(state_name));
+
+  changeState(state_name);
+  
+  active.classed("active",'true');
+      
+
 }
 
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
     //.on("click", changeState('all'));
-  var state_name = 'all';
+  var state_name = 'All';
   console.log(state_name)
+
+  active.on("click", changeState(state_name));
 
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
-  active.on("click", changeState(state_name));
+  //active.on("click", changeState(state_name));
 }
 
 function zoomed() {
