@@ -69,12 +69,13 @@ function clicked(d) {
   if (active.node() === this) return reset(); // if you click on the state again, reset the chart.
   active.classed("active", false); // set active as false
   active = d3.select(this) // set active as true for clicked instance
-    .classed("active", true);
-    //.on("click", changeState(d.properties.NAME));
+    .classed("active", true)
+    .on("click", changeState(d.properties.NAME));
   
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
 
+  console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
 
   var bounds = path.bounds(d),
@@ -89,7 +90,7 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
-  active.on("click", changeState(state_name));
+  //active.on("click", changeState(state_name));
 }
 
 function reset() {
@@ -102,7 +103,7 @@ function reset() {
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
-  //active.on("click", changeState('all'));
+  active.on("click", changeState(state_name));
 }
 
 function zoomed() {

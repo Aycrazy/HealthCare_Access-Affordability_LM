@@ -68,11 +68,16 @@ d3.json("state_level_geojson.json", function(error, state) {
 function clicked(d) {
   if (active.node() === this) return reset();
   active.classed("active", false);
+  
+  console.log(active.node(), 'this node')
+
   active = d3.select(this).classed("active", true);
+  active.append('true')
   
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
 
+  console.log(active.node(), 'this node')
   console.log(state_name, state_abbr);
 
   var bounds = path.bounds(d),
@@ -91,7 +96,9 @@ function clicked(d) {
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
+  active.append('false')
 
+  console.log(active.node, 'zoomed out')
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
