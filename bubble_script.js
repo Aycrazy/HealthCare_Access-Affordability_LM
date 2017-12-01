@@ -73,6 +73,7 @@ function initialize(error, data,first_time) {
                 e.total_plan_selections = d3.sum(e.values, function (f) { return f.total_plan_selections })
                 e.yes_aptc =   d3.sum(e.values , function (f) {
                     return f.yes_aptc})
+                e.county_name = d3.max(e.values,function(f){ return f.state_name;})
                 e.avg_silver_27 = +d3.sum(e.values, function (f) {
                     return f.avg_silver_27
                 })/+e.values.length
@@ -231,7 +232,12 @@ function initialize(error, data,first_time) {
 
         yearLabel.transition().duration(0).delay(interval/2).text(year)
     
+        var tooltip = d3.select("body").append("div")
+          .attr("class", "tooltip");
 
+       
+
+        states.append('title').text(function (d) { return d.state_name })
 
         states = states.data(
             data.find(function (d) { return d.key === year }).values,
@@ -275,6 +281,17 @@ function initialize(error, data,first_time) {
                 return retval
             })
 
+        // states.selectAll("text")
+        //   .on("mouseover", function(d) {
+        //     svg.selectAll('.state')
+        //         .classed('active', true);
+
+        //     var tooltip_str = "Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
+        //                     "<br/>" + "Region: " + d.state_name+
+        //             "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
+        //             "<br/>" + "Year: " + d.year;})
+
+
         console.log("after selecting .aggregate");
 
         counties
@@ -283,7 +300,6 @@ function initialize(error, data,first_time) {
                 var retval = (exploded.has(d.state_name) ? d: d.parent).total_plan_selections;
                 return r(retval); })
             .attr('cx', function (d) {
-                //console.log((exploded.has(d.state_name) ? d : d.parent));
                 return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
             .attr('cy', function (d) {
                 var retval = y(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections *100));
@@ -292,8 +308,15 @@ function initialize(error, data,first_time) {
 
                     return retval}})
                         
-            //.attr('cx',function(d,i) {return i*10})
-            //.attr('cy',function(d,i) {return i*10})
+        svg.selectAll("circle")
+          .on("mouseover", function(d) {
+            svg.selectAll('circle')
+                .classed('active', true);
+
+            var tooltip_str = "Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
+                            "<br/>" + "Region: " + d.county_name+
+                    "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
+                    "<br/>" + "Year: " + d.year;})
 
 
         blurValues

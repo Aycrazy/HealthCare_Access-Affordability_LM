@@ -146,18 +146,15 @@ var bumpChart = function(chart_data, options_bump){
     .attr("y", function(d) { return y_bump(d['position']); })
     .style('fill',function(d) {
     	return color(d.median_income)})
-    // replace spaces with - and remove '.' (from d.c. united)
     .attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
     .attr("font-family", 'monospace')
-    //.style('font-size', '8px')
-    //.attr("stroke-width", .3)
     .attr('opacity', '0.8')
     .classed('bump_temp',true);
 
 	///////////////////////
 	  // Tooltips
-	  var tooltip = d3.select("body").append("div")
-	      .attr("class", "tooltip");
+	  var tooltip_bump = d3.select("#row3").append("div")
+	      .classed("class", "tooltip");
 
 	  chart_bump.selectAll("text")
 	      .on("mouseover", function(d) {
@@ -169,18 +166,18 @@ var bumpChart = function(chart_data, options_bump){
 	                "<br/>" + "Median Income: " + d.median_income +
 	                "<br/>" + "Year: " + d['year'];
 
-	        tooltip.html(tooltip_str)
+	        tooltip_bump.html(tooltip_str)
 	            .style("visibility", "visible");
 	      })
 	      .on("mousemove", function(d) {
-	        tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
-	            .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");
+	        tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight + 15) + "px")
+	            .style("left", event.pageX - (tooltip_bump.node().clientWidth / 2.0) + "px");
 	      })
 	      .on("mouseout", function(d) {
 	        chart_bump.selectAll('.'+d['class'])
 	            .classed('active', false);
 
-	        tooltip.style("visibility", "hidden");
+	        tooltip_bump.style("visibility", "hidden");
 	      })
 	      .on('click', function(d) {
 	        chart_bump.selectAll('.' + d['class'])
