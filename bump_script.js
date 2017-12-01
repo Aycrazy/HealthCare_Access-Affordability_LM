@@ -4,7 +4,8 @@ var bumpChart = function(chart_data, options_bump){
 	
 	//load in data
 	if(d3.select('.bump_temp')){
-		d3.select('.bump_temp').remove()
+		console.log('this was working before')
+		d3.select('.bump_temp').remove().exit()
 	}
 
 	this.data  = chart_data
@@ -20,9 +21,8 @@ var bumpChart = function(chart_data, options_bump){
 		    .attr('height', this.height + this.margin.top + this.margin.bottom*5)
 		    .classed('bump_temp',true)
 		  .append('g')
-		  	.classed('bump_temp',true)
-		    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
-
+		    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
+		    .classed('bump_temp',true)
 
 
 	this.data.sort(function(a,b){
@@ -146,38 +146,43 @@ var bumpChart = function(chart_data, options_bump){
     .attr("y", function(d) { return y_bump(d['position']); })
     .style('fill',function(d) {
     	return color(d.median_income)})
+    // replace spaces with - and remove '.' (from d.c. united)
     .attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
     .attr("font-family", 'monospace')
+    //.style('font-size', '8px')
+    //.attr("stroke-width", .3)
     .attr('opacity', '0.8')
     .classed('bump_temp',true);
 
 	///////////////////////
 	  // Tooltips
-	  var tooltip_bump = d3.select("#row3").append("div")
-	      .classed("class", "tooltip");
+	  var tooltip = d3.select("body").append("div")
+	      .attr("class", "tooltip")
+	      .classed('bump_temp',true);
 
 	  chart_bump.selectAll("text")
 	      .on("mouseover", function(d) {
 	        chart_bump.selectAll('.' + d['class'])
-	            .classed('active', true);
+	            .classed('active', true)
+	            .classed('bump_temp',true);
 
 	        var tooltip_str = "Uninsured %: " + d['% Uninsured'] +
 	        				"<br/>" + "Region: " + d['County'] +
 	                "<br/>" + "Median Income: " + d.median_income +
 	                "<br/>" + "Year: " + d['year'];
 
-	        tooltip_bump.html(tooltip_str)
+	        tooltip.html(tooltip_str)
 	            .style("visibility", "visible");
 	      })
 	      .on("mousemove", function(d) {
-	        tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight + 15) + "px")
-	            .style("left", event.pageX - (tooltip_bump.node().clientWidth / 2.0) + "px");
+	        tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
+	            .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");
 	      })
 	      .on("mouseout", function(d) {
 	        chart_bump.selectAll('.'+d['class'])
 	            .classed('active', false);
 
-	        tooltip_bump.style("visibility", "hidden");
+	        tooltip.style("visibility", "hidden");
 	      })
 	      .on('click', function(d) {
 	        chart_bump.selectAll('.' + d['class'])
@@ -220,7 +225,7 @@ var bumpChart = function(chart_data, options_bump){
 				.append("text")
 				.attr("x", function (d){ return x_bump(d[1]);})
 				.attr("height", -10)
-				.attr("class", "bump_temp")
+				.classed("bump_temp",'true')
 				.text(function (d){return d[2];})
 				.style('font-size', '14px')
 				.style('font-weight','bold')
@@ -235,7 +240,7 @@ var bumpChart = function(chart_data, options_bump){
 	  			.attr("x", function (d){ return x_bump(d[1]);})
 	  			//.attr('transform', 'translate( 0,0)')
 	  			.attr("y", this.height+this.margin.bottom)
-	  			.attr("class", "bump_temp")
+	  			.classed("bump_temp", true)
 	  			.text(function (d){ return d[0];})
 	  			.style('font-size', '14px')
 	  			.style('font-family','monospace')
@@ -245,38 +250,42 @@ var bumpChart = function(chart_data, options_bump){
 			chart_bump.append("text")
 				.attr("x",  this.width/12)
 				.attr("y", this.height+this.margin.bottom*3)
-				.attr("class", "bump_temp")
+				.classed('bump_temp',true)
 				.text('Source: Source: County Health Rankings')
 				.style('font-size', '14px')
 				.style('font-family','monospace')
 				.append("text")
+				.classed('bump_temp','true')
 
 			chart_bump.append("text")
 				.attr("x",  this.width/12)
 				.attr("y", this.height+this.margin.bottom*4)
-				.attr("class", "bump_temp")
+				.classed('bump_temp',true)
 				.text('Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a')
 				.style('font-size', '14px')
 				.style('font-family','monospace')
 				.append("text")
+				.classed('bump_temp','true')
 
 			chart_bump.append("text")
 				.attr("x",  (this.width-this.margin.left*2)/2 )
 				.attr("y", -15)
-				.attr("class", "bump_temp")
+				.classed('bump_temp',true)
 				.text('Lowest % Uninsured')
 				.style('font-size', '14px')
 				.style('font-family','monospace')
 				.append("text")
+				.classed('bump_temp',true)
 
 			chart_bump.append("text")
 				.attr("x",  (this.width-this.margin.left*2)/2 )
 				.attr("y", this.height+this.margin.bottom*2)
-				.attr("class", "bump_temp")
+				.classed('bump_temp','true')
 				.text('Highest % Uninsured')
 				.style('font-size', '14px')
 				.style('font-family','monospace')
 				.append("text")
+				.classed('bump_temp',true)
 
 
 			chart_bump.append('text')
@@ -286,7 +295,7 @@ var bumpChart = function(chart_data, options_bump){
 		    .style('font-weight', 'bold')
 		    .style('font-family','monospace')
 		    .append('text')
-
+		    .classed('bump_temp',true)
 						};
 
 
@@ -301,22 +310,30 @@ var bumpChart = function(chart_data, options_bump){
 
 			console.log('i ran a state');
 
+			d3.selectAll(".bump_temp")
+			    .remove()
+			    .exit();
+
 	  	d3.json("bump_chart_data.json", function(d) {  
 		
 
 	    	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
 	    	
-	    	new bumpChart(dataset,options_bump) 
+	    	bc = bumpChart(dataset,options_bump) 
 
 	  		}
 	  	)}
-	  else{
+	  else{		
 
 	  		console.log('i ran all');
 
+	  		d3.selectAll(".bump_temp")
+			    .remove()
+			    .exit();
+
 	  	 	d3.json("bump_chart_state_data.json", function(d) { 
 
-	  	 	new bumpChart(d,options_bump)
+	  	 	bc = bumpChart(d,options_bump)
 
 
 	  	 	}) 
@@ -328,7 +345,7 @@ var options_bump = {state_bump: "All"}
 
 var bump = d3.json('bump_chart_state_data.json', function (d){ 
 
-		var bump = new bumpChart(d,options_bump)
+		 bc = new bumpChart(d,options_bump)
 
 
 	});

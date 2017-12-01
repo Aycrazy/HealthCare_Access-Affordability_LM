@@ -69,6 +69,8 @@ function clicked(d) {
   console.log('clicked ran');
   console.log(this,'this in clicked');
   if (active.node() === this) return reset(); // if you click on the state again, reset the chart.
+  active.classed("active", false);
+  
   active = d3.select(this) // set active as true for clicked instance
     .classed("active", true)
     
@@ -95,7 +97,7 @@ function clicked(d) {
 
   changeState(state_name);
   
-  active.classed("active",'true');
+  //active.classed("active",'true');
       
 
 }
@@ -103,16 +105,19 @@ function clicked(d) {
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
-    //.on("click", changeState('all'));
+  active.append('false')
+
+    //.on("click", changeState('All'));
   var state_name = 'All';
   console.log(state_name)
 
-  active.on("click", changeState(state_name));
+  
 
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
   //active.on("click", changeState(state_name));
+  changeState(state_name);
 }
 
 function zoomed() {
