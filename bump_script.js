@@ -156,15 +156,13 @@ var bumpChart = function(chart_data, options_bump){
 
 	///////////////////////
 	  // Tooltips
-	  var tooltip = d3.select("body").append("div")
-	      .attr("class", "tooltip")
-	      .classed('bump_temp',true);
+	  var tooltip = d3.select("#bump_chart").append("div")
+	      .attr("class", "tooltip");
 
 	  chart_bump.selectAll("text")
 	      .on("mouseover", function(d) {
 	        chart_bump.selectAll('.' + d['class'])
-	            .classed('active', true)
-	            .classed('bump_temp',true);
+	            .classed('active', true);
 
 	        var tooltip_str = "Uninsured %: " + d['% Uninsured'] +
 	        				"<br/>" + "Region: " + d['County'] +
@@ -192,8 +190,8 @@ var bumpChart = function(chart_data, options_bump){
 	            })
 	            
 	      })
-	      .classed('bump_temp',true)
-	      .classed('active',false)
+
+	      // .classed('active',false)
 
 	  	by_year = d3.nest()
 	  							.key(function (d){return d.year;})
