@@ -94,10 +94,16 @@ var bumpChart = function(chart_data, options_bump){
       .domain(d3.extent(this.data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
+  if(options_bump.state_bump === 'all'){
+  	var color = d3.scaleOrdinal()
+	  	.domain(["Illinois","Indiana",'Michigan','Wisconsin'])
+	    .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
+  }
+  else{
   var color = d3.scaleThreshold()
     .domain([0, 25000, 50000, 75000, 100000])
     .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
-
+  }
   //console.log(d3.extent(data, function(d) { return d.position; }));
   ///////////////////////
   // Axis
@@ -165,8 +171,12 @@ var bumpChart = function(chart_data, options_bump){
     .text( function(d){ return d.County;})
     .attr("x", function(d) { return x_bump(d['year'])-15; })
     .attr("y", function(d) { return y_bump(d['position']); })
-    .style('fill',function(d) {
-    	return color(d.median_income)})
+    .style('fill',function(d){ if(options_bump.state_bump === 'all'){
+    		return color(d['County']);}
+    	else{
+    		return color(d.median_income)
+    	};
+    })
     // replace spaces with - and remove '.' (from d.c. united)
     .attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
     .attr("font-family", 'monospace')
