@@ -106,14 +106,14 @@ var barChart = function(chart_data, options_bar) {
     .attr('transform', 'translate(' + 0 + ' ,' + (this.height+90) + ')')
     .attr('class', 'source_text_bar')
     .text('Data Source: County Health Rankings, 2015-2017')
-    .classed('bump_temp',true);
+    .classed('bar_temp',true);
 
   // append code source
   chart_bar.append("text")
     .attr('transform', 'translate(' + 0 + ' ,' + (this.height+110) + ')')
     .attr('class', 'source_text_bar')
     .text('Used code from: https://stackoverflow.com/questions/43513800/d3-js-grouped-bar-chart-with-json-data')
-    .classed('bump_temp',true);
+    .classed('bar_temp',true);
 
   var x1_bar = d3.scaleBand()
     .rangeRound([0, x_bar.bandwidth()])
