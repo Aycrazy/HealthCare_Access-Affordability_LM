@@ -5,9 +5,9 @@ d3.json("scatter_area_data.json", initialize);
 function initialize(error, data,first_time) {
     if (error) { throw error }
 
-    var blurStable = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -7'
-    var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -11'
-    var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -7'
+    var blurStable = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
+    var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -10'
+    var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
 
     var margin = { top: 15, right: 15, bottom: 45, left: 55 };
     var width = 960 - margin.left - margin.right;
@@ -28,8 +28,10 @@ function initialize(error, data,first_time) {
 
     var r = d3.scaleLinear()
                     .range([10, 50]);
+
     var color = d3.scaleOrdinal()
-        .range(([ "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]));
+        .domain(["IL","IN",'MI','WI'])
+        .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
 
     var xAxis = d3.axisBottom()
                             .scale(x);
@@ -121,7 +123,7 @@ function initialize(error, data,first_time) {
 	      .attr('transform', 'translate(' + margin.left + ',' + height + ')')
 	      .call(xAxis)
 	      .append('text')
-	      .attr('x', width-55)
+	      .attr('x', width)
 	      .attr('y', 30)
 	      .style('text-anchor', 'end')
 	      .style('font-weight', 'bold')
@@ -187,15 +189,17 @@ function initialize(error, data,first_time) {
                     .data(data[0].values)
                     .enter().append('g')
                     .attr('class', 'state')
+                    .style('filter', function (d) { return 'url(#gooeyCodeFilter-' + d.key.replace(' ', '-') + ')' })
+
 
 
     states.append('circle')
         .attr('class', 'aggregate')
         .attr('cx', width/2)
         .attr('cy', height / 2)
-        .style('fill', function (d) {console.log(d.key, d.state_name,'state'); return color(d.key) })
+        .style('fill', function (d) {return color(d.key) })
         .style('opacity','.9')
-        .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
+        .on('click', function (d) { console.log(d.state_name,'line 198 explode'); exploded.add(d.key); blurTransition.add(d.state_name) })
         .append('title').text(function (d) { return d.key })
 
     update()
@@ -234,7 +238,7 @@ function initialize(error, data,first_time) {
             .attr('cx', width / 2)
             .attr('cy', height / 2)
             .style('fill', function (d) { return color(d.state_name) })
-            .on('click', function (d) { exploded.remove(d.state_name); blurTransition.add(d.state_name);})
+            .on('click', function (d) {console.log(d.state_name, d.county_name,'line 237 explode'); exploded.remove(d.state_name); blurTransition.add(d.state_name);})
 
         enterCounties.append('title').text(function (d) { return d.county_name })
 

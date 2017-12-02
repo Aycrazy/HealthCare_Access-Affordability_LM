@@ -175,47 +175,31 @@ function initialize(error, data,first_time) {
           year = '2015'
           console.log(yearIndex,'reset worked');
           first_time=false;
-          var states = svg.selectAll('.state')
-                    .data(data[0].values)
-                    .enter().append('g')
-                    .attr('class', 'state')
 
-    console.log("HERE")
+          // var states = svg.selectAll('.state')
+          //           .data(data[0].values)
+          //           .enter().append('g')
+          //           .attr('class', 'state')
+
+            console.log("HERE")
 
 
-    states.append('circle')
-        .attr('class', 'aggregate')
-        .attr('cx', width/2)
-        .attr('cy', height / 2)
+            // states.append('circle')
+            //     .attr('class', 'aggregate')
+            //     .attr('cx', width/2)
+            //     .attr('cy', height / 2)
 
-        .style('fill', function (d) { return color(d.key) })
-        .style('opacity','.9')
-        .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
-        .append('title').text(function (d) { return d.key })
+            //     .style('fill', function (d) { return color(d.key) })
+            //     .style('opacity','.9')
+            //     .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
+            //     .append('title').text(function (d) { return d.key })
 
-        update()
+                update()
 
-      })
+              })
 
    console.log(data,"data before year");
 
-    var states = svg.selectAll('.state')
-                    .data(data[0].values)
-                    .enter().append('g')
-                    .attr('class', 'state')
-
-    console.log("HERE")
-    //console.log(years);
-
-
-    states.append('circle')
-        .attr('class', 'aggregate')
-        .attr('cx', width/2)
-        .attr('cy', height / 2)
-        .style('fill', function (d) { return color(d.key) })
-        .style('opacity','.9')
-        .on('click', function (d) { exploded.add(d.key); blurTransition.add(d.state_name) })
-        .append('title').text(function (d) { return d.key })
 
     update()
     d3.interval(incrementYear, interval)
@@ -284,19 +268,6 @@ function initialize(error, data,first_time) {
 
         counties
             .transition(t)
-            //.attr('r', function (d) {  return r(f(d.yes_aptc/d.total_plan_selections)*100)})
-           //  .attr('r', function (d) { 
-           //      // console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc,'mystery value');
-           //      // console.log(d.parent.yes_aptc, d.parent, 'parent')
-           //      console.log((exploded.has(d.state_name) ? d : d.parent).county_name, (exploded.has(d.state_name) ? d : d.parent).state_name);
-           //      console.log((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
-           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000,d.county_name,"looping through counties");
-
-           //    return 
-           //      r(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections * 
-           //          (exploded.has(d.state_name) ? d : d.parent).total_plan_selections/d.parent.total_plan_selections *1000))
-               
-           // })
             .attr('r', 10)
             .attr('cx', function (d) {
                 //console.log((exploded.has(d.state_name) ? d : d.parent));
@@ -305,8 +276,6 @@ function initialize(error, data,first_time) {
                 //console.log(x((exploded.has(d.state_name) ? d : d.parent).values),'county_plans')}
                 return y((exploded.has(d.state_name) ? d: d.parent).total_plan_selections) })
             .attr('opacity', .4)
-            //.attr('cx',function(d,i) {return i*10})
-            //.attr('cy',function(d,i) {return i*10})
 
 
         blurValues
