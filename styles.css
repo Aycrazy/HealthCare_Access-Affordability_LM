@@ -35,9 +35,10 @@ text.year {
     font-family: monospace;
     pointer-events: none;
 }
+
 #controls {
     position: relative;
-    top: 15px; right: 15px;
+    top: 10px;  left: 120px;
 }
 
 .click-active, .active {
