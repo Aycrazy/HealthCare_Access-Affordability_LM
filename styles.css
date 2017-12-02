@@ -82,3 +82,32 @@ path.active {
   opacity: 0.9;
   visibility: hidden;
 }
+
+g.xaxis_bar,
+g.yaxis_bar {
+  font-family: Lucidatypewriter, monospace;
+  font-size: 8pt;
+}
+
+text.source_text_bar,
+text.ltext_bar,
+text.xText_bar,
+text.yText_bar {
+    font-size: 10pt;
+    font-family: Lucidatypewriter, monospace;
+    fill: #2d2e2e;
+    font-style: italic;
+}
+
+.tooltip_bar {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  padding: 5px;
+  font-size: 8pt;
+  font-family: Lucidatypewriter, monospace;
+  fill: #2d2e2e;
+  font-style: italic;
+}
