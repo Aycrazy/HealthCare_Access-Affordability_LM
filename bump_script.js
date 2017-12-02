@@ -1,5 +1,34 @@
 
 
+var options_bump = {state_bump: "all"}
+
+var bump = d3.json('bump_chart_state_data.json', function (d){ 
+		 bc = new bumpChart(d,options_bump)
+	});
+
+function changeStateBump(value){
+		options_bump.state_bump = value;
+		console.log(options_bump, "line 11 bump")
+		if(options_bump.state_bump != 'all'){
+			console.log('i ran a state');
+			d3.selectAll(".bump_temp")
+			    .remove()
+			    .exit();
+
+	  	d3.json("bump_chart_data.json", function(d) {  
+	    	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
+	    	bc = bumpChart(dataset,options_bump) 
+	  		})}
+	  else{		
+	  		console.log('i ran all');
+	  		d3.selectAll(".bump_temp")
+			    .remove()
+			    .exit();
+	  	 	d3.json("bump_chart_state_data.json", function(d) { 
+	  	 	bc = bumpChart(d,options_bump)
+	  	 	}) 
+	  	}};
+
 var bumpChart = function(chart_data, options_bump){
 	
 	//load in data
@@ -23,7 +52,6 @@ var bumpChart = function(chart_data, options_bump){
 		  .append('g')
 		    .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')')
 		    .classed('bump_temp',true)
-
 
 	this.data.sort(function(a,b){
 		if(b['year'] != a['year']) {
@@ -66,8 +94,6 @@ var bumpChart = function(chart_data, options_bump){
       .domain(d3.extent(this.data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
-  // /
-  
   var color = d3.scaleThreshold()
     .domain([0, 25000, 50000, 75000, 100000])
     .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
@@ -93,19 +119,14 @@ var bumpChart = function(chart_data, options_bump){
 
   ///////////////////////
   // Lines
-
-  
-
   var counties = d3.map(this.data, function(d) {
     return d['County'];
   }).keys();
-
 
   console.log(this.data.filter(function(d) {
       if(d.County == 'Illinois') {
         return d;
       }}));
-
 
   var data = this.data;
 
@@ -297,56 +318,8 @@ var bumpChart = function(chart_data, options_bump){
 						};
 
 
- function changeState(value){
+ 
 
-
-		options_bump.state_bump = value;
-
-		console.log(options_bump)
-
-		if(options_bump.state_bump != 'All'){
-
-			console.log('i ran a state');
-
-			d3.selectAll(".bump_temp")
-			    .remove()
-			    .exit();
-
-	  	d3.json("bump_chart_data.json", function(d) {  
-		
-
-	    	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
-	    	
-	    	bc = bumpChart(dataset,options_bump) 
-
-	  		}
-	  	)}
-	  else{		
-
-	  		console.log('i ran all');
-
-	  		d3.selectAll(".bump_temp")
-			    .remove()
-			    .exit();
-
-	  	 	d3.json("bump_chart_state_data.json", function(d) { 
-
-	  	 	bc = bumpChart(d,options_bump)
-
-
-	  	 	}) 
-	  	}
-	  
-	};
-
-var options_bump = {state_bump: "All"}
-
-var bump = d3.json('bump_chart_state_data.json', function (d){ 
-
-		 bc = new bumpChart(d,options_bump)
-
-
-	});
 
 
 

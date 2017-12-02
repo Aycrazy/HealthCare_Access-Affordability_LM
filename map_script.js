@@ -94,12 +94,12 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
+  /////////////////////////////
+  // ISSUE IS HERE!!!!
 
-  changeState(state_name);
-  
-  //active.classed("active",'true');
-      
-
+  //changeState(state_name);
+  changeStateBump(state_name);
+  changeStateBar(state_name);
 }
 
 function reset() {
@@ -108,16 +108,19 @@ function reset() {
   active.append('false')
 
     //.on("click", changeState('All'));
-  var state_name = 'All';
+  var state_name = 'all';
   console.log(state_name)
-
-  
 
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
   //active.on("click", changeState(state_name));
-  changeState(state_name);
+  
+  /////////////////////////////
+  // ISSUE IS HERE!!!!
+  //changeState(state_name);
+  changeStateBump(state_name);
+  changeStateBar(state_name);
 }
 
 function zoomed() {
