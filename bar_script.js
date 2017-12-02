@@ -141,7 +141,7 @@ var barChart = function(chart_data, options_bar) {
               .style("left", d3.event.pageX - 50 + "px")
               .style("top", d3.event.pageY - 70 + "px")
               .style("display", "inline-block")
-              .html("year: " + (d_bar.year) + "<br>" + "health status: "  + "<br>" + (d_bar.health_status)  + "%" + "<br>" + "population size: "  + "<br>" + (d_bar.num_18plus) + "<br>" + "state: " + "<br>" + (d_bar.state));
+              .html("year: " + (d_bar.year) + "<br>" + "health status: "  + (d_bar.health_status)  + "%" + "<br>" + "state: " + (d_bar.state));
         })
       .on("mouseout", function(d_bar){ tooltip_bar.style("display", "none");});
 
