@@ -71,7 +71,20 @@ path.active {
   display: none;
 }
 
-.tooltip {
+.tooltip_bump {
+  position: absolute;
+  padding: 10px;
+  font: 12px sans-serif;
+  background: #222;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.9;
+  visibility: hidden;
+}
+
+.tooltip_bubble {
   position: absolute;
   padding: 10px;
   font: 12px sans-serif;

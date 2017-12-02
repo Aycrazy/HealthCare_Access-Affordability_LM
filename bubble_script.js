@@ -275,32 +275,28 @@ function initialize(error, data,first_time) {
                 if(retval){ return retval;}})
                         
          // Tooltips
-          // var tooltip = d3.select("#bubble_chart").append("div")
-          //     .attr("class", "tooltip");
+          var tooltip_bubble = d3.select("#bubble_chart").append("div")
+              .attr("class", "tooltip_bubble");
 
-          // bubble.selectAll("circle")
-          //     .on("mouseover", function(d) {
-          //       bubble.selectAll('.aggregate')
-          //           .classed('active', true);
+          bubble.selectAll("circle")
+              .on("mouseover", function(d) {
+                bubble.selectAll('.county');
 
-          //       var tooltip_str = "Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
-          //                   "<br/>" + "Region: " + d.state_name+
-          //           "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
-          //           "<br/>" + "Year: " + d.year;
+                tooltip_bubble.html("Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
+                            "<br/>" + "Region: " + d.state_name+
+                    "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
+                    "<br/>" + "Year: " + d.year)
+                    .style("visibility", "visible");
+              })
+              .on("mousemove", function(d) {
+                tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
+                    .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
+              })
+              .on("mouseout", function(d) {
+                bubble.selectAll('.county');
 
-          //       tooltip.html(tooltip_str)
-          //           .style("visibility", "visible");
-          //     })
-          //     .on("mousemove", function(d) {
-          //       tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
-          //           .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");
-          //     })
-          //     .on("mouseout", function(d) {
-          //       bubble.selectAll('.aggregate')
-          //           .classed('active', false);
-
-          //       tooltip.style("visibility", "hidden");
-          //     })
+                tooltip_bubble.style("visibility", "hidden");
+              })
           
 
 

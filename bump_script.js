@@ -178,7 +178,7 @@ var bumpChart = function(chart_data, options_bump){
 	///////////////////////
 	  // Tooltips
 	  var tooltip = d3.select("#bump_chart").append("div")
-	      .attr("class", "tooltip");
+	      .attr("class", "tooltip_bump");
 
 	  chart_bump.selectAll("text")
 	      .on("mouseover", function(d) {
