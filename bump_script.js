@@ -33,7 +33,6 @@ var bumpChart = function(chart_data, options_bump){
 	
 	//load in data
 	if(d3.select('.bump_temp')){
-		console.log('this was working before')
 		d3.select('.bump_temp').remove().exit()
 	}
 

@@ -6,7 +6,7 @@ function initialize(error, data,first_time) {
     if (error) { throw error }
 
     var blurStable = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
-    var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -10'
+    var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -10'
     var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
 
     var margin = { top: 15, right: 15, bottom: 45, left: 55 };

@@ -100,6 +100,7 @@ function clicked(d) {
   //changeState(state_name);
   changeStateBump(state_name);
   changeStateBar(state_name);
+  changeStateArea(state_abbr);
 }
 
 function reset() {
@@ -109,6 +110,7 @@ function reset() {
 
     //.on("click", changeState('All'));
   var state_name = 'all';
+  var state_abbr = 'all';
   console.log(state_name)
 
   map_svg.transition()
@@ -121,6 +123,7 @@ function reset() {
   //changeState(state_name);
   changeStateBump(state_name);
   changeStateBar(state_name);
+  changeStateArea(state_abbr);
 }
 
 function zoomed() {
