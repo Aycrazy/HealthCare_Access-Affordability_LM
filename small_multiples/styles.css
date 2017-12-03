@@ -1,0 +1,31 @@
+#small-multiples > div {
+    display: inline-block;
+    width: 240px;
+    height: 185px;
+  }
+
+.plot-area {
+    overflow: visible !important;
+  }
+
+.point {
+fill: black;
+}
+.point text {
+text-anchor: middle;
+transform: translateY(-10px);
+font-size: 10px;
+stroke: none;
+}
+.bottom-handle {
+text-anchor: middle;
+alignment-baseline: hanging;
+	font-size: 10px;
+transform: translateY(1.5em);
+}
+.top-handle {
+display: none;
+}
+.annotation-line line {
+display: none;
+}
