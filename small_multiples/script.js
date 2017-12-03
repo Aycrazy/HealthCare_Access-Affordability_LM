@@ -3,15 +3,25 @@
 var options_area = {state_area: "all"}
 
 
-
 var f = d3.format(".2f")
 
-var area = d3.json('all_state_metals_data.json', function (d){ 
 
-   keys = d3.keys(d[0]).slice(1,5);
 
-    ac = new areaChart(type(d,columns = keys), options_area)
+var aChart = d3.json('all_state_metals_data.json', function (d){ 
+
+  d = makeOrderVal(d);
+  
+  d = d.sort(function(a,b){return a.month - b.month;
+      });
+
+  console.log(d)
+
+  var keys = ['catastrophic','bronze','silver','gold','platinum'];
+
+  ac = new areaChart(type(d,columns = keys), options_area)
   });
+
+//var parseDate = d3.timeParse("%B %Y");
 
 function changeStateArea(value){
     options_area.state_area = value;
@@ -24,6 +34,7 @@ function changeStateArea(value){
 
       d3.json("state_metals_data.json", function(d) {  
         dataset = d.filter(function(d) {return d.state == options_area.state_area;});
+         
          keys = d3.keys(dataset[0]).slice(1,5);
 
         dataset = type(dataset,columns = keys)
@@ -44,16 +55,20 @@ function changeStateArea(value){
 function areaChart(area_data, options_area){
 
 
-  data  = area_data
 
-  var svg = d3.select("#area_chart").append("svg");
-
+  var data = area_data;
+  console.log(data);
 
   margin = { top: 65, right: 0, bottom: 30, left: 70 };
-  width = 960 - margin.left - margin.right;
-  height = 800 - margin.top - margin.bottom;
+  width = 700 - margin.left - margin.right;
+  height = 500 - margin.top - margin.bottom;
 
-  var x = d3.scaleTime().range([0, width]),
+  var svg = d3.select("#area_chart")
+            .append("svg")
+            .attr('height',700)
+            .attr('width',500);
+
+  var x = d3.scaleBand().range([0, 500]),
       y = d3.scaleLinear().range([height, 0]),
       z = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -70,15 +85,16 @@ function areaChart(area_data, options_area){
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var keys = ['catastrophic','bronze','silver','gold','platinum']
+  var keys = ['catastrophic','bronze','silver','gold','platinum'];
 
   console.log(keys);
 
 
-  x.domain(d3.extent(data, function(d) {console.log(d.date); return d.date; }));
-  y.domain([0.00, 700000.00])
+  x.domain(['December 2014','March 2015', 'June 2015','September 2015','December 2015','March 2016']);
+  y.domain([0.00, 1200000.00])
   z.domain(keys);
   stack.keys(keys);
+
 
   var layer = g.selectAll(".layer")
     .data(stack(data))
@@ -92,10 +108,11 @@ function areaChart(area_data, options_area){
       .style("fill", function(d) { console.log(d.key, z(d.key),'z'); return z(d.key); })
       .attr("d", area);
 
-  layer.filter(function(d) { return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
+  layer.filter(function(d) { console.log(d); return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
     .append("text")
       .attr("x", width - 6)
-      .attr("y", function(d) { console.log (f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)));
+      .attr("y", function(d) { 
+        console.log(d,'what am i');
         return f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)); })
       .attr("dy", ".35em")
       .style("font", "10px sans-serif")
@@ -114,7 +131,45 @@ function areaChart(area_data, options_area){
 }
 
 function type(d, columns) {
-  console.log(d);
+  //d.date = parseDate(d.date);
+  
+
+  console.log(d.date)
   for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = d[columns[i]];
+  return d;
+}
+
+function makeOrderVal(d){
+
+  keys = ['catastrophic','bronze','silver','gold','platinum'];
+  console.log(d);
+
+  switch(d.date){
+    case 'December 2014':
+     d['month']= 1 ;
+     break;
+
+    case 'March 2015':
+     d['month']= 2 ;
+     break;
+
+    case 'June 2015':
+      d['month']= 3 ;
+     break;
+
+    case 'September 2015':
+     d['month']= 4 ;
+     break;
+
+    case 'December 2015':
+     d['month']= 5 ;
+     break;
+
+    case 'March 2016':
+     d['month']= 6 ;
+     break;
+    };
+
+  console.log(d['month']);
   return d;
 }
