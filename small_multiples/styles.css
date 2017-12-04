@@ -29,3 +29,26 @@ display: none;
 .annotation-line line {
 display: none;
 }
+
+.tooltip_area {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  padding: 5px;
+  font-size: 10pt;
+  font-family: Lucidatypewriter, monospace;
+  fill: #2d2e2e;
+  font-style: italic;
+}
+
+text.source_text_area,
+text.ltext_area,
+text.xText_area,
+text.yText_area {
+    font-size: 10pt;
+    font-family: Lucidatypewriter, monospace;
+    fill: #2d2e2e;
+    font-style: italic;
+}

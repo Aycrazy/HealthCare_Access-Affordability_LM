@@ -3,7 +3,7 @@
 var options_area = {state_area: "all"}
 
 
-// var f_area = d3.format(".2f")
+var f = d3.format(".2f")
 
 
 var aChart = d3.json('all_state_metals_data.json', function (d){ 
@@ -84,7 +84,7 @@ function areaChart(area_data, options_area){
 
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    ;
+    .classed('area_temp',true);
 
   var keys = ['catastrophic','bronze','silver','gold','platinum'];
 
@@ -141,6 +141,7 @@ function areaChart(area_data, options_area){
   var legend1_area= svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
+    .classed('area_temp',true);
 
   legend1_area.selectAll('path')
     .data(data)
@@ -163,6 +164,7 @@ function areaChart(area_data, options_area){
   var legend2_area = svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
+    .classed('area_temp',true);
 
   legend2_area.selectAll('path')
     .data(data)
@@ -185,6 +187,7 @@ function areaChart(area_data, options_area){
   var legend3_area = svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
+    .classed('area_temp',true);
 
   legend3_area.selectAll('path')
     .data(data)
@@ -207,6 +210,7 @@ function areaChart(area_data, options_area){
   var legend4_area = svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
+    .classed('area_temp',true);
 
   legend4_area.selectAll('path')
     .data(data)
@@ -229,6 +233,7 @@ function areaChart(area_data, options_area){
   var legend5_area = svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
+    .classed('area_temp',true);
 
   legend5_area.selectAll('path')
     .data(data)
@@ -252,9 +257,7 @@ function areaChart(area_data, options_area){
 
 function type(d, columns) {
   //d.date = parseDate(d.date);
-  
 
-  console.log(d.date)
   for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = d[columns[i]];
   return d;
 }
