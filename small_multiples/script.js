@@ -60,15 +60,15 @@ function areaChart(area_data, options_area){
   console.log(data);
 
   margin = { top: 65, right: 0, bottom: 30, left: 70 };
-  width = 700 - margin.left - margin.right;
-  height = 500 - margin.top - margin.bottom;
+  width = 700
+  height = 600
 
   var svg = d3.select("#area_chart")
             .append("svg")
-            .attr('height',700)
-            .attr('width',500);
+            .attr('height',height+margin.top+margin.bottom)
+            .attr('width',width+margin.left+margin.right);
 
-  var x = d3.scaleBand().range([0, 500]),
+  var x = d3.scaleBand().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
       z = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -122,7 +122,12 @@ function areaChart(area_data, options_area){
   g.append("g")
       .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .attr("y", margin.bottom/3 -15)
+      .attr("x", margin.left)
+      .selectAll("text").attr("transform","rotate(45)")
+
+      ;
 
   g.append("g")
       .attr("class", "axis axis--y")
@@ -144,31 +149,33 @@ function makeOrderVal(d){
   keys = ['catastrophic','bronze','silver','gold','platinum'];
   console.log(d);
 
-  switch(d.date){
+  d.forEach( function(e){
+  switch(e.date){
     case 'December 2014':
-     d['month']= 1 ;
+      console.log('hello');
+     e['month']= 1 ;
      break;
 
     case 'March 2015':
-     d['month']= 2 ;
+     e['month']= 2 ;
      break;
 
     case 'June 2015':
-      d['month']= 3 ;
+      e['month']= 3 ;
      break;
 
     case 'September 2015':
-     d['month']= 4 ;
+     e['month']= 4 ;
      break;
 
     case 'December 2015':
-     d['month']= 5 ;
+     e['month']= 5 ;
      break;
 
     case 'March 2016':
-     d['month']= 6 ;
+     e['month']= 6 ;
      break;
-    };
+    };})
 
   console.log(d['month']);
   return d;

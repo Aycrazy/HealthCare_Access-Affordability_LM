@@ -8,7 +8,7 @@ var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -7';
 
 var margin = { top: 15, right: 15, bottom: 45, left: 55 };
 var width = 960 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var height = 700 - margin.top - margin.bottom;
 
 
 var svg = d3.select('#scatterHealthBubbleChart')
