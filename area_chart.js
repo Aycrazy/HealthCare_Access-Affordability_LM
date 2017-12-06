@@ -8,16 +8,15 @@ var f = d3.format(".2f")
 
 var aChart = d3.json('all_state_metals_data.json', function (d){ 
 
-  d = makeOrderVal(d);
+  //d = makeOrderVal(d);
   
-  d = d.sort(function(a,b){return a.date - b.date;
-      });
+  //d = d.sort(function(a,b){return a.date - b.date;
+  //    });
 
   console.log(d)
 
-  var keys = ['catastrophic','bronze','silver','gold','platinum'];
 
-  ac = new areaChart(type(d,columns = keys), options_area)
+  ac = new areaChart(d, options_area)
   });
 
 //var parseDate = d3.timeParse("%B %Y");
@@ -32,11 +31,9 @@ function changeStateArea(value){
           .exit();
 
       d3.json("state_metals_data.json", function(d) {  
-        dataset = d.filter(function(d) {return d.state == options_area.state_area;});
+        
+        dataset = d.filter(function(d) { console.log(d.state,'filter'); return d.state == options_area.state_area;});
          
-         keys = d3.keys(dataset[0]).slice(1,5);
-
-        dataset = type(dataset,columns = keys)
         ac = areaChart(dataset,options_area) 
         })}
     else{   
@@ -44,9 +41,10 @@ function changeStateArea(value){
         d3.selectAll(".area_temp")
           .remove()
           .exit();
+        
         d3.json("all_state_metals_data.json",function(d) { 
-          keys = d3.keys(d[0]).slice(1,5);
-          d = type(d,columns = keys)
+          
+          
           ac = areaChart(d,options_area)
         }) 
       }};
@@ -56,7 +54,6 @@ function areaChart(area_data, options_area){
 
 
   var data = area_data;
-  console.log(data);
 
   margin = { top: 65, right: 10, bottom: 100, left: 70 };
   width = 700
@@ -72,12 +69,6 @@ function areaChart(area_data, options_area){
       y = d3.scaleLinear().range([height, 0]),
       z = d3.scaleOrdinal().range(['#C468CC','#CCBA97','#958E99','#FFDA68','#83C2CC']);
 
-  var area = d3.area()
-    .x(function(d, i) { console.log(d.data.date); return x(d.data.date); })
-    .y0(function(d) { console.log(d[0],'hi'); return y(d[0]); })
-    .y1(function(d) { console.log(d[1],'hi2'); return y(d[1]); });
-
-
 
   var stack = d3.stack();
 
@@ -88,14 +79,25 @@ function areaChart(area_data, options_area){
 
   var keys = ['catastrophic','bronze','silver','gold','platinum'];
 
-  console.log(keys);
+  
   // do this down where the swich and case are d = ['01//01/2014', ]
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([0.00, 1200000.00])
+  data = makeOrderVal(data).sort(function(a,b){return a.date - b.date;})
+  data = type(data)
+
+  x.domain(d3.extent(data, function(d) {return d.date; }));
+  y.domain([0, d3.max(data, function(d){ return d.total;})])
   z.domain(keys);
   stack.keys(keys);
 
+  
+
+   var area = d3.area()
+    .x(function(d, i) { return x(d.data.date); })
+    .y0(function(d) { console.log(d[0],'hi'); return y(d[0]); })
+    .y1(function(d) { console.log(d[1],'hi2'); return y(d[1]); });
+
+  console.log(data, 'data');
 
   var layer = g.selectAll(".layer")
     .data(stack(data))
@@ -109,16 +111,17 @@ function areaChart(area_data, options_area){
       .style("fill", function(d) { console.log(d.key, z(d.key),'z'); return z(d.key); })
       .attr("d", area);
 
-  // layer.filter(function(d) { console.log(d); return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
-  //   .append("text")
-  //     .attr("x", width - 6)
-  //     .attr("y", function(d) { 
-  //       console.log(d,'what am i');
-  //       return f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)); })
-  //     .attr("dy", ".25em")
-  //     .style("font", "10px sans-serif")
-  //     .style("text-anchor", "end")
-  //     .text(function(d) { console.log(d.key,'key'); return d.key; });
+
+  layer.filter(function(d) { console.log(d); return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
+    .append("text")
+      .attr("x", width - 6)
+      .attr("y", function(d) { 
+        console.log(d,'what am i');
+        return f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)); })
+      .attr("dy", ".25em")
+      .style("font", "10px sans-serif")
+      .style("text-anchor", "end")
+      //.text(function(d) { console.log(d.key,'key'); return d.key; });
 
   g.append("g")
       .attr("class", "axis axis--x")
@@ -229,7 +232,7 @@ function areaChart(area_data, options_area){
       .attr('class', 'ltext_area')
       .text('Gold')
 
-  // create the 2014 legend
+  // create the Platinum legend
   var legend5_area = svg.append('g')
     .attr('height', 100)
     .attr('width', 100)
@@ -255,16 +258,17 @@ function areaChart(area_data, options_area){
 
 }
 
-function type(d, columns) {
+function type(d) {
   //d.date = parseDate(d.date);
-
-  for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = d[columns[i]];
-  return d;
+  columns = ['catastrophic','bronze','silver','gold','platinum'];
+  for (var i = 1, n = columns.length; i < n; ++i){ 
+    console.log(d[columns[i]],'bug 263');
+    d[columns[i]] = d[columns[i]];
+  return d;}
 }
 
 function makeOrderVal(d){
 
-  keys = ['catastrophic','bronze','silver','gold','platinum'];
   console.log(d);
 
   var parseDate=d3.timeParse('%m/%Y')
