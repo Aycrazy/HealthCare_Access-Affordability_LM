@@ -15,9 +15,9 @@ var aChart = d3.json('all_state_metals_data.json', function (d){
 
   console.log(d)
 
-
   ac = new areaChart(d, options_area)
   });
+
 
 //var parseDate = d3.timeParse("%B %Y");
 
@@ -34,7 +34,8 @@ function changeStateArea(value){
         
         dataset = d.filter(function(d) { console.log(d.state,'filter'); return d.state == options_area.state_area;});
          
-        ac = areaChart(dataset,options_area) 
+          ac = areaChart(dataset,options_area) 
+
         })}
     else{   
         console.log('i ran all');
@@ -82,8 +83,8 @@ function areaChart(area_data, options_area){
   
   // do this down where the swich and case are d = ['01//01/2014', ]
 
-  data = makeOrderVal(data).sort(function(a,b){return a.date - b.date;})
-  data = type(data)
+  data = makeOrderVal(data,'area').sort(function(a,b){return a.date - b.date;})
+  data = type(data,'area')
 
   x.domain(d3.extent(data, function(d) {return d.date; }));
   y.domain([0, d3.max(data, function(d){ return d.total;})])
@@ -112,7 +113,7 @@ function areaChart(area_data, options_area){
       .attr("d", area);
 
 
-  layer.filter(function(d) { console.log(d); return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
+  layer.filter(function(d) {  return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
     .append("text")
       .attr("x", width - 6)
       .attr("y", function(d) { 
@@ -255,51 +256,215 @@ function areaChart(area_data, options_area){
       .attr('class', 'ltext_area')
       .text('Platinum')
 
+  svg.append('text')
+    .attr("transform", "translate(" + ( margin.left ) + " ," + margin.top/1.7 + ")")
+    .text("Area Chart of Metal Plans Purchased by Year " + options_area.state_area)
+    .style('font-size','16')
+    .style('font-weight', 'bold')
+    .style('font-family','monospace')
+    .append('text')
+    .classed('area_temp',true)
+//tried it, works. No use to it.  Uninsured rate is way higher. Best way to visualize
+//this would be with bump chart conversion to line chart.  Instead created button that
+//presents number of uninsured in January of new year
 
-}
+  var selected = false;
 
-function type(d) {
+  d3.select('#uninsured')
+    .on('click', function () {
+
+        if(selected == true){
+
+          d3.selectAll('.uText')
+            .remove().exit()
+
+          selected = false;
+        }
+        else{
+
+          selected = true
+          lc = makelineChart(options_area)
+        //uninsured.inactive
+        }
+    })
+
+  function makelineChart(options_area){
+    //inspired by Jasmin Dial https://github.com/jdial8/D3-Inequality-/blob/master/index.html
+  
+      if(options_area.state_area == 'all'){
+
+        d3.json('all_uninsured_14_16.json', function(d){
+
+          
+          lineChart(d);});
+      }
+      else{
+        d3.json('uninsured_14_16.json', function(d){
+
+          
+          d = makeOrderVal(d,'line')
+
+          d.filter(function(d) { return  d.state == options_area.state_area;})
+
+            lineChart(d, options_area);})
+      }
+
+      function lineChart(data){
+
+        //console.log(data);
+
+        var parseYear=d3.timeParse('%Y')
+
+        data = makeOrderVal(data,'line').sort(function(a,b){return a.year - b.year;})
+        //data = type(data,'line')
+
+        console.log(data, 'line data');
+
+        y.domain(d3.extent(data, function(d){ return d.num_uninsured;}));
+          
+       
+        // var ULine = d3.line()
+        //   .x(function(d) { return x(d.year); })
+        //   .y(function(d) { return y(d.num_uninsured); });
+
+        // g.select(".axis .axis--y")
+        //   .exit()
+        //   .transition()
+        //   .duration(1000)
+        //   .call(d3.axisLeft(y))
+
+
+
+        
+        
+
+        var g2 = svg.append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+          .classed('area_temp',true);
+
+        //lines
+       // g2.append("path")
+       //    .data([data])
+       //    .attr("stroke-width", '15px')
+       //    .attr('fill','black')
+       //    .attr("d", ULine)
+       //    .attr('z',9);
+
+        // points
+         uninsured = g2.selectAll(".uText")
+          .data(data)
+          .enter()
+          .append("text")
+          .attr("class", "uText")
+          .attr("x", function(d) { if(options_area.state_area != 'all')
+            {if(d.state == options_area.state_area){
+              return x(parseYear(d.year));}}
+          else{
+              return x(parseYear(d.year));}
+            })
+          .attr("y", function (d) {if(options_area.state_area != 'all')
+            {if(d.state == options_area.state_area){
+              return y(d.num_uninsured);}}
+            else
+            {return y(d.num_uninsured)}})
+          .attr('z',10)
+          .text(function (d) {if(options_area.state_area != 'all')
+            {if(d.state == options_area.state_area){
+              return d.num_uninsured;}}
+            else
+            {
+              return d.num_uninsured}})
+          .classed('active',true)
+          .classed('area_temp',true);
+       
+      
+    }
+  };//end of area chart
+
+  
+ }
+
+function type(d, chartType) {
   //d.date = parseDate(d.date);
+  if(chartType == 'area'){
   columns = ['catastrophic','bronze','silver','gold','platinum'];
+    }
+  else{
+  columns = ['num_uninsured'];
+    }
+
+  
+  
   for (var i = 1, n = columns.length; i < n; ++i){ 
     console.log(d[columns[i]],'bug 263');
     d[columns[i]] = d[columns[i]];
   return d;}
 }
 
-function makeOrderVal(d){
+function makeOrderVal(d, chartType){
+
+
+ 
 
   console.log(d);
+  if(chartType == 'area'){
 
-  var parseDate=d3.timeParse('%m/%Y')
+    var parseDate=d3.timeParse('%m/%Y')
 
-  d.forEach( function(e){
-  switch(e.date){
-    case 'December 2014':
-      console.log('hello');
-     e['date']= parseDate('12/2014') ;
-     break;
+    d.forEach( function(e){
+    switch(e.date){
+      case 'December 2014':
+        console.log('hello');
+       e['date']= parseDate('12/2014') ;
+       break;
 
-    case 'March 2015':
-     e['date']= parseDate('03/2015') ;
-     break;
+      case 'March 2015':
+       e['date']= parseDate('03/2015') ;
+       break;
 
-    case 'June 2015':
-      e['date']= parseDate('06/2015') ;
-     break;
+      case 'June 2015':
+        e['date']= parseDate('06/2015') ;
+       break;
 
-    case 'September 2015':
-     e['date']= parseDate('09/2015');
-     break;
+      case 'September 2015':
+       e['date']= parseDate('09/2015');
+       break;
 
-    case 'December 2015':
-     e['date']= parseDate('12/2015');
-     break;
+      case 'December 2015':
+       e['date']= parseDate('12/2015');
+       break;
 
-    case 'March 2016':
-     e['date']= parseDate('03/2016');
-     break;
-    };})
+      case 'March 2016':
+       e['date']= parseDate('03/2016');
+       break;
+      };})
 
-  return d;
+    return d;
+    }//end if
+else{
+  d.forEach(function(e){
+
+    switch(e.state){
+      case 'Illinois':
+       e['state']= 'IL';
+       break;
+
+      case 'Indiana':
+       e['state']= 'IN';
+       break;
+
+      case 'Michigan':
+             e['state']= 'MI';
+             break;
+
+      case 'Wisconsin':
+             e['state']= 'WI';
+             break;
+
+      };})
+
+  return d
+}//end else
+
 }
+

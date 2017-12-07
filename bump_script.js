@@ -37,7 +37,7 @@ var bumpChart = function(chart_data, options_bump){
 	}
 
 	this.data  = chart_data
-	this.margin = { top: 65, right: 0, bottom: 30, left: 70 };
+	this.margin = { top: 65, right: 120, bottom: 30, left: 70 };
 	this.width = 960 - this.margin.left - this.margin.right;
 	this.height = 800 - this.margin.top - this.margin.bottom;
 
@@ -93,16 +93,16 @@ var bumpChart = function(chart_data, options_bump){
       .domain(d3.extent(this.data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
-  if(options_bump.state_bump === 'all'){
-  	var color = d3.scaleOrdinal()
-	  	.domain(["Illinois","Indiana",'Michigan','Wisconsin'])
-	    .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
-  }
-  else{
+  // if(options_bump.state_bump === 'all'){
+  // 	var color = d3.scaleOrdinal()
+	 //  	.domain(["Illinois","Indiana",'Michigan','Wisconsin'])
+	 //    .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
+  // }
+  // else{
   var color = d3.scaleThreshold()
-    .domain([0, 25000, 50000, 75000, 100000])
+    .domain([0, 25000, 50000, 75000])
     .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
-  }
+  //}
   //console.log(d3.extent(data, function(d) { return d.position; }));
   ///////////////////////
   // Axis
@@ -113,14 +113,17 @@ var bumpChart = function(chart_data, options_bump){
   chart_bump.append("g")
       .classed('bump_temp',true)
       .attr("transform", "translate(-"+ this.margin.left/2 +"," + this.height + ")")
-      .call(xAxis_bump);
+      .call(xAxis_bump)
+      .transition()
+      .duration(1000);;
 
   console.log('worked2');
 
   chart_bump.append("g")
       .attr("class", "y axis")
-      .classed('bump_temp',true)
-      .call(yAxis_bump);
+      .call(yAxis_bump)
+      .transition()
+      .duration(1000);
 
   ///////////////////////
   // Lines
@@ -166,23 +169,30 @@ var bumpChart = function(chart_data, options_bump){
     .selectAll("text")
     .data(this.data)
     .enter().append("text")
+    .transition()
+    .duration(1000)
     .attr("class", "uninsured")
     .text( function(d){ return d.County;})
     .attr("x", function(d) { return x_bump(d['year'])-15; })
     .attr("y", function(d) { return y_bump(d['position']); })
-    .style('fill',function(d){ if(options_bump.state_bump === 'all'){
-    		return color(d['County']);}
-    	else{
+    .style('fill',function(d){ 
+
+    	//option to show the states as their own colors
+    	//if(options_bump.state_bump === 'all'){
+    		//return color(d['County']);
+    		//}
+    	//else{
     		return color(d.median_income)
-    	};
+    	//};
     })
     // replace spaces with - and remove '.' (from d.c. united)
-    .attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
+    
+    node.attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
     .attr("font-family", 'monospace')
     //.style('font-size', '8px')
     //.attr("stroke-width", .3)
     .attr('opacity', '0.8')
-    .classed('bump_temp',true);
+    //.classed('bump_temp',true);
 
 	///////////////////////
 	  // Tooltips
@@ -246,19 +256,6 @@ var bumpChart = function(chart_data, options_bump){
 
 	  	console.log(by_year_median_income);
 
-			chart_bump.append("g")
-				.selectAll("text")
-				.data(by_year_median_income)
-				.enter()
-				.append("text")
-				.attr("x", function (d){ return x_bump(d[1]);})
-				.attr("height", -10)
-				.classed("bump_temp",'true')
-				.text(function (d){return d[2];})
-				.style('font-size', '14px')
-				.style('font-weight','bold')
-				.style('font-family','monospace')
-				.call(xAxis_bump)
 
 			chart_bump.append("g")
 				.selectAll("text")
@@ -324,6 +321,101 @@ var bumpChart = function(chart_data, options_bump){
 		    .style('font-family','monospace')
 		    .append('text')
 		    .classed('bump_temp',true)
+
+
+
+					  // create 0-$25,000 legend
+			  var legend1_bump= chart_bump.append('g')
+			    .attr('height', 100)
+			    .attr('width', 100)
+			    .classed('bump_temp',true);
+
+			  legend1_bump.selectAll('path')
+			    .data(data)
+			    .enter().append('rect')
+			    .attr('x', this.width+this.margin.right/2)
+			    .attr('y', this.height/2 - 175)
+			    .attr('width', 15)
+			    .attr('height', 15)
+			    .attr('fill', "#009E73")
+
+			  legend1_bump.selectAll('text')
+			    .data(data)
+			    .enter().append('text')
+			    .attr('x', this.width+this.margin.right/2.5)
+			      .attr('y', this.height/2 - 175)
+			      .attr('class', 'ltext_bump')
+			      .text('0-$25,000')
+
+			  // create the 25-$50,000 legend
+			  var legend3_bump = chart_bump.append('g')
+			    .attr('height', 100)
+			    .attr('width', 100)
+			    .classed('bump_temp',true);
+
+			  legend3_bump.selectAll('path')
+			    .data(data)
+			    .enter().append('rect')
+			    .attr('x', this.width+this.margin.right/2)
+			    .attr('y', this.height/2 - 115)
+			    .attr('width', 15)
+			    .attr('height', 15)
+			    .attr('fill',  "#0072B2")
+
+			  legend3_bump.selectAll('text')
+			    .data(data)
+			    .enter().append('text')
+			    .attr('x', this.width+this.margin.right/2.5)
+			      .attr('y', this.height/2 - 115)
+			      .attr('class', 'ltext_bump')
+			      .text('25-$50,000')
+
+			  // create the 50-$75,000 legend
+			  var legend4_bump = chart_bump.append('g')
+			    .attr('height', 100)
+			    .attr('width', 100)
+			    .classed('bump_temp',true);
+
+			  legend4_bump.selectAll('path')
+			    .data(data)
+			    .enter().append('rect')
+			    .attr('x', this.width+this.margin.right/2 )
+			    .attr('y', this.height/2 - 50)
+			    .attr('width', 15)
+			    .attr('height', 15)
+			    .attr('fill', "#D55E00")
+
+			  legend4_bump.selectAll('text')
+			    .data(data)
+			    .enter().append('text')
+			    .attr('x', this.width+this.margin.right/2.5)
+			      .attr('y', this.height/2 - 50)
+			      .attr('class', 'ltext_bump')
+			      .text('50-$75,000')
+
+			  // create the 75-$100,000 legend
+			  var legend5_bump = chart_bump.append('g')
+			    .attr('height', 100)
+			    .attr('width', 100)
+			    .classed('bump_temp',true);
+
+			  legend5_bump.selectAll('path')
+			    .data(data)
+			    .enter().append('rect')
+			    .attr('x', this.width+this.margin.right/2)
+			    .attr('y', this.height/2 + 10)
+			    .attr('width', 15)
+			    .attr('height', 15)
+			    .attr('fill',  "#CC79A7")
+
+			  legend5_bump.selectAll('text')
+			    .data(data)
+			    .enter().append('text')
+			    .attr('x', this.width+this.margin.right/2.5)
+			      .attr('y', this.height/2 + 10)
+			      .attr('class', 'ltext_bump')
+			      .text('$75,000^')
+
 						};
 
 

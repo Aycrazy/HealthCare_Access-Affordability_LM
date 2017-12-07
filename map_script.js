@@ -76,6 +76,7 @@ function clicked(d) {
     
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
+  state_abbr_bubb = d.properties.STUSPS;
 
   console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
@@ -101,6 +102,7 @@ function clicked(d) {
   changeStateBump(state_name);
   changeStateBar(state_name);
   changeStateArea(state_abbr);
+  changeStateBubble(state_abbr);
 }
 
 function reset() {
@@ -124,6 +126,7 @@ function reset() {
   changeStateBump(state_name);
   changeStateBar(state_name);
   changeStateArea(state_abbr);
+  changeStateBubble(state_abbr_bubb);
 }
 
 function zoomed() {

@@ -7,6 +7,12 @@
 
 d3.json("scatter_area_data.json", initialize);
 
+var counties;
+var bubble_data;
+var bubble;
+var color ;
+var tool_tip_bubble;
+
 function initialize(error, data,first_time) {
     if (error) { throw error }
 
@@ -19,7 +25,7 @@ function initialize(error, data,first_time) {
     var height = 500 - margin.top - margin.bottom;
 
 
-    var bubble = d3.select('#bubble_chart')
+    bubble = d3.select('#bubble_chart')
         .append('svg')
         .attr('width', width + margin.left + margin.top*2)
         .attr('height', height + margin.top*2 + margin.bottom)
@@ -34,7 +40,7 @@ function initialize(error, data,first_time) {
     var r = d3.scaleLinear()
                     .range([10, 50]);
 
-    var color = d3.scaleOrdinal()
+    color = d3.scaleOrdinal()
         .domain(["IL","IN",'MI','WI'])
         .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
 
@@ -66,6 +72,8 @@ function initialize(error, data,first_time) {
    
 
     //if(first_time = true){
+    bubble_data = data
+
     data = d3.nest()
         .key(function (d) { return d.year })
         .key(function (d) { return d.state_name })
@@ -77,6 +85,7 @@ function initialize(error, data,first_time) {
             e.yes_aptc =   d3.sum(e.values , function (f) {
                 return f.yes_aptc})
             e.county_name = d3.max(e.values,function(f){ return f.state_name;})
+            e.state = 'yes'
             e.avg_silver_27 = +d3.sum(e.values, function (f) {
                 return f.avg_silver_27
             })/+e.values.length
@@ -86,7 +95,8 @@ function initialize(error, data,first_time) {
     })
     //}
 
-    dataset = data 
+    dataset = data  
+   
 
     var uniqueStates = data[0].values.map(function (d) { return d.key });
 
@@ -157,15 +167,45 @@ function initialize(error, data,first_time) {
 	          if (!exploded.has(d)) {
 	              exploded.add(d)
 	              blurTransition.add(d)
-	          }
-	      });
-	  })
+	          }})
+
+            d3.select("#controls")
+              .append('div')
+              .attr('id','countyDropDown');
+
+          var topicMenu = d3.select('#countyDropDown');
+
+          //bubble_data = d3.map(x  = )
+
+          console.log( bubble_data, 'bubb_data');
+
+          topicMenu.append("select")
+                .selectAll("option")
+                .data(bubble_data)
+                .enter()
+                .append("option")
+                .attr("value",function(d){
+                return d.county_name})
+                .text(function(d){
+                return d.county_name+', '+d.state_name})
+
+            topicMenu.on('change', function(){
+
+    // Find which topic was selected from the dropdown
+            var selectedTopic = d3.select(this)
+                    .select("select")
+                    .property("value")
+
+                // Run update function with the selected fruit
+
+            updateCircles(selectedTopic)
+            
+
+	      });})//end explode
+	  
 
 	  d3.select('#collapse').on('click', function () {
         uniqueStates.forEach(function (d) {
-
-            //bubble.selectAll('.scatter_temp')
-              //      .remove().exit();
 
             if (exploded.has(d)) {
                 exploded.remove(d)
@@ -177,11 +217,11 @@ function initialize(error, data,first_time) {
       d3.select('#reset')
       .on('click', function () {
 
-        //bubble.selectAll('.scatter_temp')
-        //            .remove().exit();
+        bubble.selectAll('.tooltip_bubble')
+                   .remove().exit();
 
           yearIndex = 0
-          year = '2015'
+          year = '' + years[yearIndex]
           first_time=false;
 
 
@@ -194,7 +234,8 @@ function initialize(error, data,first_time) {
                     .data(data[0].values)
                     .enter().append('g')
                     .attr('class', 'state')
-                    //.attr('id',function (d) { console.log(d.key.replace('','text'), 'EXP'); return d.key.toLowerCase().replace(' ','text') })
+                    //.attr('id',function (d) { //console.log(d.key.replace('','text'), 'EXP'); return d.key.toLowerCase().replace(' ','text') })
+                    .attr('id',function (d) { return d.key.replace('','bubble')})
                     .style('filter', function (d) { return 'url(#gooeyCodeFilter' + d.key.replace(' ', '-') + ')' })
 
 
@@ -205,8 +246,9 @@ function initialize(error, data,first_time) {
         .attr('cy', height / 2)
         .style('fill', function (d) {return color(d.key) })
         .style('opacity',0.4)
-        .on('click', function (d) { console.log(d.state_name,'line 198 explode'); exploded.add(d.key); blurTransition.add(d.key) })
-        .append('title').text(function (d) { return d.key })
+        .on('click', function (d) { //console.log(d.state_name,'line 198 explode');
+         exploded.add(d.key); blurTransition.add(d.key) })
+        //.append('title').text(function (d) { return d.key })
 
     update()
     d3.interval(incrementYear, interval)
@@ -224,6 +266,10 @@ function initialize(error, data,first_time) {
     
     function update() {
 
+        bubble.selectAll('.tooltip_bubble')
+          .exit()
+          .remove()
+
         yearLabel.transition().duration(0).delay(interval/2).text(year)
     
 
@@ -234,7 +280,7 @@ function initialize(error, data,first_time) {
             function (d) { return d.key }
         )
 
-        var counties = states.selectAll('.county')
+        counties = states.selectAll('.county')
             .data(function (d) { return d.values }, function (d) { return d.county_name })
 
         counties.exit().remove()
@@ -245,21 +291,22 @@ function initialize(error, data,first_time) {
             .attr('cy', height / 2)
             .style('fill', function (d) { return color(d.state_name) })
             .style('opacity',0.4)
-            .on('click', function (d) {console.log(d.state_name, d.county_name,'line 237 explode'); exploded.remove(d.state_name); blurTransition.add(d.state_name);})
+            .on('click', function (d) {//console.log(d.state_name, d.county_name,'line 237 explode');
+             exploded.remove(d.state_name); blurTransition.add(d.state_name);})
 
-        enterCounties.append('title').text(function (d) { return d.county_name })
+        //enterCounties.append('title').text(function (d) { return d.county_name })
 
         counties = counties.merge(enterCounties)
 
-        console.log(counties,'counties after merge');
+        //console.log(counties,'counties after merge');
 
         var t =  d3.transition()
                     .ease(d3.easeLinear)
-                    .duration(100)
+                    .duration(800)
                      .delay(interval/2)
 
-        console.log("before selecting .aggregate");
-        console.log(exploded,"exploded")
+        //console.log("before selecting .aggregate");
+        //console.log(exploded,"exploded")
 
 
 
@@ -273,7 +320,7 @@ function initialize(error, data,first_time) {
                 return retval
             })
 
-        console.log("after selecting .aggregate");
+        //console.log("after selecting .aggregate");
 
         counties
             .transition(t)
@@ -284,27 +331,53 @@ function initialize(error, data,first_time) {
                 return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
             .attr('cy', function (d) {
                 var retval = y(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections *100));
-                console.log(retval);
+                //console.log(retval);
                 if(retval){ return retval;}})
                         
          // Tooltips
-         if(year == '2017'){
-          var tooltip_bubble = d3.select("#bubble_chart").append("div")
-              .attr("class", "tooltip_bubble");
+         
+            var tooltip_bubble = d3.select("#bubble_chart").append("div")
+                .attr("class", "tooltip_bubble");
+                //.classed('bubble_temp',true);
 
-          bubble.selectAll("circle")
-              .on("click", function(d) {
-                bubble.selectAll('.county');
+            bubble.selectAll("circle")
+                .on("mouseover", function(d) {  
+                  //console.log(exploded.size(), 'explode length');
+                  if(year == '2017'){
+                    if(!exploded.size()){
+                      bubble.selectAll('.state');
 
-                tooltip_bubble.html("Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
-                            "<br/>" + "Region: " + d.state_name+
-                    "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
-                    "<br/>" + "Year: " + d.year)
-                    .style("visibility", "visible");
+                       tooltip_bubble.html("Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
+                                  "<br/>" + "Region: " + d.state_name+
+                          "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
+                          "<br/>" + "Year: " + d.year)
+                          .style("visibility", "visible");
 
-                 tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 55) + "px")
-                   .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
-              })
+                        tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
+                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
+                      }
+                    else{
+                      bubble.selectAll('.county');
+
+                      tooltip_bubble.html("Yes APTC %: " + f(d.yes_aptc/d.total_plan_selections *100) +
+                                  "<br/>" + "Region: " + d.county_name+
+                                  //"<br/>" + "County: " + d.county_name+
+                          "<br/>" + "Total Plan Selection: " + d.total_plan_selections +
+                          "<br/>" + "Year: " + d.year)
+                          .style("visibility", "visible");
+
+                       tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
+                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
+                      }}
+                    else{
+
+                      bubble.selectAll('.tooltip_bubble')
+                        .exit()
+                        .remove()
+                            }
+                    
+                    })
+
               //.on("mousemove", function(d) {
                 //tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 55) + "px")
                 //    .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
@@ -314,9 +387,9 @@ function initialize(error, data,first_time) {
 
                 tooltip_bubble.style("visibility", "hidden");
               })//end tooltip
-          }//end if
+       
 
-
+          
         blurValues
             .transition(t)
             .attrTween('values', function (d) {
@@ -338,7 +411,7 @@ function initialize(error, data,first_time) {
     // create Illinois legend
   var legend1_area= bubble.append('g')
     .attr('height', 100)
-    .attr('width', 100)
+    .attr('width', 100);
     
   legend1_area.append('rect')
     .attr('x', width/2 - 225)
@@ -356,7 +429,7 @@ function initialize(error, data,first_time) {
   // create Indi legend
   var legend2_area = bubble.append('g')
     .attr('height', 100)
-    .attr('width', 100)
+    .attr('width', 100);
     
   legend2_area.append('rect')
     .attr('x', width/2 - 85)
@@ -369,22 +442,12 @@ function initialize(error, data,first_time) {
     .attr('x', width/2 - 85)
       .attr('y', height + margin.top*4)
       .attr('class', 'ltext_area')
-      .on("click", function(){
-       // determine if current circle is visible
-       var active   = gooeyCodeFilterIN.active ? false : true,
-       newOpacity = active ? 0 : 1;
-       // hide or show the elements
-       d3.select('#gooeyCodeFilterIN').style("opacity", newOpacity);
-       // update whether or not the elements are active
-       gooeyCodeFilterIN.active = active;
-     })
       .text('Indiana')
 
   // create the Mich legend
   var legend3_area = bubble.append('g')
     .attr('height', 100)
-    .attr('width', 100)
-    .classed('area_temp',true);
+    .attr('width', 100);
 
   legend3_area.append('rect')
     .attr('x', width/2 +15)
@@ -402,8 +465,7 @@ function initialize(error, data,first_time) {
   // create the Wisco legend
   var legend4_area = bubble.append('g')
     .attr('height', 100)
-    .attr('width', 100)
-    .classed('area_temp',true);
+    .attr('width', 100);
 
   legend4_area.append('rect')
     .attr('x', width/2 + 125 )
@@ -420,4 +482,40 @@ function initialize(error, data,first_time) {
 
 	  };//end scatter function
 
-	
+
+function changeStateBubble(value){
+
+  all_abbr = {'IN':bubbleIN,'IL':bubbleIL,'WI':bubbleWI,'MI':bubbleMI}
+
+  for(key in all_abbr){
+    if(key != value){
+
+       var active   = all_abbr[key].active ? false : true,
+       newOpacity = active ? 0 : 1;
+       // hide or show the elements
+       //console.log('#bubble'+key);
+       d3.select('#bubble'+key).style("opacity", newOpacity);
+       // update whether or not the elements are active
+       all_abbr[key].active = active;
+    }}
+   // determine if current circle is visible
+
+
+}
+
+//not currently working
+    function updateCircles(value){
+
+              bubble.selectAll('circle')
+                .transition()
+                .duration(1000)
+                .on("start",function(d){
+                  console.log(d.county_name);
+                  if(!d.hasOwnProperty(value)){
+                  d3.select(this)
+                    .attr('opacity', 0);}
+                  })
+                .transition()
+                .duration(0)
+                .attr("opacity", .4)
+              }
