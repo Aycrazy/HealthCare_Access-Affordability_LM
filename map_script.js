@@ -1,13 +1,13 @@
 //lots of code from here: https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
 
-var map_width = 500,
-    map_height = 500,
+var map_width = 300,
+    map_height = 400,
     active = d3.select(null);
 
 // make the projection
 var projection = d3.geoMercator()
-    .scale(1800)
-    .center([-82,42]);
+    .scale(1500)
+    .center([-75,41]);
 
 // start the zooom
 var zoom = d3.zoom()
@@ -90,13 +90,13 @@ function clicked(d) {
       translate = [map_width / 2 - scale * x, map_height / 2 - scale * y];
 
   map_svg.transition()
-      .duration(750)
+      .duration(2000)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
   changeStateBump(state_name);
   changeStateBar(state_name);
-  //changeStateArea(state_abbr);
-  //changeStateBubble(state_abbr);
+  changeStateArea(state_abbr);
+  changeStateBubble(state_abbr);
 }
 
 function reset() {
@@ -109,13 +109,13 @@ function reset() {
   console.log(state_name)
 
   map_svg.transition()
-      .duration(750)
+      .duration(2000)
      .call( zoom.transform, d3.zoomIdentity );
 
   changeStateBump(state_name);
   changeStateBar(state_name);
-  //changeStateArea(state_abbr);
-  //changeStateBubble(state_abbr_bubb);
+  changeStateArea(state_abbr);
+  changeStateBubble(state_abbr_bubb);
 }
 
 function zoomed() {

@@ -38,7 +38,7 @@ var bumpChart = function(chart_data, options_bump){
 	}
 
 	this.data  = chart_data
-	this.margin = { top: 65, right: 100, bottom: 30, left: 70 };
+	this.margin = { top: 0, right: 100, bottom: 30, left: 100 };
 	this.width = 960 - this.margin.left - this.margin.right;
 	this.height = 600 - this.margin.top - this.margin.bottom;
 
@@ -163,7 +163,7 @@ var bumpChart = function(chart_data, options_bump){
     .data(this.data)
     .enter().append("text")
     .transition()
-    .duration(1000)
+    .duration(4000)
     .attr("class", "uninsured")
     .text( function(d){ return d.County;})
     .attr("x", function(d) { return x_bump(d['year'])-15; })

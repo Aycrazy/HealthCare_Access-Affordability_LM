@@ -18,20 +18,17 @@ function changeStateArea(value){
     options_area.state_area = value;
     console.log(options_area, "line 4 area")
     if(options_area.state_area != 'all'){
-      console.log('i ran a state');
       d3.selectAll(".area_temp")
           .remove()
           .exit();
 
       d3.json("state_metals_data.json", function(d) {  
-        
-        dataset = d.filter(function(d) { console.log(d.state,'filter'); return d.state == options_area.state_area;});
-         
-          ac = areaChart(dataset,options_area) 
+        dataset = d.filter(function(d) { return d.state == options_area.state_area;});
+        ac = areaChart(dataset,options_area) 
 
         })}
     else{   
-        console.log('i ran all');
+        //console.log('i ran all');
         d3.selectAll(".area_temp")
           .remove()
           .exit();
@@ -45,27 +42,23 @@ function changeStateArea(value){
 
 function areaChart(area_data, options_area){
 
-
-
   var data = area_data;
 
-  margin = { top: 65, right: 10, bottom: 100, left: 70 };
-  width = 700
-  height = 300
+  margin = { top: 65, right: 0, bottom: 130, left: 70 };
+  width = 700-margin.left-margin.right;
+  height = 400-margin.top-margin.bottom;
 
   var svg = d3.select("#area_chart")
             .append("svg")
-            .attr('height',height+margin.top+margin.bottom)
             .attr('width',width+margin.left+margin.right)
+            .attr('height',height+margin.top+margin.bottom)
             .classed('area_temp',true);
 
   var x = d3.scaleTime().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
       z = d3.scaleOrdinal().range(['#C468CC','#CCBA97','#958E99','#FFDA68','#83C2CC']);
 
-
   var stack = d3.stack();
-
 
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -80,29 +73,27 @@ function areaChart(area_data, options_area){
   data = type(data,'area')
 
   x.domain(d3.extent(data, function(d) {return d.date; }));
-  y.domain([0, d3.max(data, function(d){ return d.total;})])
+  y.domain([0, d3.max(data, function(d){ return d.total;})]);
   z.domain(keys);
   stack.keys(keys);
 
-  
-
    var area = d3.area()
     .x(function(d, i) { return x(d.data.date); })
-    .y0(function(d) { console.log(d[0],'hi'); return y(d[0]); })
-    .y1(function(d) { console.log(d[1],'hi2'); return y(d[1]); });
+    .y0(function(d) { return y(d[0]); })
+    .y1(function(d) { return y(d[1]); });
 
-  console.log(data, 'data');
+//  console.log(data, 'data');
 
   var layer = g.selectAll(".layer")
     .data(stack(data))
     .enter().append("g")
       .attr("class", "layer");
 
-  console.log(layer,'layer');
+  //console.log(layer,'layer');
 
   layer.append("path")
       .attr("class", "area")
-      .style("fill", function(d) { console.log(d.key, z(d.key),'z'); return z(d.key); })
+      .style("fill", function(d) { return z(d.key); })
       .attr("d", area);
 
 
@@ -110,30 +101,25 @@ function areaChart(area_data, options_area){
     .append("text")
       .attr("x", width - 6)
       .attr("y", function(d) { 
-        console.log(d,'what am i');
+        //console.log(d,'what am i');
         return f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)); })
       .attr("dy", ".25em")
       .style("font", "10px sans-serif")
-      .style("text-anchor", "end")
+      .style("text-anchor", "end");
       //.text(function(d) { console.log(d.key,'key'); return d.key; });
 
   g.append("g")
       .attr("class", "axis axis--x")
-      .attr("transform", "translate("+ 0 + "," + 305 + ")")
-
+      .attr('transform', 'translate(0,' + (height) + ')')
       .call(d3.axisBottom(x))
-      
       .selectAll("text")
-        .attr("transform","translate(12,30)rotate(90)")
-        //.attr("transform","translate("+5+","+10+")")
-
-      ;
+        .attr("class", "xText_area")
+        .attr("transform","translate(12,15)rotate(30)");
 
   g.append("g")
       .attr("class", "axis axis--y")
       .call(d3.axisLeft(y));
 
-  
   // create catastrophic legend
   var legend1_area= svg.append('g')
     .attr('height', 100)
@@ -304,44 +290,17 @@ function areaChart(area_data, options_area){
 
       function lineChart(data){
 
-        //console.log(data);
-
         var parseYear=d3.timeParse('%Y')
 
         data = makeOrderVal(data,'line').sort(function(a,b){return a.year - b.year;})
-        //data = type(data,'line')
 
         console.log(data, 'line data');
 
         y.domain(d3.extent(data, function(d){ return d.num_uninsured;}));
-          
-       
-        // var ULine = d3.line()
-        //   .x(function(d) { return x(d.year); })
-        //   .y(function(d) { return y(d.num_uninsured); });
-
-        // g.select(".axis .axis--y")
-        //   .exit()
-        //   .transition()
-        //   .duration(1000)
-        //   .call(d3.axisLeft(y))
-
-
-
-        
-        
 
         var g2 = svg.append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
           .classed('area_temp',true);
-
-        //lines
-       // g2.append("path")
-       //    .data([data])
-       //    .attr("stroke-width", '15px')
-       //    .attr('fill','black')
-       //    .attr("d", ULine)
-       //    .attr('z',9);
 
         // points
          uninsured = g2.selectAll(".uText")
@@ -368,13 +327,9 @@ function areaChart(area_data, options_area){
             {
               return d.num_uninsured}})
           .classed('active',true)
-          .classed('area_temp',true);
-       
-      
+          .classed('area_temp',true);     
     }
   };//end of area chart
-
-  
  }
 
 function type(d, chartType) {
@@ -386,19 +341,13 @@ function type(d, chartType) {
   columns = ['num_uninsured'];
     }
 
-  
-  
   for (var i = 1, n = columns.length; i < n; ++i){ 
-    console.log(d[columns[i]],'bug 263');
+    //console.log(d[columns[i]],'bug 263');
     d[columns[i]] = d[columns[i]];
   return d;}
 }
 
 function makeOrderVal(d, chartType){
-
-
- 
-
   console.log(d);
   if(chartType == 'area'){
 
@@ -407,7 +356,7 @@ function makeOrderVal(d, chartType){
     d.forEach( function(e){
     switch(e.date){
       case 'December 2014':
-        console.log('hello');
+        //console.log('hello');
        e['date']= parseDate('12/2014') ;
        break;
 
