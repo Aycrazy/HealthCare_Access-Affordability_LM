@@ -77,6 +77,10 @@ function areaChart(area_data, options_area){
   z.domain(keys);
   stack.keys(keys);
 
+  var f_date = d3.timeFormat('%b')
+  var f_date2 = d3.timeFormat("%y")
+
+
    var area = d3.area()
     .x(function(d, i) { return x(d.data.date); })
     .y0(function(d) { return y(d[0]); })
@@ -89,7 +93,9 @@ function areaChart(area_data, options_area){
     .enter().append("g")
       .attr("class", "layer");
 
-  //console.log(layer,'layer');
+
+
+  console.log(layer,'layer');
 
   layer.append("path")
       .attr("class", "area")
@@ -112,6 +118,17 @@ function areaChart(area_data, options_area){
       .attr("class", "axis axis--x")
       .attr('transform', 'translate(0,' + (height) + ')')
       .call(d3.axisBottom(x))
+
+      .call(d3.axisBottom(x).tickFormat(function(d){if(f_date(d) == 'Jan'){
+        console.log(d,'EXPP');
+        
+        return f_date2(d)
+        }
+        else{
+          console.log(d);
+          return f_date(d)
+        }}))
+
       .selectAll("text")
         .attr("class", "xText_area")
         .attr("transform","translate(12,15)rotate(30)");
