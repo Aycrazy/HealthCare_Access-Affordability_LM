@@ -1,62 +1,72 @@
-<!DOCTYPE html>
-<html>
-	<meta charset="utf-8">
-	<head>
-		<title>Impact of the ACA on Lake Michigan States</title>
-		<h1>Impact of the ACA on Lake Michigan States</h1>
-		<link rel="stylesheet" type="text/css" href="styles.css">
-		<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-		<script type="text/javascript" src="d3/d3.min.js"></script>
-	</head>
-	<body>
-		<div class='container'>
-			<div class="row" id="row1">
-				<!-- <div id ="title" class = 'col-12'></div> -->
-				<div id ="map" class = 'col-12'></div>
-				<script type="text/javascript" src="map_script.js"></script>
-				<p id = 'source'> Source: Census Bureau Shape Files. </p>
-				<p id = 'attribution'> Credit: Heavily inspired by https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2 </p>
-			</div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Healthcare Data</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-		 	<div class="row" id='row2'> 
-			  	<h1>Bump Chart Displaying Change in Rankings of Uninsured by State/County</h1>
-			  	<script type="text/javascript" src="bump_script.js"></script>
-			  	<div class="col-6" id= "bump_chart"></div>
+    <!-- Bootstrap CSS and my CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
 
-			</div>
+    <!-- import d3 -->
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+  </head>
 
-			<div class="row" id='row3'> 
-			  	<h1>Bar Chart Displaying Percent Reporting Fair/Poor Health by Median Income and Year</h1>
-			  	<script type="text/javascript" src="bar_script.js"></script>
-			  	<div class="col-6" id= "bar_chart"></div>
-			</div>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="map">
+          <h3> Map </h3>
+        </div>
 
-			<div class="row" id="row4">
-				<!-- <div id ="title" class = 'col-12'></div> -->
-				<h1>Bubble Chart of Total Plans Purchased by Year In Each of the Four States</h1>
-				<div id="controls">
-			    <button id="explode">Explode All</button>
-			    <button id="collapse">Collapse</button>
-			    <button id="reset">Reset</button>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id="bar_chart">
+          <h3>Bar Chart</h3>
+        </div>
+      </div>
 
-		  	</div>
-				<div id ="bubble_chart" class = 'col-12'></div>
-				<script type="text/javascript" src="bubble_script.js"></script>
-				<p id = 'source'> Source: Health.Data.Gov, https://github.com/hrecht/marketplace-data for rating areas csv, CMS Public Use Files</p>
-		  	<p id = 'attribution'> Credit: Heavily inspired by Chris Given http://bl.ocks.org/cmgiven/e5dfe0888968ee8c507f5469a4d62b6f </p>
-			</div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "bump_chart">
+          <h3>Bump Chart</h5>
+        </div>
+      </div>
+    
+    <div class = row>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id = "bubble_chart">
+        <h1>Bubble Chart</h1>
+          <div id="controls">
+            <button id="explode">Explode All</button>
+            <button id="collapse">Collapse</button>
+            <button id="reset">Reset</button>
+          </div>
+      </div>
 
-			<div class="row" id="row5">
-				<h1>Area Chart Displaying Plans by Metal type Quartery from December 2014-March 2016</h1>
-				<!-- <div id ="title" class = 'col-12'></div> -->
-				<button id="uninsured">Uninsured Number</button>
-				<div id ="area_chart" class = 'col-12'></div>
-				<script type="text/javascript" src="area_chart.js"></script>
-				<p id = 'source'> Source: Health.Data.Gov, County Health Rankings, CMS Public Use Files</p>
-		  	<p id = 'attribution'> Credit: Heavily inspired by Mike Bostock https://bl.ocks.org/mbostock/3885211</p>
-			</div>
-		</div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id = "area_chart">
+        <h1>Area Chart</h1>
+          <button id="uninsured">Uninsured Number</button>
+    </div>
 
-	</body>
+
+    <script type="text/javascript" src="map_script.js"></script>
+    <script type="text/javascript" src="bump_script.js"></script>
+    <script type="text/javascript" src="bar_script.js"></script>
+    <script type="text/javascript" src="bubble_script.js"></script>
+    <script type="text/javascript" src="area_chart.js"></script>
+
+    <p> Map. Data Credit: Census Bureau Shape Files. Code Credit: Heavily inspired by https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2. 
+      <br> Bump Chart. Data Credit: County Health Rankings. Code Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a. 
+      <br> Bar Chart. Data Credit: County Health Rankings, 2015-2017. Code Credit:  https://stackoverflow.com/questions/43513800/d3-js-grouped-bar-chart-with-json-data. 
+      <br> Bubble Chart. Data Credit: Health.Data.Gov, https://github.com/hrecht/marketplace-data for rating areas csv, CMS Public Use Files. Code Credit: Chris Given, http://bl.ocks.org/cmgiven/e5dfe0888968ee8c507f5469a4d62b6f
+      <br> Area Chart. Data Credit: Health.Data.Gov, County Health Rankings, CMS Public Use Files. Code Credit: Mike Bostock, https://bl.ocks.org/mbostock/3885211
+    </p>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  </body>
 </html>
 
