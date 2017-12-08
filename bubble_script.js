@@ -21,8 +21,8 @@ function initialize(error, data,first_time) {
     var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
 
     var margin = { top: 15, right: 15, bottom: 100, left: 55 };
-    var width = 960 - margin.left - margin.right;
-    var height = 500 - margin.top - margin.bottom;
+    var width = 660 - margin.left - margin.right;
+    var height = 400 - margin.top - margin.bottom;
 
 
     bubble = d3.select('#bubble_chart')

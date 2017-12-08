@@ -8,18 +8,11 @@ var f = d3.format(".2f")
 
 var aChart = d3.json('all_state_metals_data.json', function (d){ 
 
-  //d = makeOrderVal(d);
-  
-  //d = d.sort(function(a,b){return a.date - b.date;
-  //    });
-
-  console.log(d)
+  //console.log(d)
 
   ac = new areaChart(d, options_area)
   });
 
-
-//var parseDate = d3.timeParse("%B %Y");
 
 function changeStateArea(value){
     options_area.state_area = value;
