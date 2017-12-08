@@ -409,8 +409,6 @@ var bumpChart = function(chart_data, options_bump){
 
 
 
-=======
-
 
 var options_bump = {state_bump: "all"}
 
