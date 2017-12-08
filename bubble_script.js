@@ -302,7 +302,7 @@ function initialize(error, data,first_time) {
 
         var t =  d3.transition()
                     .ease(d3.easeLinear)
-                    .duration(800)
+                    .duration(1400)
                      .delay(interval/2)
 
         //console.log("before selecting .aggregate");
@@ -516,6 +516,6 @@ function changeStateBubble(value){
                     .attr('opacity', 0);}
                   })
                 .transition()
-                .duration(0)
+                .duration(1000)
                 .attr("opacity", .4)
               }

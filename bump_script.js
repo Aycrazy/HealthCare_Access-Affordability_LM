@@ -255,6 +255,21 @@ var bumpChart = function(chart_data, options_bump){
 	  			.style('font-weight','bold')
 	  			.call(xAxis_bump)
 
+	  chart_bump.append("g")
+				.selectAll("text")
+				.data(by_year_median_income)
+				.enter()
+				.append("text")
+	  			.attr("x", function (d){ return x_bump(d[1]);})
+	  			//.attr('transform', 'translate( 0,0)')
+	  			.attr("y", this.margin.top/12 - 4)
+	  			.classed("bump_temp", true)
+	  			.text(function (d){ return d[2];})
+	  			.style('font-size', '14px')
+	  			.style('font-family','monospace')
+	  			.style('font-weight','bold')
+	  			.call(xAxis_bump)
+
 			chart_bump.append("text")
 				.attr("x",  (this.width-this.margin.left*2)/2 )
 				.attr("y", -15)
@@ -369,6 +384,19 @@ var bumpChart = function(chart_data, options_bump){
 
 						};
 
+
+//Convert Bump Chart to Line Chart
+	//On some click (button)
+		// change var line = d3.line()
+    //  .x(function(d) { return x_bump(d['year']); })
+    //  .y(function(d) { return y_bump(d['% Uninsured']); });
+
+    // 	ybump.domain()
+    //	yScale
+    //	xScale
+    //	call transition().duration()...
+
+    //remove.exit() old chart
 
  
 
