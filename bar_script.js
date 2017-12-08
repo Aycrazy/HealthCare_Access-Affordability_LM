@@ -44,8 +44,8 @@ var barChart = function(chart_data, options_bar) {
 
   this.data = chart_data;
   this.margin = { top: 65, right: 0, bottom: 130, left: 70 };
-  this.width = 960 - this.margin.left - this.margin.right;
-  this.height = 800 - this.margin.top - this.margin.bottom;
+  this.width = 600 - this.margin.left - this.margin.right;
+  this.height = 600 - this.margin.top - this.margin.bottom;
   
   //console.log(this.data, "in barChart")
   
@@ -101,28 +101,11 @@ var barChart = function(chart_data, options_bar) {
     .style('text-anchor', 'middle')
     .text('Percent Reporting Fair/Poor Health');
 
-  // append data source
-  chart_bar.append("text")
-    .attr('transform', 'translate(' + 0 + ' ,' + (this.height+90) + ')')
-    .attr('class', 'source_text_bar')
-    .text('Data Source: County Health Rankings, 2015-2017')
-    .classed('bar_temp',true);
-
-  // append code source
-  chart_bar.append("text")
-    .attr('transform', 'translate(' + 0 + ' ,' + (this.height+110) + ')')
-    .attr('class', 'source_text_bar')
-    .text('Used code from: https://stackoverflow.com/questions/43513800/d3-js-grouped-bar-chart-with-json-data')
-    .classed('bar_temp',true);
-
   var x1_bar = d3.scaleBand()
     .rangeRound([0, x_bar.bandwidth()])
     .domain(this.data.map(function(d_bar) { return d_bar['year'];}));
 
   var tooltip_bar = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
-
-  //datatatata = this.data.filter(function(d_bar) {return d_bar["state"] == "all"});
-  //console.log(datatatata)
 
   // add bars
   var bars = chart_bar.selectAll("rect")
@@ -134,7 +117,7 @@ var barChart = function(chart_data, options_bar) {
       .attr("x", function(d_bar) {return (x_bar(d_bar['range_income'])+x1_bar(d_bar['year'])); })
       .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
       .attr("width", x1_bar.bandwidth())
-      .attr("height", function(d_bar) { return (605 - (y_bar(d_bar["health_status"]))); })
+      .attr("height", function(d_bar) { return (405 - (y_bar(d_bar["health_status"]))); })
       .attr("fill", function(d_bar) { return color_bar(d_bar['year']); })
       .on("mouseover", function(d_bar){
             tooltip_bar

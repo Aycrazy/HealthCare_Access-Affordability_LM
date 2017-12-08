@@ -1,13 +1,13 @@
 //lots of code from here: https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
 
-var map_width = 960,
+var map_width = 500,
     map_height = 500,
     active = d3.select(null);
 
 // make the projection
 var projection = d3.geoMercator()
-    .scale(1900)
-    .center([-90,42.5]);
+    .scale(1800)
+    .center([-82,42]);
 
 // start the zooom
 var zoom = d3.zoom()
@@ -81,8 +81,6 @@ function clicked(d) {
   console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
 
-  
-    
   var bounds = path_map.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
       dy = bounds[1][1] - bounds[0][1],
@@ -95,14 +93,10 @@ function clicked(d) {
       .duration(750)
       .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) );
 
-  /////////////////////////////
-  // ISSUE IS HERE!!!!
-
-  //changeState(state_name);
   changeStateBump(state_name);
   changeStateBar(state_name);
-  changeStateArea(state_abbr);
-  changeStateBubble(state_abbr);
+  //changeStateArea(state_abbr);
+  //changeStateBubble(state_abbr);
 }
 
 function reset() {
@@ -110,7 +104,6 @@ function reset() {
   active = d3.select(null);
   active.append('false')
 
-    //.on("click", changeState('All'));
   var state_name = 'all';
   var state_abbr = 'all';
   console.log(state_name)
@@ -118,15 +111,11 @@ function reset() {
   map_svg.transition()
       .duration(750)
      .call( zoom.transform, d3.zoomIdentity );
-  //active.on("click", changeState(state_name));
-  
-  /////////////////////////////
-  // ISSUE IS HERE!!!!
-  //changeState(state_name);
+
   changeStateBump(state_name);
   changeStateBar(state_name);
-  changeStateArea(state_abbr);
-  changeStateBubble(state_abbr_bubb);
+  //changeStateArea(state_abbr);
+  //changeStateBubble(state_abbr_bubb);
 }
 
 function zoomed() {

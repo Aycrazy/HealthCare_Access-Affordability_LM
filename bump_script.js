@@ -37,9 +37,9 @@ var bumpChart = function(chart_data, options_bump){
 	}
 
 	this.data  = chart_data
-	this.margin = { top: 65, right: 120, bottom: 30, left: 70 };
+	this.margin = { top: 65, right: 100, bottom: 30, left: 70 };
 	this.width = 960 - this.margin.left - this.margin.right;
-	this.height = 800 - this.margin.top - this.margin.bottom;
+	this.height = 600 - this.margin.top - this.margin.bottom;
 
 	console.log(this.data)
 		//create chart
@@ -87,24 +87,16 @@ var bumpChart = function(chart_data, options_bump){
 
   var y_bump = d3.scaleLinear()
       .domain([d3.min(this.data, function(d) { return d['position'] }), d3.max(this.data, function(d) { return d['position']; })])
-      .range([20, this.height - 30]);
+      .range([20, this.height]);
 
   var size = d3.scaleLinear()
       .domain(d3.extent(this.data, function(d) { return d['% Uninsured']; }))
       .range([3, 10]);
 
-  // if(options_bump.state_bump === 'all'){
-  // 	var color = d3.scaleOrdinal()
-	 //  	.domain(["Illinois","Indiana",'Michigan','Wisconsin'])
-	 //    .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
-  // }
-  // else{
   var color = d3.scaleThreshold()
     .domain([0, 25000, 50000, 75000])
     .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
-  //}
-  //console.log(d3.extent(data, function(d) { return d.position; }));
-  ///////////////////////
+
   // Axis
   var xAxis_bump = d3.axisBottom(x_bump);
 
@@ -115,7 +107,7 @@ var bumpChart = function(chart_data, options_bump){
       .attr("transform", "translate(-"+ this.margin.left/2 +"," + this.height + ")")
       .call(xAxis_bump)
       .transition()
-      .duration(1000);;
+      .duration(1000);
 
   console.log('worked2');
 
@@ -177,22 +169,13 @@ var bumpChart = function(chart_data, options_bump){
     .attr("y", function(d) { return y_bump(d['position']); })
     .style('fill',function(d){ 
 
-    	//option to show the states as their own colors
-    	//if(options_bump.state_bump === 'all'){
-    		//return color(d['County']);
-    		//}
-    	//else{
-    		return color(d.median_income)
-    	//};
+    return color(d.median_income)
     })
     // replace spaces with - and remove '.' (from d.c. united)
     
     node.attr("class", function(d) { return d['County'].toLowerCase().replace(/ /g, '-').replace(/\./g,'') })
     .attr("font-family", 'monospace')
-    //.style('font-size', '8px')
-    //.attr("stroke-width", .3)
     .attr('opacity', '0.8')
-    //.classed('bump_temp',true);
 
 	///////////////////////
 	  // Tooltips
@@ -273,26 +256,6 @@ var bumpChart = function(chart_data, options_bump){
 	  			.call(xAxis_bump)
 
 			chart_bump.append("text")
-				.attr("x",  this.width/12)
-				.attr("y", this.height+this.margin.bottom*3)
-				.classed('bump_temp',true)
-				.text('Source: Source: County Health Rankings')
-				.style('font-size', '14px')
-				.style('font-family','monospace')
-				.append("text")
-				.classed('bump_temp','true')
-
-			chart_bump.append("text")
-				.attr("x",  this.width/12)
-				.attr("y", this.height+this.margin.bottom*4)
-				.classed('bump_temp',true)
-				.text('Credit: Heavily inspired by Chas Jhin https://gist.github.com/cjhin/b7a5f24a0853524414b06124c559961a')
-				.style('font-size', '14px')
-				.style('font-family','monospace')
-				.append("text")
-				.classed('bump_temp','true')
-
-			chart_bump.append("text")
 				.attr("x",  (this.width-this.margin.left*2)/2 )
 				.attr("y", -15)
 				.classed('bump_temp',true)
@@ -312,19 +275,7 @@ var bumpChart = function(chart_data, options_bump){
 				.append("text")
 				.classed('bump_temp',true)
 
-
-			chart_bump.append('text')
-		    .attr("transform", "translate(" + ( this.margin.left/3 ) + " ," + -this.margin.top/1.5 + ")")
-		    .text("Bump Chart Displaying Change in Rankings of Uninsured by State/County in " + options_bump.state_bump)
-		    .style('font-size','16')
-		    .style('font-weight', 'bold')
-		    .style('font-family','monospace')
-		    .append('text')
-		    .classed('bump_temp',true)
-
-
-
-					  // create 0-$25,000 legend
+			  // create 0-$25,000 legend
 			  var legend1_bump= chart_bump.append('g')
 			    .attr('height', 100)
 			    .attr('width', 100)
@@ -333,7 +284,7 @@ var bumpChart = function(chart_data, options_bump){
 			  legend1_bump.selectAll('path')
 			    .data(data)
 			    .enter().append('rect')
-			    .attr('x', this.width+this.margin.right/2)
+			    .attr('x', this.width)
 			    .attr('y', this.height/2 - 175)
 			    .attr('width', 15)
 			    .attr('height', 15)
@@ -342,10 +293,10 @@ var bumpChart = function(chart_data, options_bump){
 			  legend1_bump.selectAll('text')
 			    .data(data)
 			    .enter().append('text')
-			    .attr('x', this.width+this.margin.right/2.5)
-			      .attr('y', this.height/2 - 175)
+			    .attr('x', this.width+25)
+			      .attr('y', this.height/2 - 162)
 			      .attr('class', 'ltext_bump')
-			      .text('0-$25,000')
+			      .text('<$25k')
 
 			  // create the 25-$50,000 legend
 			  var legend3_bump = chart_bump.append('g')
@@ -356,8 +307,8 @@ var bumpChart = function(chart_data, options_bump){
 			  legend3_bump.selectAll('path')
 			    .data(data)
 			    .enter().append('rect')
-			    .attr('x', this.width+this.margin.right/2)
-			    .attr('y', this.height/2 - 115)
+			    .attr('x', this.width)
+			    .attr('y', this.height/2 - 117)
 			    .attr('width', 15)
 			    .attr('height', 15)
 			    .attr('fill',  "#0072B2")
@@ -365,10 +316,10 @@ var bumpChart = function(chart_data, options_bump){
 			  legend3_bump.selectAll('text')
 			    .data(data)
 			    .enter().append('text')
-			    .attr('x', this.width+this.margin.right/2.5)
-			      .attr('y', this.height/2 - 115)
-			      .attr('class', 'ltext_bump')
-			      .text('25-$50,000')
+			    .attr('x', this.width+25)
+			    .attr('y', this.height/2 - 105.5)
+			    .attr('class', 'ltext_bump')
+			    .text('$25k-$50k')
 
 			  // create the 50-$75,000 legend
 			  var legend4_bump = chart_bump.append('g')
@@ -379,7 +330,7 @@ var bumpChart = function(chart_data, options_bump){
 			  legend4_bump.selectAll('path')
 			    .data(data)
 			    .enter().append('rect')
-			    .attr('x', this.width+this.margin.right/2 )
+			    .attr('x', this.width)
 			    .attr('y', this.height/2 - 50)
 			    .attr('width', 15)
 			    .attr('height', 15)
@@ -388,10 +339,10 @@ var bumpChart = function(chart_data, options_bump){
 			  legend4_bump.selectAll('text')
 			    .data(data)
 			    .enter().append('text')
-			    .attr('x', this.width+this.margin.right/2.5)
-			      .attr('y', this.height/2 - 50)
-			      .attr('class', 'ltext_bump')
-			      .text('50-$75,000')
+			    .attr('x', this.width+25)
+			    .attr('y', this.height/2 - 37.5)
+			    .attr('class', 'ltext_bump')
+			    .text('$50k-$75k')
 
 			  // create the 75-$100,000 legend
 			  var legend5_bump = chart_bump.append('g')
@@ -402,7 +353,7 @@ var bumpChart = function(chart_data, options_bump){
 			  legend5_bump.selectAll('path')
 			    .data(data)
 			    .enter().append('rect')
-			    .attr('x', this.width+this.margin.right/2)
+			    .attr('x', this.width)
 			    .attr('y', this.height/2 + 10)
 			    .attr('width', 15)
 			    .attr('height', 15)
@@ -411,10 +362,10 @@ var bumpChart = function(chart_data, options_bump){
 			  legend5_bump.selectAll('text')
 			    .data(data)
 			    .enter().append('text')
-			    .attr('x', this.width+this.margin.right/2.5)
-			      .attr('y', this.height/2 + 10)
+			    .attr('x', this.width+25)
+			      .attr('y', this.height/2 +23)
 			      .attr('class', 'ltext_bump')
-			      .text('$75,000^')
+			      .text('$75k<')
 
 						};
 
