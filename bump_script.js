@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 
 var options_bump = {state_bump: "all"}
@@ -812,12 +812,3 @@ var bumpChart = function(chart_data, options_bump){
 
  
 
-
-
-
-
-
-
-
-
->>>>>>> c847941d2e6656bdebf45163d40841e8303fd1e7
