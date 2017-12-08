@@ -1,8 +1,19 @@
+
+/*#map,
+#bubble_chart,
+#bar_chart,
+#area_chart,
+#bump_chart {
+  background-color: #d3d3d3;
+}*/
+
+
 text { fill: #333; }
 text.year {
     font-family: monospace;
     pointer-events: none;
 }
+
 #title {
     height:25px;
 }
@@ -17,6 +28,7 @@ text.year {
   fill: transparent;
   stroke: #cecece;
   cursor: pointer;
+  font-size: 20px;
 }
 
 .feature.active { 
@@ -24,12 +36,24 @@ text.year {
   stroke-width: 2;
 }
 
-h1,h3
- { 
+h1 {
+ font-family: Helvetica;
+ font-size: 30px;
+ /*background-color: #d3d3d3;*/
+}
+
+h3 {
+ font-family: Helvetica;
+ font-size: 20px;
+ /*background-color: #d3d3d3;*/
+}
+
+h5{ 
  	font-family: Lucidatypewriter, monospace;}
  	
 p{
- font-family: Lucidatypewriter, monospace;}
+  font-family: Lucidatypewriter, monospace;
+  font-size: 10px;}
 text { fill: #333; }
 text.year {
     font-family: monospace;
@@ -71,19 +95,25 @@ path.active {
   display: none;
 }
 
-.tooltip_bump {
-  position: absolute;
-  padding: 10px;
-  font: 12px sans-serif;
-  background: #222;
-  color: #fff;
-  border: 0px;
-  border-radius: 8px;
-  pointer-events: none;
-  opacity: 0.9;
-  visibility: hidden;
+g.xaxis_bar,
+g.yaxis_bar {
+  font-family: Lucidatypewriter, monospace;
+  font-size: 8pt;
 }
 
+text.ltext_bar,
+text.ltext_area,
+text.xText_bar,
+text.xText_area,
+text.yText_bar {
+    font-size: 10pt;
+    font-family: Lucidatypewriter, monospace;
+    fill: #2d2e2e;
+    font-style: italic;
+}
+
+.tooltip_bar,
+.tooltip_bump,
 .tooltip_bubble {
   position: absolute;
   padding: 10px;
@@ -95,33 +125,4 @@ path.active {
   pointer-events: none;
   opacity: 0.9;
   visibility: hidden;
-}
-
-g.xaxis_bar,
-g.yaxis_bar {
-  font-family: Lucidatypewriter, monospace;
-  font-size: 8pt;
-}
-
-text.source_text_bar,
-text.ltext_bar,
-text.xText_bar,
-text.yText_bar {
-    font-size: 10pt;
-    font-family: Lucidatypewriter, monospace;
-    fill: #2d2e2e;
-    font-style: italic;
-}
-
-.tooltip_bar {
-  position: absolute;
-  display: none;
-  min-width: 80px;
-  height: auto;
-  background: none repeat scroll 0 0 #ffffff;
-  padding: 5px;
-  font-size: 10pt;
-  font-family: Lucidatypewriter, monospace;
-  fill: #2d2e2e;
-  font-style: italic;
 }

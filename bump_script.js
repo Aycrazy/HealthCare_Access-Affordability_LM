@@ -38,7 +38,7 @@ var bumpChart = function(chart_data, options_bump){
 	}
 
 	this.data  = chart_data
-	this.margin = { top: 0, right: 100, bottom: 30, left: 100 };
+	this.margin = { top: 30, right: 100, bottom: 30, left: 100 };
 	this.width = 960 - this.margin.left - this.margin.right;
 	this.height = 600 - this.margin.top - this.margin.bottom;
 
@@ -84,7 +84,7 @@ var bumpChart = function(chart_data, options_bump){
   // Scales
   var x_bump = d3.scaleBand()
       .domain(this.data.map(function(d) { return d['year']; }).reverse())
-      .rangeRound([25, this.width - 15]);
+      .rangeRound([25, this.width - 30]);
 
   var y_bump = d3.scaleLinear()
       .domain([d3.min(this.data, function(d) { return d['position'] }), d3.max(this.data, function(d) { return d['position']; })])
@@ -112,11 +112,11 @@ var bumpChart = function(chart_data, options_bump){
 
   console.log('worked2');
 
-  chart_bump.append("g")
-      .attr("class", "y axis")
-      .call(yAxis_bump)
-      .transition()
-      .duration(1000);
+  // chart_bump.append("g")
+  //     .attr("class", "y axis")
+  //     .call(yAxis_bump)
+  //     .transition()
+  //     .duration(1000);
 
   ///////////////////////
   // Lines
@@ -165,7 +165,7 @@ var bumpChart = function(chart_data, options_bump){
     .transition()
     .duration(4000)
     .attr("class", "uninsured")
-    .text( function(d){ return d.County;})
+    .text( function(d){ if (d.year == 2010){return d.County;} if (d.year == 2017){return d.County;}})
     .attr("x", function(d) { return x_bump(d['year'])-15; })
     .attr("y", function(d) { return y_bump(d['position']); })
     .style('fill',function(d){ 
@@ -222,8 +222,6 @@ var bumpChart = function(chart_data, options_bump){
 	  							.entries(this.data)
 
 	  	var by_year_median_income = [];
-
-
 
 	  	by_year.forEach(function (d){
 	  		by_year_median_income.push([d3.max(d.values,function(e){

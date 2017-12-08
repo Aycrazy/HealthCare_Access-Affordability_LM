@@ -12,41 +12,45 @@
 
     <!-- import d3 -->
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+
+    <h1> What impact did the Affordable Care Act have on Lake Michigan States?</h1>
+    <h3> An Interactive Experience by Alix Gates and Andrew Yaspan </h3>
+
   </head>
 
   <body>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="map">
-          <h3> Map </h3>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="map">
+          <h5> Map </h5>
         </div>
 
-        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" id = "bump_chart">
-          <h3>Bump Chart</h5>
-        </div>        
-      </div>
-    
-    <div class = row>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="bar_chart">
-        <h3>Bar Chart</h3>
-      </div>
-
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id = "area_chart">
-        <h3>Area Chart</h1>
-          <!--<button id="uninsured">Uninsured Number</button>-->
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "bubble_chart">
-          <h3>Bubble Chart</h3>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" id = "bubble_chart">
+          <h5>Bubble Chart</h5>
             <div id="controls">
               <button id="explode">Explode All</button>
               <button id="collapse">Collapse</button>
               <button id="reset">Reset</button>
             </div>
         </div>
-    </div>
+
+      <div class = row>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id="bar_chart">
+          <h5>Bar Chart</h5>
+        </div>
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" id = "area_chart">
+          <h5>Area Chart</h5>
+            <!--<button id="uninsured">Uninsured Number</button>-->
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" id = "bump_chart">
+          <h5>Bump Chart</h5>
+        </div>        
+      </div>
+  </div>
 
 
     <script type="text/javascript" src="map_script.js"></script>

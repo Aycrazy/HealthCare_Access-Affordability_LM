@@ -21,8 +21,8 @@ function initialize(error, data,first_time) {
     var blurOut = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7'
 
     var margin = { top: 15, right: 15, bottom: 100, left: 55 };
-    var width = 660 - margin.left - margin.right;
-    var height = 400 - margin.top - margin.bottom;
+    var width = 500 - margin.left - margin.right;
+    var height = 300 - margin.top - margin.bottom;
 
 
     bubble = d3.select('#bubble_chart')
@@ -30,7 +30,8 @@ function initialize(error, data,first_time) {
         .attr('width', width + margin.left + margin.top*2)
         .attr('height', height + margin.top*2 + margin.bottom)
         .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        //.attr("fill", "#d3d3d3");
 
     var x = d3.scaleLinear()
                     .range([0, width]);
@@ -414,15 +415,15 @@ function initialize(error, data,first_time) {
     .attr('width', 100);
     
   legend1_area.append('rect')
-    .attr('x', width/2 - 225)
-    .attr('y', height + margin.top*2)
+    .attr('x', width/2 - 160)
+    .attr('y', height + margin.top*2.5)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#7B22FF')
 
   legend1_area.append('text')
-    .attr('x', width/2 - 225)
-      .attr('y', height + margin.top*4)
+    .attr('x', width/2 - 135)
+      .attr('y', height + margin.top*3.3)
       .attr('class', 'ltext_area')
       .text('Illinois')
 
@@ -432,15 +433,15 @@ function initialize(error, data,first_time) {
     .attr('width', 100);
     
   legend2_area.append('rect')
-    .attr('x', width/2 - 85)
-    .attr('y', height + margin.top*2)
+    .attr('x', width/2 - 60)
+    .attr('y', height + margin.top*2.5)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#E84927')
 
   legend2_area.append('text')
-    .attr('x', width/2 - 85)
-      .attr('y', height + margin.top*4)
+    .attr('x', width/2 - 35)
+      .attr('y', height + margin.top*3.3)
       .attr('class', 'ltext_area')
       .text('Indiana')
 
@@ -450,15 +451,15 @@ function initialize(error, data,first_time) {
     .attr('width', 100);
 
   legend3_area.append('rect')
-    .attr('x', width/2 +15)
-    .attr('y', height + margin.top*2)
+    .attr('x', width/2 +30)
+    .attr('y', height + margin.top*2.5)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#0D4EFF')
 
   legend3_area.append('text')
-    .attr('x', width/2 +15)
-      .attr('y', height + margin.top*4)
+    .attr('x', width/2 +55)
+      .attr('y', height + margin.top*3.3)
       .attr('class', 'ltext_area')
       .text('Michigan')
 
@@ -468,15 +469,15 @@ function initialize(error, data,first_time) {
     .attr('width', 100);
 
   legend4_area.append('rect')
-    .attr('x', width/2 + 125 )
-    .attr('y', height + margin.top*2)
+    .attr('x', width/2 + 130 )
+    .attr('y', height + margin.top*2.5)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#0CE846')
 
   legend4_area.append('text')
-    .attr('x', width/2 + 125 )
-      .attr('y', height + margin.top*4)
+    .attr('x', width/2 + 155 )
+      .attr('y', height + margin.top*3.3)
       .attr('class', 'ltext_area')
       .text('Wisconsin')
 

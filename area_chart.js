@@ -44,9 +44,9 @@ function areaChart(area_data, options_area){
 
   var data = area_data;
 
-  margin = { top: 65, right: 0, bottom: 130, left: 70 };
-  width = 700-margin.left-margin.right;
-  height = 400-margin.top-margin.bottom;
+  margin = { top: 65, right: 40, bottom: 130, left: 70 };
+  width = 600-margin.left-margin.right;
+  height = 350-margin.top-margin.bottom;
 
   var svg = d3.select("#area_chart")
             .append("svg")
@@ -146,7 +146,7 @@ function areaChart(area_data, options_area){
   legend1_area.selectAll('path')
     .data(data)
     .enter().append('rect')
-    .attr('x', width/2 - 225)
+    .attr('x', width/2 - 165)
     .attr('y', height + margin.top*1.9)
     .attr('width', 15)
     .attr('height', 15)
@@ -155,10 +155,10 @@ function areaChart(area_data, options_area){
   legend1_area.selectAll('text')
     .data(data)
     .enter().append('text')
-    .attr('x', width/2 - 225)
-      .attr('y', height + margin.top*2.5)
-      .attr('class', 'ltext_area')
-      .text('Catastrophic')
+    .attr('x', width/2 - 140)
+    .attr('y', height + margin.top*2.1)
+    .attr('class', 'ltext_area')
+    .text('Catastrophic')
 
   // create bronze legend
   var legend2_area = svg.append('g')
@@ -169,7 +169,7 @@ function areaChart(area_data, options_area){
   legend2_area.selectAll('path')
     .data(data)
     .enter().append('rect')
-    .attr('x', width/2 - 85)
+    .attr('x', width/2 - 30)
     .attr('y', height + margin.top*1.9)
     .attr('width', 15)
     .attr('height', 15)
@@ -178,8 +178,8 @@ function areaChart(area_data, options_area){
   legend2_area.selectAll('text')
     .data(data)
     .enter().append('text')
-    .attr('x', width/2 - 85)
-      .attr('y', height + margin.top*2.5)
+    .attr('x', width/2-5)
+      .attr('y', height + margin.top*2.1)
       .attr('class', 'ltext_area')
       .text('Bronze')
 
@@ -192,7 +192,7 @@ function areaChart(area_data, options_area){
   legend3_area.selectAll('path')
     .data(data)
     .enter().append('rect')
-    .attr('x', width/2 +15)
+    .attr('x', width/2 +60)
     .attr('y', height + margin.top*1.9)
     .attr('width', 15)
     .attr('height', 15)
@@ -201,8 +201,8 @@ function areaChart(area_data, options_area){
   legend3_area.selectAll('text')
     .data(data)
     .enter().append('text')
-    .attr('x', width/2 +15)
-      .attr('y', height + margin.top*2.5)
+    .attr('x', width/2 +85)
+      .attr('y', height + margin.top*2.1)
       .attr('class', 'ltext_area')
       .text('Silver')
 
@@ -215,7 +215,7 @@ function areaChart(area_data, options_area){
   legend4_area.selectAll('path')
     .data(data)
     .enter().append('rect')
-    .attr('x', width/2 + 125 )
+    .attr('x', width/2 + 150 )
     .attr('y', height + margin.top*1.9)
     .attr('width', 15)
     .attr('height', 15)
@@ -224,8 +224,8 @@ function areaChart(area_data, options_area){
   legend4_area.selectAll('text')
     .data(data)
     .enter().append('text')
-    .attr('x', width/2 + 125 )
-      .attr('y', height + margin.top*2.5)
+    .attr('x', width/2 + 175 )
+      .attr('y', height + margin.top*2.1)
       .attr('class', 'ltext_area')
       .text('Gold')
 
@@ -238,7 +238,7 @@ function areaChart(area_data, options_area){
   legend5_area.selectAll('path')
     .data(data)
     .enter().append('rect')
-    .attr('x', width/2+250)
+    .attr('x', width/2+230)
     .attr('y', height + margin.top*1.9)
     .attr('width', 15)
     .attr('height', 15)
@@ -247,8 +247,8 @@ function areaChart(area_data, options_area){
   legend5_area.selectAll('text')
     .data(data)
     .enter().append('text')
-    .attr('x', width/2+250)
-      .attr('y', height + margin.top*2.5)
+    .attr('x', width/2+255)
+      .attr('y', height + margin.top*2.1)
       .attr('class', 'ltext_area')
       .text('Platinum')
 

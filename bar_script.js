@@ -9,7 +9,7 @@ var bar = d3.json("bar_graph_data.json", function(d) {
 
 function changeStateBar(value){
   options_bar.state_bar = value;
-  console.log(options_bar.state_bar, "line 10")
+  //console.log(options_bar.state_bar, "line 10")
   
   if(options_bar.state_bar != "All") {
     d3.selectAll(".bar_temp")
@@ -22,7 +22,7 @@ function changeStateBar(value){
     })}
   
   else{
-    console.log("I'm running all!")
+    //console.log("I'm running all!")
     d3.selectAll(".bar_temp")
       .remove()
       .exit();
@@ -44,8 +44,8 @@ var barChart = function(chart_data, options_bar) {
 
   this.data = chart_data;
   this.margin = { top: 65, right: 0, bottom: 130, left: 70 };
-  this.width = 700 - this.margin.left - this.margin.right;
-  this.height = 400 - this.margin.top - this.margin.bottom;
+  this.width = 600 - this.margin.left - this.margin.right;
+  this.height = 350 - this.margin.top - this.margin.bottom;
   
   //console.log(this.data, "in barChart")
   
@@ -105,7 +105,7 @@ var barChart = function(chart_data, options_bar) {
     .rangeRound([0, x_bar.bandwidth()])
     .domain(this.data.map(function(d_bar) { return d_bar['year'];}));
 
-  var tooltip_bar = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
+  //var tooltip_bar = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
 
   // add bars
   var bars = chart_bar.selectAll("rect")
@@ -119,7 +119,7 @@ var barChart = function(chart_data, options_bar) {
       .transition()
         .duration(4000)
         .ease(d3.easeBack)
-        .attr("height", function(d_bar) { return (205 - (y_bar(d_bar["health_status"]))); })
+        .attr("height", function(d_bar) { return (155 - (y_bar(d_bar["health_status"]))); })
         .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
         .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
         // .on("mouseover", function(d_bar){
@@ -131,26 +131,27 @@ var barChart = function(chart_data, options_bar) {
         //   })
         // .on("mouseout", function(d_bar){ tooltip_bar.style("display", "none");});
 
-  var tooltip = d3.select("#bar_chart").append("div")
-    .attr("class", "tooltip_bar");
+//////////////////ISSUE HERE - tooltip :(
 
-  chart_bar.selectAll("text")
-    .on("mouseover", function(d_bar) {
-      chart_bar.selectAll('.' + d_bar['class'])
-        .classed('active', true);
-      var tooltip_str = "year: " + (d_bar["year"]) + "<br>" + "health status: "  + (d_bar["health_status"])  + "%" + "<br>" + "state: " + (d_bar["state"]);
-      tooltip.html(tooltip_str)
-        .style("visibility", "visible");})
+  // var tooltip = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
+
+  // chart_bar.selectAll("rect")
+  //   .on("mouseover", function(d_bar) {
+  //     chart_bar.selectAll("rect")
+  //       .classed('active', true);
+  //     var tooltip_str = "year: " + (d_bar["year"]) + "<br>" + "health status: "  + (d_bar["health_status"])  + "%" + "<br>" + "state: " + (d_bar["state"]);
+  //     tooltip.html(tooltip_str)
+  //       .style("visibility", "visible");})
     
-    .on("mousemove", function(d_bar) {
-      tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
-        .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");})
+  //   .on("mousemove", function(d_bar) {
+  //     tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
+  //       .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");})
     
-    .on("mouseout", function(d_bar) {
-      chart_bar.selectAll('.'+d_bar['class'])
-        .classed('active', false);
-      tooltip.style("visibility", "hidden");
-        });
+  //   .on("mouseout", function(d_bar) {
+  //     chart_bar.selectAll("rect")
+  //       .classed('active', false);
+  //     tooltip.style("visibility", "hidden");
+  //       });
 
   // create 2013 legend
   var legend1_bar = chart_bar.append('g')
