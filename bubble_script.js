@@ -331,19 +331,7 @@ function initialize(error, data,first_time) {
             .attr('cy', function (d) { var retval = exploded.has(d.key) ? 0 : y(f(d.yes_aptc/d.total_plan_selections*100));
                 return retval
             })
-            .attr('z-index',function(d) { switch(d){
-                                      case 'IN':
-                                        return 4;
-                                        break;
-                                      case 'IL':
-                                        return 1;
-                                        break;
-                                      case 'WI':
-                                        return 3;
-                                        break;
-                                      case 'MI':
-                                        return 2;
-                                        break;}});
+            
 
 
         //console.log("after selecting .aggregate");
