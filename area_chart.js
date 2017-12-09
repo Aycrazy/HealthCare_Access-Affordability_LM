@@ -42,17 +42,33 @@ function changeStateArea(value){
 
 function areaChart(area_data, options_area){
 
+  
+
+
   var data = area_data;
 
   margin = { top: 65, right: 40, bottom: 130, left: 70 };
   width = 600-margin.left-margin.right;
-  height = 350-margin.top-margin.bottom;
+  height = 310-margin.top-margin.bottom;
+
+ d3.select("#area_chart")
+    .append('div')
+    .attr('id','uninsured')
+    .classed('area_temp',true);
 
   var svg = d3.select("#area_chart")
             .append("svg")
             .attr('width',width+margin.left+margin.right)
             .attr('height',height+margin.top+margin.bottom)
             .classed('area_temp',true);
+
+ 
+
+  var unButton = d3.select('#uninsured');
+
+  unButton.append("button")
+    .text('Number Uninsured')
+
 
   var x = d3.scaleTime().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
@@ -252,14 +268,14 @@ function areaChart(area_data, options_area){
       .attr('class', 'ltext_area')
       .text('Platinum')
 
-  svg.append('text')
-    .attr("transform", "translate(" + ( margin.left ) + " ," + margin.top/1.7 + ")")
-    .text("Area Chart of Metal Plans Purchased by Year " + options_area.state_area)
-    .style('font-size','16')
-    .style('font-weight', 'bold')
-    .style('font-family','monospace')
-    .append('text')
-    .classed('area_temp',true)
+  // svg.append('text')
+  //   .attr("transform", "translate(" + ( margin.left ) + " ," + margin.top/1.7 + ")")
+  //   .text("Area Chart of Metal Plans Purchased by Year " + options_area.state_area)
+  //   .style('font-size','16')
+  //   .style('font-weight', 'bold')
+  //   .style('font-family','monospace')
+  //   .append('text')
+  //   .classed('area_temp',true)
 //tried it, works. No use to it.  Uninsured rate is way higher. Best way to visualize
 //this would be with bump chart conversion to line chart.  Instead created button that
 //presents number of uninsured in January of new year

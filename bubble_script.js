@@ -170,39 +170,47 @@ function initialize(error, data,first_time) {
 	              blurTransition.add(d)
 	          }})
 
-            d3.select("#controls")
-              .append('div')
-              .attr('id','countyDropDown');
 
-          var topicMenu = d3.select('#countyDropDown');
+    //     bubble.selectAll('.bubble_temp')
+    //                .remove().exit();
 
-          //bubble_data = d3.map(x  = )
 
-          console.log( bubble_data, 'bubb_data');
+    //     d3.select("#controls")
+    //       .append('div')
+    //       .attr('id','countyDropDown');
 
-          topicMenu.append("select")
-                .selectAll("option")
-                .data(bubble_data)
-                .enter()
-                .append("option")
-                .attr("value",function(d){
-                return d.county_name})
-                .text(function(d){
-                return d.county_name+', '+d.state_name})
+    //       var topicMenu = d3.select('#countyDropDown')
+    //         .classed('bubble_temp',true);
 
-            topicMenu.on('change', function(){
+    //       //bubble_data = d3.map(x  = )
 
-    // Find which topic was selected from the dropdown
-            var selectedTopic = d3.select(this)
-                    .select("select")
-                    .property("value")
+    //       console.log( bubble_data, 'bubb_data');
 
-                // Run update function with the selected fruit
+    //       topicMenu.append("select")
+    //             .selectAll("option")
+    //             .data(bubble_data)
+    //             .enter()
+    //             .append("option")
+    //             .classed('bubble_temp',true)
+    //             .attr("value",function(d){
+    //             return d.county_name})
+    //             .text(function(d){
+    //             return d.county_name+', '+d.state_name})
 
-            updateCircles(selectedTopic)
+    //         topicMenu.on('change', function(){
+
+    // // Find which topic was selected from the dropdown
+    //         var selectedTopic = d3.select(this)
+    //                 .select("select")
+    //                 .property("value")
+
+    //             // Run update function with the selected fruit
+
+    //         updateCircles(selectedTopic)
             
 
-	      });})//end explode
+	   //    })
+        ;})//end explode
 	  
 
 	  d3.select('#collapse').on('click', function () {
@@ -368,7 +376,7 @@ function initialize(error, data,first_time) {
                           .style("visibility", "visible");
 
                        tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
-                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
+                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth*4 ) + "px");
                       }}
                     else{
 

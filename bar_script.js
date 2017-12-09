@@ -78,7 +78,7 @@ var barChart = function(chart_data, options_bar) {
   //draw x axis
   chart_bar.append("g")
       .attr("class", "xaxis_bar")
-      .attr('transform', 'translate(0,' + (this.height) + ')')
+      .attr('transform', 'translate(0,' + (this.height)+ ')')
       .call(xAxis_bar);
 
   // draw y axis
@@ -114,22 +114,22 @@ var barChart = function(chart_data, options_bar) {
     .data(this.data);
 
   bars.enter().append("rect")
+    //.transition()
+    //    .duration(4000)
+    //    .ease(d3.easeBack)
       .attr("width", x1_bar.bandwidth())
       .attr("x", function(d_bar) {return (x_bar(d_bar['range_income'])+x1_bar(d_bar['year'])); })
-      //.transition()
-        //.duration(4000)
-        //.ease(d3.easeBack)
-        .attr("height", function(d_bar) { return (155 - (y_bar(d_bar["health_status"]))); })
-        .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
-        .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
-        // .on("mouseover", function(d_bar){
-        //     tooltip_bar
-        //       .style("left", d3.event.pageX - 50 + "px")
-        //       .style("top", d3.event.pageY - 70 + "px")
-        //       .style("display", "inline-block")
-        //       .html("year: " + (d_bar.year) + "<br>" + "health status: "  + (d_bar.health_status)  + "%" + "<br>" + "state: " + (d_bar.state));
-        //   })
-        // .on("mouseout", function(d_bar){ tooltip_bar.style("display", "none");});
+      .attr("height", function(d_bar) { return (155 - (y_bar(d_bar["health_status"]))); })
+      .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
+      .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
+      // .on("mouseover", function(d_bar){
+      //     tooltip_bar
+      //       .style("left", d3.event.pageX - 50 + "px")
+      //       .style("top", d3.event.pageY - 70 + "px")
+      //       .style("display", "inline-block")
+      //       .html("year: " + (d_bar.year) + "<br>" + "health status: "  + (d_bar.health_status)  + "%" + "<br>" + "state: " + (d_bar.state));
+      //   })
+      // .on("mouseout", function(d_bar){ tooltip_bar.style("display", "none");});
 
 //////////////////ISSUE HERE - tooltip :(
 
@@ -146,7 +146,7 @@ var barChart = function(chart_data, options_bar) {
     .on("mousemove", function(d_bar) {
       tooltip_bar.style("top", event.pageY - (tooltip_bar.node().clientHeight*6 + 5) + "px")
         .style("left", event.pageX - (tooltip_bar.node().clientWidth ) + "px");})
- 6
+ 
     .on("mouseout", function(d_bar) {
       chart_bar.selectAll("rect")
         .classed('active', false);

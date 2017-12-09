@@ -108,7 +108,7 @@ var bumpChart = function(chart_data, options_bump){
       .attr("transform", "translate(-"+ this.margin.left/2 +"," + this.height + ")")
       .call(xAxis_bump)
       //.transition()
-      //.duration(1000);
+     	//.duration(1000);
 
   console.log('worked2');
 
