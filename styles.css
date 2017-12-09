@@ -126,3 +126,17 @@ text.yText_bar {
   opacity: 0.9;
   visibility: hidden;
 }
+
+/*I tried to add z index to bubbles*/
+#bubbleIN{
+  z-index: 4;
+}
+#bubbleWI{
+  z-index: 3;
+}
+#bubbleMI{
+  z-index: 2;
+}
+#bubbleIL{
+  z-index: 1;
+}

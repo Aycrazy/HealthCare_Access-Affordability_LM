@@ -70,10 +70,13 @@ function initialize(error, data,first_time) {
     x.domain([200, d3.max(data, function (d) { return d.avg_silver_27 })]).nice()
     y.domain([0.00, 100.00]).nice()
     r.domain([0, 400000])
+
    
 
     //if(first_time = true){
     bubble_data = data
+
+
 
     data = d3.nest()
         .key(function (d) { return d.year })
@@ -328,6 +331,20 @@ function initialize(error, data,first_time) {
             .attr('cy', function (d) { var retval = exploded.has(d.key) ? 0 : y(f(d.yes_aptc/d.total_plan_selections*100));
                 return retval
             })
+            .attr('z-index',function(d) { switch(d){
+                                      case 'IN':
+                                        return 4;
+                                        break;
+                                      case 'IL':
+                                        return 1;
+                                        break;
+                                      case 'WI':
+                                        return 3;
+                                        break;
+                                      case 'MI':
+                                        return 2;
+                                        break;}});
+
 
         //console.log("after selecting .aggregate");
 
