@@ -116,9 +116,9 @@ var barChart = function(chart_data, options_bar) {
   bars.enter().append("rect")
       .attr("width", x1_bar.bandwidth())
       .attr("x", function(d_bar) {return (x_bar(d_bar['range_income'])+x1_bar(d_bar['year'])); })
-      .transition()
-        .duration(4000)
-        .ease(d3.easeBack)
+      //.transition()
+        //.duration(4000)
+        //.ease(d3.easeBack)
         .attr("height", function(d_bar) { return (155 - (y_bar(d_bar["health_status"]))); })
         .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
         .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
@@ -133,25 +133,25 @@ var barChart = function(chart_data, options_bar) {
 
 //////////////////ISSUE HERE - tooltip :(
 
-  // var tooltip = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
+  var tooltip_bar = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
 
-  // chart_bar.selectAll("rect")
-  //   .on("mouseover", function(d_bar) {
-  //     chart_bar.selectAll("rect")
-  //       .classed('active', true);
-  //     var tooltip_str = "year: " + (d_bar["year"]) + "<br>" + "health status: "  + (d_bar["health_status"])  + "%" + "<br>" + "state: " + (d_bar["state"]);
-  //     tooltip.html(tooltip_str)
-  //       .style("visibility", "visible");})
+  chart_bar.selectAll("rect")
+    .on("mouseover", function(d_bar) {
+      chart_bar.selectAll("rect")
+        .classed('active', true);
+      var tooltip_str = "year: " + (d_bar["year"]) + "<br>" + "health status: "  + (d_bar["health_status"])  + "%" + "<br>" + "state: " + (d_bar["state"]);
+      tooltip_bar.html(tooltip_str)
+        .style("visibility", "visible");})
     
-  //   .on("mousemove", function(d_bar) {
-  //     tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
-  //       .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");})
-    
-  //   .on("mouseout", function(d_bar) {
-  //     chart_bar.selectAll("rect")
-  //       .classed('active', false);
-  //     tooltip.style("visibility", "hidden");
-  //       });
+    .on("mousemove", function(d_bar) {
+      tooltip_bar.style("top", event.pageY - (tooltip_bar.node().clientHeight*6 + 5) + "px")
+        .style("left", event.pageX - (tooltip_bar.node().clientWidth ) + "px");})
+ 6
+    .on("mouseout", function(d_bar) {
+      chart_bar.selectAll("rect")
+        .classed('active', false);
+      tooltip_bar.style("visibility", "hidden");
+        });
 
   // create 2013 legend
   var legend1_bar = chart_bar.append('g')

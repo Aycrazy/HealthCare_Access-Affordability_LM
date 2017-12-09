@@ -355,7 +355,7 @@ function initialize(error, data,first_time) {
                           .style("visibility", "visible");
 
                         tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
-                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth / 2.0) + "px");
+                       .style("left", event.pageX - (tooltip_bubble.node().clientWidth)*4 + "px");
                       }
                     else{
                       bubble.selectAll('.county');

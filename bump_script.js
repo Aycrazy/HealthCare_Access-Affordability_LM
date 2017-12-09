@@ -107,8 +107,8 @@ var bumpChart = function(chart_data, options_bump){
       .classed('bump_temp',true)
       .attr("transform", "translate(-"+ this.margin.left/2 +"," + this.height + ")")
       .call(xAxis_bump)
-      .transition()
-      .duration(1000);
+      //.transition()
+      //.duration(1000);
 
   console.log('worked2');
 
@@ -162,8 +162,8 @@ var bumpChart = function(chart_data, options_bump){
     .selectAll("text")
     .data(this.data)
     .enter().append("text")
-    .transition()
-    .duration(4000)
+    //.transition()
+    //.duration(4000)
     .attr("class", "uninsured")
     .text( function(d){ if (d.year == 2010){return d.County;} if (d.year == 2017){return d.County;}})
     .attr("x", function(d) { return x_bump(d['year'])-15; })
@@ -180,7 +180,7 @@ var bumpChart = function(chart_data, options_bump){
 
 	///////////////////////
 	  // Tooltips
-	  var tooltip = d3.select("#bump_chart").append("div")
+	  var tooltip_bump = d3.select("#bump_chart").append("div")
 	      .attr("class", "tooltip_bump");
 
 	  chart_bump.selectAll("text")
@@ -193,18 +193,19 @@ var bumpChart = function(chart_data, options_bump){
 	                "<br/>" + "Median Income: " + d.median_income +
 	                "<br/>" + "Year: " + d['year'];
 
-	        tooltip.html(tooltip_str)
+	        tooltip_bump.html(tooltip_str)
 	            .style("visibility", "visible");
 	      })
 	      .on("mousemove", function(d) {
-	        tooltip.style("top", event.pageY - (tooltip.node().clientHeight + 5) + "px")
-	            .style("left", event.pageX - (tooltip.node().clientWidth / 2.0) + "px");
+	        tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*4 + 5)
+	         + "px")
+	            .style("left", event.pageX - (tooltip_bump.node().clientWidth)*5 + "px");
 	      })
 	      .on("mouseout", function(d) {
 	        chart_bump.selectAll('.'+d['class'])
 	            .classed('active', false);
 
-	        tooltip.style("visibility", "hidden");
+	        tooltip_bump.style("visibility", "hidden");
 	      })
 	      .on('click', function(d) {
 	        chart_bump.selectAll('.' + d['class'])
@@ -296,8 +297,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .classed('bump_temp',true);
 
 			  legend1_bump.selectAll('path')
-			    .data(data)
-			    .enter().append('rect')
+			  	.append('rect')
 			    .attr('x', this.width)
 			    .attr('y', this.height/2 - 175)
 			    .attr('width', 15)
@@ -305,8 +305,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .attr('fill', "#009E73")
 
 			  legend1_bump.selectAll('text')
-			    .data(data)
-			    .enter().append('text')
+			    .append('text')
 			    .attr('x', this.width+25)
 			      .attr('y', this.height/2 - 162)
 			      .attr('class', 'ltext_bump')
@@ -319,8 +318,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .classed('bump_temp',true);
 
 			  legend3_bump.selectAll('path')
-			    .data(data)
-			    .enter().append('rect')
+			    .append('rect')
 			    .attr('x', this.width)
 			    .attr('y', this.height/2 - 117)
 			    .attr('width', 15)
@@ -328,8 +326,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .attr('fill',  "#0072B2")
 
 			  legend3_bump.selectAll('text')
-			    .data(data)
-			    .enter().append('text')
+			    .append('text')
 			    .attr('x', this.width+25)
 			    .attr('y', this.height/2 - 105.5)
 			    .attr('class', 'ltext_bump')
@@ -342,8 +339,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .classed('bump_temp',true);
 
 			  legend4_bump.selectAll('path')
-			    .data(data)
-			    .enter().append('rect')
+			    .append('rect')
 			    .attr('x', this.width)
 			    .attr('y', this.height/2 - 50)
 			    .attr('width', 15)
@@ -351,8 +347,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .attr('fill', "#D55E00")
 
 			  legend4_bump.selectAll('text')
-			    .data(data)
-			    .enter().append('text')
+			    .append('text')
 			    .attr('x', this.width+25)
 			    .attr('y', this.height/2 - 37.5)
 			    .attr('class', 'ltext_bump')
@@ -365,8 +360,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .classed('bump_temp',true);
 
 			  legend5_bump.selectAll('path')
-			    .data(data)
-			    .enter().append('rect')
+			    .append('rect')
 			    .attr('x', this.width)
 			    .attr('y', this.height/2 + 10)
 			    .attr('width', 15)
@@ -374,8 +368,7 @@ var bumpChart = function(chart_data, options_bump){
 			    .attr('fill',  "#CC79A7")
 
 			  legend5_bump.selectAll('text')
-			    .data(data)
-			    .enter().append('text')
+			    .append('text')
 			    .attr('x', this.width+25)
 			      .attr('y', this.height/2 +23)
 			      .attr('class', 'ltext_bump')
