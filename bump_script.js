@@ -199,7 +199,7 @@ var bumpChart = function(chart_data, options_bump){
 	      .on("mousemove", function(d) {
 	        tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*4 + 5)
 	         + "px")
-	            .style("left", event.pageX - (tooltip_bump.node().clientWidth)*5 + "px");
+	            .style("left", event.pageX - (tooltip_bump.node().clientWidth)*5.5 + "px");
 	      })
 	      .on("mouseout", function(d) {
 	        chart_bump.selectAll('.'+d['class'])
