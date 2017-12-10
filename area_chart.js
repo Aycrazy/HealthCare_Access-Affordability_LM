@@ -37,8 +37,8 @@ function changeStateArea(value){
 function areaChart(area_data, options_area){
   var data = area_data;
 
-  margin = { top: 65, right: 40, bottom: 130, left: 70 };
-  width = 600-margin.left-margin.right;
+  margin = { top: 10, right: 40, bottom: 130, left: 70 };
+  width = 550-margin.left-margin.right;
   height = 400-margin.top-margin.bottom;
 
   d3.select("#area_chart")
@@ -116,12 +116,26 @@ function areaChart(area_data, options_area){
         else{return f_date(d)}}))
 
       .selectAll("text")
-        .attr("class", "xText_area")
-        .attr("transform","translate(12,15)rotate(30)");
+        .attr("class", "xaxis_area")
+        .attr("transform","translate(0,0)rotate(0)");
 
   g.append("g")
       .attr("class", "axis axis--y")
       .call(d3.axisLeft(y));
+
+  g.append('text')             
+    .attr('transform', 'translate(' + (70) + ' ,' + (height+43) + ')')
+    .attr('class', 'xText_area')
+    //.style('text-anchor', 'middle')
+    .text('Median Income Level (Percent FPL)');
+
+  // add y axis text
+  g.append('text')
+    .attr('transform', 'rotate(-90)translate(-' + height + ',-15)')
+    .attr('class', 'yText_area')
+    .attr('dy', '-2.5em')
+    //.style('text-anchor', 'middle')
+    .text('Percent Reporting Fair/Poor Health');
 
   // create catastrophic legend
   var legend1_area= svg.append('g')
@@ -133,7 +147,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('rect')
     .attr('x', width/2 - 165)
-    .attr('y', height + margin.top*1.9)
+    .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#C468CC')
@@ -142,7 +156,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('text')
     .attr('x', width/2 - 140)
-    .attr('y', height + margin.top*2.1)
+    .attr('y', height + 83)
     .attr('class', 'ltext_area')
     .text('Catastrophic')
 
@@ -156,7 +170,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('rect')
     .attr('x', width/2 - 30)
-    .attr('y', height + margin.top*1.9)
+    .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#CCBA97')
@@ -165,7 +179,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('text')
     .attr('x', width/2-5)
-      .attr('y', height + margin.top*2.1)
+      .attr('y', height + 83)
       .attr('class', 'ltext_area')
       .text('Bronze')
 
@@ -179,7 +193,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('rect')
     .attr('x', width/2 +60)
-    .attr('y', height + margin.top*1.9)
+    .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#958E99')
@@ -188,7 +202,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('text')
     .attr('x', width/2 +85)
-      .attr('y', height + margin.top*2.1)
+      .attr('y', height + 83)
       .attr('class', 'ltext_area')
       .text('Silver')
 
@@ -202,7 +216,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('rect')
     .attr('x', width/2 + 150 )
-    .attr('y', height + margin.top*1.9)
+    .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#FFDA68')
@@ -211,7 +225,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('text')
     .attr('x', width/2 + 175 )
-      .attr('y', height + margin.top*2.1)
+      .attr('y', height + 83)
       .attr('class', 'ltext_area')
       .text('Gold')
 
@@ -225,7 +239,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('rect')
     .attr('x', width/2+230)
-    .attr('y', height + margin.top*1.9)
+    .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
     .attr('fill', '#83C2CC')
@@ -234,7 +248,7 @@ function areaChart(area_data, options_area){
     .data(data)
     .enter().append('text')
     .attr('x', width/2+255)
-      .attr('y', height + margin.top*2.1)
+      .attr('y', height + 83)
       .attr('class', 'ltext_area')
       .text('Platinum')
 

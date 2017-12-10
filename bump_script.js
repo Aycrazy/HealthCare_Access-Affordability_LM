@@ -185,8 +185,8 @@ chart_bump.append("path")
 		        .style("visibility", "visible");})
 	      
 	    .on("mousemove", function(d) {
-	    	tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*4 + 5) + "px")
-	            .style("left", event.pageX - (tooltip_bump.node().clientWidth)*5.5 + "px");
+	    	tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*13 + 5) + "px")
+	            .style("left", event.pageX - (tooltip_bump.node().clientWidth) + "px");
 	      })
 	    
 	    .on("mouseout", function(d) {
@@ -238,20 +238,20 @@ chart_bump.append("path")
 			.style('font-weight','bold')
 			.call(xAxis_bump);
 
-	  chart_bump.append("g")
-		.selectAll("text")
-		.data(by_year_median_income)
-		.enter()
-		.append("text")
-			.attr("x", function (d){ return x_bump(d[1]);})
-			//.attr('transform', 'translate( 0,0)')
-			.attr("y", this.margin.top/12 - 4)
-			.classed("bump_temp", true)
-			.text(function (d){ return d[2];})
-			.style('font-size', '14px')
-			.style('font-family','monospace')
-			.style('font-weight','bold')
-			.call(xAxis_bump)
+  chart_bump.append("g")
+	.selectAll("text")
+	.data(by_year_median_income)
+	.enter()
+	.append("text")
+		.attr("x", function (d){ return x_bump(d[1]);})
+		//.attr('transform', 'translate( 0,0)')
+		.attr("y", this.margin.top/12 - 4)
+		.classed("bump_temp", true)
+		.text(function (d){ return d[2];})
+		.style('font-size', '14px')
+		.style('font-family','monospace')
+		.style('font-weight','bold')
+		.call(xAxis_bump)
 
 	chart_bump.append("text")
 		.attr("x", (this.width-this.margin.left*2)/2 )

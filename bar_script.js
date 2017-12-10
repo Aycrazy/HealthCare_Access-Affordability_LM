@@ -43,8 +43,8 @@ var barChart = function(chart_data, options_bar) {
   }
 
   this.data = chart_data;
-  this.margin = { top: 65, right: 0, bottom: 130, left: 70 };
-  this.width = 600 - this.margin.left - this.margin.right;
+  this.margin = { top: 10, right: 0, bottom: 130, left: 70 };
+  this.width = 550 - this.margin.left - this.margin.right;
   this.height = 400 - this.margin.top - this.margin.bottom;
   
   //console.log(this.data, "in barChart")
@@ -120,7 +120,7 @@ var barChart = function(chart_data, options_bar) {
        .ease(d3.easeBack)
       .attr("width", x1_bar.bandwidth())
       .attr("x", function(d_bar) {return (x_bar(d_bar['range_income'])+x1_bar(d_bar['year'])); })
-      .attr("height", function(d_bar) { return (205 - (y_bar(d_bar["health_status"]))); })
+      .attr("height", function(d_bar) { return (260 - (y_bar(d_bar["health_status"]))); })
       .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
       .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
 
