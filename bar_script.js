@@ -135,7 +135,7 @@ var barChart = function(chart_data, options_bar) {
         .style("visibility", "visible");})
     
     .on("mousemove", function(d_bar) {
-      tooltip_bar.style("top", event.pageY - (tooltip_bar.node().clientHeight*8.5 + 5) + "px")
+      tooltip_bar.style("top", event.pageY - (tooltip_bar.node().clientHeight*15.5 + 5) + "px")
         .style("left", event.pageX - (tooltip_bar.node().clientWidth ) + "px");})
  
     .on("mouseout", function(d_bar) {
