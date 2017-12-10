@@ -185,8 +185,8 @@ chart_bump.append("path")
 		        .style("visibility", "visible");})
 	      
 	    .on("mousemove", function(d) {
-	    	tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*4 + 5) + "px")
-	            .style("left", event.pageX - (tooltip_bump.node().clientWidth)*5.5 + "px");
+	    	tooltip_bump.style("top", event.pageY - (tooltip_bump.node().clientHeight*15 + 5) + "px")
+	            .style("left", event.pageX - (tooltip_bump.node().clientWidth) + "px");
 	      })
 	    
 	    .on("mouseout", function(d) {
