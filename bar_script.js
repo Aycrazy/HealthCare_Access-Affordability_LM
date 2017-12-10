@@ -45,7 +45,7 @@ var barChart = function(chart_data, options_bar) {
   this.data = chart_data;
   this.margin = { top: 65, right: 0, bottom: 130, left: 70 };
   this.width = 600 - this.margin.left - this.margin.right;
-  this.height = 350 - this.margin.top - this.margin.bottom;
+  this.height = 400 - this.margin.top - this.margin.bottom;
   
   //console.log(this.data, "in barChart")
   
@@ -84,6 +84,7 @@ var barChart = function(chart_data, options_bar) {
   // draw y axis
   chart_bar.append("g")
     .attr("class", "yaxis_bar")
+    .attr('transform', 'translate(0,' + 0 + ')')
     .call(yAxis_bar);
 
   // add x axis text
@@ -114,24 +115,14 @@ var barChart = function(chart_data, options_bar) {
     .data(this.data);
 
   bars.enter().append("rect")
-    //.transition()
-    //    .duration(4000)
-    //    .ease(d3.easeBack)
+    .transition()
+       .duration(4000)
+       .ease(d3.easeBack)
       .attr("width", x1_bar.bandwidth())
       .attr("x", function(d_bar) {return (x_bar(d_bar['range_income'])+x1_bar(d_bar['year'])); })
-      .attr("height", function(d_bar) { return (155 - (y_bar(d_bar["health_status"]))); })
+      .attr("height", function(d_bar) { return (205 - (y_bar(d_bar["health_status"]))); })
       .attr("y", function(d_bar) {return y_bar(d_bar['health_status']); })
       .attr("fill", function(d_bar) { return color_bar(d_bar['year']); });
-      // .on("mouseover", function(d_bar){
-      //     tooltip_bar
-      //       .style("left", d3.event.pageX - 50 + "px")
-      //       .style("top", d3.event.pageY - 70 + "px")
-      //       .style("display", "inline-block")
-      //       .html("year: " + (d_bar.year) + "<br>" + "health status: "  + (d_bar.health_status)  + "%" + "<br>" + "state: " + (d_bar.state));
-      //   })
-      // .on("mouseout", function(d_bar){ tooltip_bar.style("display", "none");});
-
-//////////////////ISSUE HERE - tooltip :(
 
   var tooltip_bar = d3.select("#bar_chart").append("div").attr("class", "tooltip_bar");
 

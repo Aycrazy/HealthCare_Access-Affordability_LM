@@ -2,21 +2,16 @@
 
 var options_area = {state_area: "all"}
 
-
 var f = d3.format(".2f")
 
-
 var aChart = d3.json('all_state_metals_data.json', function (d){ 
-
-  //console.log(d)
-
   ac = new areaChart(d, options_area)
   });
 
 
 function changeStateArea(value){
     options_area.state_area = value;
-    console.log(options_area, "line 4 area")
+    
     if(options_area.state_area != 'all'){
       d3.selectAll(".area_temp")
           .remove()
@@ -25,8 +20,8 @@ function changeStateArea(value){
       d3.json("state_metals_data.json", function(d) {  
         dataset = d.filter(function(d) { return d.state == options_area.state_area;});
         ac = areaChart(dataset,options_area) 
-
         })}
+
     else{   
         //console.log('i ran all');
         d3.selectAll(".area_temp")
@@ -36,39 +31,31 @@ function changeStateArea(value){
         d3.json("all_state_metals_data.json",function(d) { 
           
           
-          ac = areaChart(d,options_area)
-        }) 
-      }};
+        ac = areaChart(d,options_area)
+        })}};
 
 function areaChart(area_data, options_area){
-
-  
-
-
   var data = area_data;
 
   margin = { top: 65, right: 40, bottom: 130, left: 70 };
   width = 600-margin.left-margin.right;
-  height = 310-margin.top-margin.bottom;
+  height = 400-margin.top-margin.bottom;
 
- d3.select("#area_chart")
+  d3.select("#area_chart")
     .append('div')
     .attr('id','uninsured')
     .classed('area_temp',true);
 
   var svg = d3.select("#area_chart")
-            .append("svg")
-            .attr('width',width+margin.left+margin.right)
-            .attr('height',height+margin.top+margin.bottom)
-            .classed('area_temp',true);
+    .append("svg")
+    .attr('width',width+margin.left+margin.right)
+    .attr('height',height+margin.top+margin.bottom)
+    .classed('area_temp',true);
 
- 
+  //var unButton = d3.select('#uninsured');
 
-  var unButton = d3.select('#uninsured');
-
-  unButton.append("button")
-    .text('Number Uninsured')
-
+  // unButton.append("button")
+  //   .text('Number Uninsured')
 
   var x = d3.scaleTime().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
@@ -81,7 +68,6 @@ function areaChart(area_data, options_area){
     .classed('area_temp',true);
 
   var keys = ['catastrophic','bronze','silver','gold','platinum'];
-
   
   // do this down where the swich and case are d = ['01//01/2014', ]
 
@@ -96,28 +82,20 @@ function areaChart(area_data, options_area){
   var f_date = d3.timeFormat('%b')
   var f_date2 = d3.timeFormat("%y")
 
-
-   var area = d3.area()
+  var area = d3.area()
     .x(function(d, i) { return x(d.data.date); })
     .y0(function(d) { return y(d[0]); })
     .y1(function(d) { return y(d[1]); });
-
-//  console.log(data, 'data');
 
   var layer = g.selectAll(".layer")
     .data(stack(data))
     .enter().append("g")
       .attr("class", "layer");
 
-
-
-  console.log(layer,'layer');
-
   layer.append("path")
       .attr("class", "area")
       .style("fill", function(d) { return z(d.key); })
       .attr("d", area);
-
 
   layer.filter(function(d) {  return d[d.length - 1][1] - d[d.length - 1][0] > 0.01; })
     .append("text")
@@ -134,16 +112,8 @@ function areaChart(area_data, options_area){
       .attr("class", "axis axis--x")
       .attr('transform', 'translate(0,' + (height) + ')')
       .call(d3.axisBottom(x))
-
-      .call(d3.axisBottom(x).tickFormat(function(d){if(f_date(d) == 'Jan'){
-        console.log(d,'EXPP');
-        
-        return f_date2(d)
-        }
-        else{
-          console.log(d);
-          return f_date(d)
-        }}))
+      .call(d3.axisBottom(x).tickFormat(function(d){if(f_date(d) == 'Jan'){return f_date2(d)}
+        else{return f_date(d)}}))
 
       .selectAll("text")
         .attr("class", "xText_area")
@@ -284,83 +254,78 @@ function areaChart(area_data, options_area){
 
   d3.select('#uninsured')
     .on('click', function () {
-
         if(selected == true){
-
           d3.selectAll('.uText')
             .remove().exit()
 
-          selected = false;
-        }
+          selected = false;}
+        
         else{
-
           selected = true
           lc = makelineChart(options_area)
-        //uninsured.inactive
-        }
-    })
+        }})
 
-  function makelineChart(options_area){
-    //inspired by Jasmin Dial https://github.com/jdial8/D3-Inequality-/blob/master/index.html
-  
-      if(options_area.state_area == 'all'){
+function makelineChart(options_area){
+  //inspired by Jasmin Dial https://github.com/jdial8/D3-Inequality-/blob/master/index.html
 
-        d3.json('all_uninsured_14_16.json', function(d){
+    if(options_area.state_area == 'all'){
 
-          
-          lineChart(d);});
-      }
-      else{
-        d3.json('uninsured_14_16.json', function(d){
+      d3.json('all_uninsured_14_16.json', function(d){
 
-          
-          d = makeOrderVal(d,'line')
+        
+        lineChart(d);});
+    }
+    else{
+      d3.json('uninsured_14_16.json', function(d){
 
-          d.filter(function(d) { return  d.state == options_area.state_area;})
+        
+        d = makeOrderVal(d,'line')
 
-            lineChart(d, options_area);})
-      }
+        d.filter(function(d) { return  d.state == options_area.state_area;})
 
-      function lineChart(data){
+          lineChart(d, options_area);})
+    }
 
-        var parseYear=d3.timeParse('%Y')
+function lineChart(data){
 
-        data = makeOrderVal(data,'line').sort(function(a,b){return a.year - b.year;})
+  var parseYear=d3.timeParse('%Y')
 
-        console.log(data, 'line data');
+  data = makeOrderVal(data,'line').sort(function(a,b){return a.year - b.year;})
 
-        y.domain(d3.extent(data, function(d){ return d.num_uninsured;}));
+  console.log(data, 'line data');
 
-        var g2 = svg.append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-          .classed('area_temp',true);
+  y.domain(d3.extent(data, function(d){ return d.num_uninsured;}));
 
-        // points
-         uninsured = g2.selectAll(".uText")
-          .data(data)
-          .enter()
-          .append("text")
-          .attr("class", "uText")
-          .attr("x", function(d) { if(options_area.state_area != 'all')
-            {if(d.state == options_area.state_area){
-              return x(parseYear(d.year));}}
-          else{
-              return x(parseYear(d.year));}
-            })
-          .attr("y", function (d) {if(options_area.state_area != 'all')
-            {if(d.state == options_area.state_area){
-              return y(d.num_uninsured);}}
-            else
-            {return y(d.num_uninsured)}})
-          .attr('z',10)
-          .text(function (d) {if(options_area.state_area != 'all')
-            {if(d.state == options_area.state_area){
-              return d.num_uninsured;}}
-            else
-            {
-              return d.num_uninsured}})
-          .classed('active',true)
-          .classed('area_temp',true);     
+  var g2 = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .classed('area_temp',true);
+
+  // points
+   uninsured = g2.selectAll(".uText")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("class", "uText")
+    .attr("x", function(d) { if(options_area.state_area != 'all')
+      {if(d.state == options_area.state_area){
+        return x(parseYear(d.year));}}
+    else{
+        return x(parseYear(d.year));}
+      })
+    .attr("y", function (d) {if(options_area.state_area != 'all')
+      {if(d.state == options_area.state_area){
+        return y(d.num_uninsured);}}
+      else
+      {return y(d.num_uninsured)}})
+    .attr('z',10)
+    .text(function (d) {if(options_area.state_area != 'all')
+      {if(d.state == options_area.state_area){
+        return d.num_uninsured;}}
+      else
+      {
+        return d.num_uninsured}})
+    .classed('active',true)
+    .classed('area_temp',true);     
     }
   };//end of area chart
  }
@@ -416,30 +381,28 @@ function makeOrderVal(d, chartType){
 
     return d;
     }//end if
-else{
-  d.forEach(function(e){
+  else{
+    d.forEach(function(e){
+      switch(e.state){
+        
+        case 'Illinois':
+          e['state']= 'IL';
+          break;
 
-    switch(e.state){
-      case 'Illinois':
-       e['state']= 'IL';
-       break;
+        case 'Indiana':
+          e['state']= 'IN';
+          break;
 
-      case 'Indiana':
-       e['state']= 'IN';
-       break;
+        case 'Michigan':
+          e['state']= 'MI';
+          break;
 
-      case 'Michigan':
-             e['state']= 'MI';
-             break;
+        case 'Wisconsin':
+          e['state']= 'WI';
+          break;
+        };})
 
-      case 'Wisconsin':
-             e['state']= 'WI';
-             break;
-
-      };})
-
-  return d
-}//end else
-
-}
+    return d
+  }//end else
+};
 
