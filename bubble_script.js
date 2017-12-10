@@ -43,12 +43,12 @@ function initialize(error, data,first_time) {
 
     color = d3.scaleOrdinal()
         .domain(["IL","IN",'MI','WI'])
-        .range(['#7B22FF', '#E84927', '#0D4EFF','#0CE846']);
+        .range(['#9289d4', '#89ccd4', '#d489a6','#a6d489']);
 
     var xAxis = d3.axisBottom()
-                            .scale(x);
+      .scale(x);
     var yAxis = d3.axisLeft()
-                            .scale(y);
+      .scale(y);
     var dataset;
 
     var f = d3.format(".2f")
@@ -63,20 +63,15 @@ function initialize(error, data,first_time) {
         .style('font-size', width / 3)
         .style('text-anchor', 'middle')
         .style('font-weight', 'bold')
-        .style('opacity', 0.4)
+        .style('opacity', 0.2)
         .text('2015');
 
-  	
     x.domain([200, d3.max(data, function (d) { return d.avg_silver_27 })]).nice()
-    y.domain([0.00, 100.00]).nice()
+    y.domain([60.00, 100.00]).nice()
     r.domain([0, 400000])
-
-   
 
     //if(first_time = true){
     bubble_data = data
-
-
 
     data = d3.nest()
         .key(function (d) { return d.year })
@@ -94,13 +89,10 @@ function initialize(error, data,first_time) {
                 return f.avg_silver_27
             })/+e.values.length
             e.values.forEach(function (f) { f.parent = e })
-
-        })
-    })
+        })})
     //}
 
     dataset = data  
-   
 
     var uniqueStates = data[0].values.map(function (d) { return d.key });
 
@@ -109,8 +101,6 @@ function initialize(error, data,first_time) {
 	  
     var years = d3.range(2015, 2017 + 1);
     var interval = 3000;
-
-
     
 	  var filters = bubble.append('defs')
 	      .selectAll('filter')
@@ -138,27 +128,27 @@ function initialize(error, data,first_time) {
 	      .attr('in2', 'gooey');
 
 	  bubble.append('g')
-	      .attr('class', 'x axis')
-	      .attr('transform', 'translate(' + margin.left + ',' + height + ')')
-	      .call(xAxis)
-	      .append('text')
-	      .attr('x', width)
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(' + margin.left + ',' + (height+10) + ')')
+      .call(xAxis)
+      .append('text')
+	      .attr('x', width-30)
 	      .attr('y', 30)
 	      .style('text-anchor', 'end')
 	      .style('font-weight', 'bold')
-	      .text('Average Silver Plan Premium Price Per Month ');
+	      .text('Average Silver Plan Premium');
 
 	  bubble.append('g')
-	      .attr('class', 'y axis')
-	      .attr('transform','translate('+ margin.left + ',' + 0 + ')')
-	      .call(yAxis.tickFormat(function(d) { return d + "%"; }))
-	      .append('text')
+      .attr('class', 'y axis')
+      .attr('transform','translate('+ margin.left + ',' + 10 + ')')
+      .call(yAxis.tickFormat(function(d) { return d + "%"; }))
+      .append('text')
 	      .attr('transform','rotate(-90)')
 	      .attr('x', 0)
 	      .attr('y', -55)
 	      .style('text-anchor', 'end')
 	      .style('font-weight', 'bold')
-	      .text('Percentage with Tax Credits');
+	      .text('Percent with Tax Credits');
 
 	  var yearIndex = 0;
 	  var year = '' + years[yearIndex];
@@ -227,37 +217,32 @@ function initialize(error, data,first_time) {
     })
 
       d3.select('#reset')
-      .on('click', function () {
-
-        bubble.selectAll('.tooltip_bubble')
-                   .remove().exit();
-
+        .on('click', function () {
+          bubble.selectAll('.tooltip_bubble')
+            .remove().exit();
           yearIndex = 0
           year = '' + years[yearIndex]
           first_time=false;
-
-
         update()
 
       })
 
 
     var states = bubble.selectAll('.state')
-                    .data(data[0].values)
-                    .enter().append('g')
-                    .attr('class', 'state')
-                    //.attr('id',function (d) { //console.log(d.key.replace('','text'), 'EXP'); return d.key.toLowerCase().replace(' ','text') })
-                    .attr('id',function (d) { return d.key.replace('','bubble')})
-                    .style('filter', function (d) { return 'url(#gooeyCodeFilter' + d.key.replace(' ', '-') + ')' })
-
-
+      .data(data[0].values)
+      .enter().append('g')
+      .attr('class', 'state')
+      //.attr('id',function (d) { //console.log(d.key.replace('','text'), 'EXP'); return d.key.toLowerCase().replace(' ','text') })
+      .attr('id',function (d) { return d.key.replace('','bubble')})
+      .style('filter', function (d) { return 'url(#gooeyCodeFilter' + d.key.replace(' ', '-') + ')' })
 
     states.append('circle')
         .attr('class', 'aggregate')
         .attr('cx', width/2)
         .attr('cy', height / 2)
         .style('fill', function (d) {return color(d.key) })
-        .style('opacity',0.4)
+        .attr('fill-opacity', 0.5)
+        .attr('stroke', "#cecece")
         .on('click', function (d) { //console.log(d.state_name,'line 198 explode');
          exploded.add(d.key); blurTransition.add(d.key) })
         //.append('title').text(function (d) { return d.key })
@@ -268,10 +253,7 @@ function initialize(error, data,first_time) {
     function incrementYear() {
         if(year < 2017){
         year = '' + years[++yearIndex >= years.length ? yearIndex = 0 : yearIndex]
-        
         update()
-        
-
         }
         //make a button to reset
     }
@@ -301,8 +283,9 @@ function initialize(error, data,first_time) {
             .attr('class', 'county')
             .attr('cx', width / 2)
             .attr('cy', height / 2)
-            .style('fill', function (d) { return color(d.state_name) })
-            .style('opacity',0.4)
+            .attr('fill', function (d) { return color(d.state_name) })
+            .attr('fill-opacity', 0.5)
+            .attr('stroke', "#cecece")
             .on('click', function (d) {//console.log(d.state_name, d.county_name,'line 237 explode');
              exploded.remove(d.state_name); blurTransition.add(d.state_name);})
 
@@ -319,8 +302,6 @@ function initialize(error, data,first_time) {
 
         //console.log("before selecting .aggregate");
         //console.log(exploded,"exploded")
-
-
 
         states.select('.aggregate')
             .transition(t)
@@ -429,14 +410,14 @@ function initialize(error, data,first_time) {
     
   legend1_area.append('rect')
     .attr('x', width/2 - 160)
-    .attr('y', height + margin.top*2.5)
+    .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#7B22FF')
+    .attr('fill', '#9289d4')
 
   legend1_area.append('text')
     .attr('x', width/2 - 135)
-      .attr('y', height + margin.top*3.3)
+      .attr('y', height + margin.top*4.7)
       .attr('class', 'ltext_area')
       .text('Illinois')
 
@@ -447,14 +428,14 @@ function initialize(error, data,first_time) {
     
   legend2_area.append('rect')
     .attr('x', width/2 - 60)
-    .attr('y', height + margin.top*2.5)
+    .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#E84927')
+    .attr('fill', '#89ccd4')
 
   legend2_area.append('text')
     .attr('x', width/2 - 35)
-      .attr('y', height + margin.top*3.3)
+      .attr('y', height + margin.top*4.7)
       .attr('class', 'ltext_area')
       .text('Indiana')
 
@@ -465,14 +446,14 @@ function initialize(error, data,first_time) {
 
   legend3_area.append('rect')
     .attr('x', width/2 +30)
-    .attr('y', height + margin.top*2.5)
+    .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#0D4EFF')
+    .attr('fill', '#d489a6')
 
   legend3_area.append('text')
     .attr('x', width/2 +55)
-      .attr('y', height + margin.top*3.3)
+      .attr('y', height + margin.top*4.7)
       .attr('class', 'ltext_area')
       .text('Michigan')
 
@@ -483,14 +464,14 @@ function initialize(error, data,first_time) {
 
   legend4_area.append('rect')
     .attr('x', width/2 + 130 )
-    .attr('y', height + margin.top*2.5)
+    .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#0CE846')
+    .attr('fill','#a6d489')
 
   legend4_area.append('text')
     .attr('x', width/2 + 155 )
-      .attr('y', height + margin.top*3.3)
+      .attr('y', height + margin.top*4.7)
       .attr('class', 'ltext_area')
       .text('Wisconsin')
 
