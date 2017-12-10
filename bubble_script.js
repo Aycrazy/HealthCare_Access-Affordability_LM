@@ -24,9 +24,6 @@ function initialize(error, data) {
     if(value_bubble != 'all'){
       data = data.filter(function(d) {return d.state_name == value_bubble;});
     }
-    else{
-      data = 
-    }
 
     var blurStable = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -7'
     var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -10'
