@@ -1,13 +1,13 @@
 //lots of code from here: https://bl.ocks.org/iamkevinv/0a24e9126cd2fa6b283c6f2d774b69a2
 
 var map_width = 300,
-    map_height = 300,
+    map_height = 400,
     active = d3.select(null);
 
 // make the projection
 var projection = d3.geoMercator()
-    .scale(1000)
-    .center([-70,37]);
+    .scale(1200)
+    .center([-72,40]);
 
 // start the zooom
 var zoom = d3.zoom()
