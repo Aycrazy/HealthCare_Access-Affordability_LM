@@ -3,9 +3,9 @@
     //grey out all bubbles exept selected county or state
     //tooltip on click
 
+var value_bubble = 'all';
 
-
-d3.json("scatter_area_data.json", initialize);
+d3.json("scatter_area_data.json",initialize);
 
 var counties;
 var bubble_data;
@@ -13,8 +13,20 @@ var bubble;
 var color ;
 var tool_tip_bubble;
 
-function initialize(error, data,first_time) {
+
+
+function initialize(error, data) {
     if (error) { throw error }
+
+    console.log(value_bubble, 'value 19')
+    
+
+    if(value_bubble != 'all'){
+      data = data.filter(function(d) {return d.state_name == value_bubble;});
+    }
+    else{
+      data = 
+    }
 
     var blurStable = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -7'
     var blurIn = '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -10'
@@ -27,6 +39,7 @@ function initialize(error, data,first_time) {
 
     bubble = d3.select('#bubble_chart')
         .append('svg')
+        .classed('bubble_temp',true)
         .attr('width', width + margin.left + margin.top*2)
         .attr('height', height + margin.top*2 + margin.bottom)
         .append('g')
@@ -52,8 +65,6 @@ function initialize(error, data,first_time) {
     var dataset;
 
     var f = d3.format(".2f")
-
-    var first_time = true;
 
     var yearLabel = bubble.append('text')
         .attr('class', 'year')
@@ -220,6 +231,7 @@ function initialize(error, data,first_time) {
         .on('click', function () {
           bubble.selectAll('.tooltip_bubble')
             .remove().exit();
+
           yearIndex = 0
           year = '' + years[yearIndex]
           first_time=false;
@@ -478,25 +490,34 @@ function initialize(error, data,first_time) {
 	  };//end scatter function
 
 
-function changeStateBubble(value){
+function changeStateBubble(value_bubble){
 
-  all_abbr = {'IN':bubbleIN,'IL':bubbleIL,'WI':bubbleWI,'MI':bubbleMI}
+  // for(key in all_abbr){
+  //   if(key != value){
 
-  for(key in all_abbr){
-    if(key != value){
+  //      console.log(value,'VALUE');
 
-       var active   = all_abbr[key].active ? false : true,
-       newOpacity = active ? 0 : 1;
-       // hide or show the elements
-       //console.log('#bubble'+key);
-       d3.select('#bubble'+key).style("opacity", newOpacity);
-       // update whether or not the elements are active
-       all_abbr[key].active = active;
-    }}
+  //      var active   = all_abbr[key].active ? false : true,
+  //      newOpacity = active ? 0 : 1;
+  //      // hide or show the elements
+  //      //console.log('#bubble'+key);
+  //      d3.select('#bubble'+key).style("opacity", newOpacity);
+  //      // update whether or not the elements are active
+  //      all_abbr[key].active = active;
+  //   }}
+    value_bubble = value_bubble;
+
+    console.log(value_bubble,'value 508');
+
+    d3.selectAll(".bubble_temp")
+        .remove()
+        .exit();
+
+    d3.json("scatter_area_data.json",initialize);
+
+};
    // determine if current circle is visible
 
-
-}
 
 //not currently working
     function updateCircles(value){

@@ -76,7 +76,7 @@ function clicked(d) {
     
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
-  state_abbr_bubb = d.properties.STUSPS;
+  value_bubble = d.properties.STUSPS;
 
   console.log(active.node(),'this node');
   console.log(state_name, state_abbr);
@@ -96,7 +96,7 @@ function clicked(d) {
   changeStateBump(state_name);
   changeStateBar(state_name);
   changeStateArea(state_abbr);
-  changeStateBubble(state_abbr);
+  changeStateBubble(value_bubble);
 }
 
 function reset() {
@@ -106,6 +106,7 @@ function reset() {
 
   var state_name = 'all';
   var state_abbr = 'all';
+  value_bubble = 'all';
   console.log(state_name)
 
   map_svg.transition()
@@ -115,7 +116,7 @@ function reset() {
   changeStateBump(state_name);
   changeStateBar(state_name);
   changeStateArea(state_abbr);
-  changeStateBubble(state_abbr_bubb);
+  changeStateBubble(value_bubble);
 }
 
 function zoomed() {
