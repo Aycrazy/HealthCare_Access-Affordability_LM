@@ -51,7 +51,7 @@ function initialize(error, data) {
 
     color = d3.scaleOrdinal()
         .domain(["IL","IN",'MI','WI'])
-        .range(['#9289d4', '#89ccd4', '#d489a6','#a6d489']);
+        .range(['#160B97', '#9B24A0', '#F97A4F','#ECF830']);
 
     var xAxis = d3.axisBottom()
       .scale(x);
@@ -411,7 +411,7 @@ function initialize(error, data) {
     .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#9289d4')
+    .attr('fill', '#160B97')
 
   legend1_area.append('text')
     .attr('x', width/2 - 135)
@@ -429,7 +429,7 @@ function initialize(error, data) {
     .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#89ccd4')
+    .attr('fill', '#9B24A0')
 
   legend2_area.append('text')
     .attr('x', width/2 - 35)
@@ -447,7 +447,7 @@ function initialize(error, data) {
     .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#d489a6')
+    .attr('fill', '#F97A4F')
 
   legend3_area.append('text')
     .attr('x', width/2 +55)
@@ -465,7 +465,7 @@ function initialize(error, data) {
     .attr('y', height + margin.top*4)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill','#a6d489')
+    .attr('fill','#ECF830')
 
   legend4_area.append('text')
     .attr('x', width/2 + 155 )

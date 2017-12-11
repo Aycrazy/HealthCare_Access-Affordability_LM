@@ -70,7 +70,7 @@ var barChart = function(chart_data, options_bar) {
   var yAxis_bar = d3.axisLeft(y_bar);
 
   var color_bar = d3.scaleOrdinal()
-    .range(["#CEBD89", "#CA7C2A", "#653900"]);
+    .range(["#CC4678", "#E1E707", "#0D0888"]);
 
   //draw x axis
   chart_bar.append("g")
@@ -155,7 +155,7 @@ var barChart = function(chart_data, options_bar) {
     .attr('y', this.height + 60)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', "#CEBD89")
+    .attr('fill', "#CC4678")
 
   legend1_bar.selectAll('text')
     .data(this.data)
@@ -177,7 +177,7 @@ var barChart = function(chart_data, options_bar) {
     .attr('y', this.height + 60)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', "#CA7C2A")
+    .attr('fill', "#E1E707")
 
   legend2_bar.selectAll('text')
     .data(this.data)
@@ -199,7 +199,7 @@ var barChart = function(chart_data, options_bar) {
     .attr('y', this.height + 60)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', "#653900")
+    .attr('fill', "#0D0888")
 
   legend3_bar.selectAll('text')
     .data(this.data)

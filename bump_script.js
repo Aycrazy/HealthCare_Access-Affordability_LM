@@ -85,7 +85,7 @@ var bumpChart = function(chart_data, options_bump){
 
   var color = d3.scaleThreshold()
     .domain([0, 25000, 50000, 75000])
-    .range(["#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]);
+    .range(['#ECF830','#F97A4F', '#9B24A0', '#160B97']);
 
   // Axis
   var xAxis_bump = d3.axisBottom(x_bump);
@@ -276,7 +276,7 @@ chart_bump.append("path")
 	    .attr('y', this.height/2 - 175)
 	    .attr('width', 15)
 	    .attr('height', 15)
-	    .attr('fill', "#009E73")
+	    .attr('fill','#ECF830')
 
 	legend1_bump
 	    .append('text')
@@ -297,7 +297,7 @@ chart_bump.append("path")
 	    .attr('y', this.height/2 - 117)
 	    .attr('width', 15)
 	    .attr('height', 15)
-	    .attr('fill',  "#0072B2")
+	    .attr('fill','#F97A4F')
 
 	legend3_bump
 	    .append('text')
@@ -319,7 +319,7 @@ chart_bump.append("path")
 	    .attr('y', this.height/2 - 50)
 	    .attr('width', 15)
 	    .attr('height', 15)
-	    .attr('fill', "#D55E00")
+	    .attr('fill', '#9B24A0')
 
 	legend4_bump
 	    .append('text')
@@ -340,7 +340,7 @@ chart_bump.append("path")
 	    .attr('y', this.height/2 + 10)
 	    .attr('width', 15)
 	    .attr('height', 15)
-	    .attr('fill',  "#CC79A7")
+	    .attr('fill', '#160B97')
 
 	legend5_bump
 	    .append('text')
