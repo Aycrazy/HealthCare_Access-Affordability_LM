@@ -115,7 +115,7 @@ function areaChart(area_data, options_area){
         else{return f_date(d)}}))
 
       .selectAll("text")
-        .attr("class", "xaxis_area")
+        .classed('xaxis_bar',true)
         .attr("transform","translate(0,0)rotate(0)");
 
   g.append("g")
@@ -124,17 +124,16 @@ function areaChart(area_data, options_area){
 
   g.append('text')             
     .attr('transform', 'translate(' + (70) + ' ,' + (height+43) + ')')
-    .attr('class', 'xText_area')
-    //.style('text-anchor', 'middle')
-    .text('Median Income Level (Percent FPL)');
+    .classed('xaxis_bar',true)    //.style('text-anchor', 'middle')
+    .text('Month/Year');
 
   // add y axis text
   g.append('text')
     .attr('transform', 'rotate(-90)translate(-' + height + ',-15)')
-    .attr('class', 'yText_area')
+    .attr('xaxis_bar',true)
     .attr('dy', '-2.5em')
     //.style('text-anchor', 'middle')
-    .text('Percent Reporting Fair/Poor Health');
+    .text('Number of Plans Purchased');
 
   // create catastrophic legend
   var legend1_area= svg.append('g')

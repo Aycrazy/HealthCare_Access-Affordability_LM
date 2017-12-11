@@ -140,10 +140,13 @@ function initialize(error, data) {
       .attr('transform', 'translate(' + margin.left + ',' + (height+10) + ')')
       .call(xAxis)
       .append('text')
-	      .attr('x', width-30)
+        .classed('xaxis_area',true) 
+	      .attr('x', width-330)
 	      .attr('y', 30)
-	      .style('text-anchor', 'end')
-	      .style('font-weight', 'bold')
+	      //.style('text-anchor', 'end')
+	      //.style('font-weight', 'bold')
+        .style('font-size','16px')
+        .classed('xaxis_bar',true)
 	      .text('Average Silver Plan Premium');
 
 	  bubble.append('g')
@@ -151,11 +154,13 @@ function initialize(error, data) {
       .attr('transform','translate('+ margin.left + ',' + 10 + ')')
       .call(yAxis.tickFormat(function(d) { return d + "%"; }))
       .append('text')
+        .classed('xaxis_area',true) 
 	      .attr('transform','rotate(-90)')
 	      .attr('x', 0)
 	      .attr('y', -55)
-	      .style('text-anchor', 'end')
-	      .style('font-weight', 'bold')
+        .style('font-size','16px')
+	      //.style('text-anchor', 'end')
+	      //.style('font-weight', 'bold')
 	      .text('Percent with Tax Credits');
 
 	  var yearIndex = 0;

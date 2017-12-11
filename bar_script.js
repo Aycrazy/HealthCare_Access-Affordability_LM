@@ -79,18 +79,20 @@ var barChart = function(chart_data, options_bar) {
   chart_bar.append("g")
       .attr("class", "xaxis_bar")
       .attr('transform', 'translate(0,' + (this.height)+ ')')
-      .call(xAxis_bar);
+      .call(xAxis_bar)
+      .style('font-family','Lucidatypewriter');
 
   // draw y axis
   chart_bar.append("g")
     .attr("class", "yaxis_bar")
     .attr('transform', 'translate(0,' + 0 + ')')
-    .call(yAxis_bar);
+    .call(yAxis_bar)
+    .style('font-family','Lucidatypewriter');
 
   // add x axis text
   chart_bar.append('text')             
     .attr('transform', 'translate(' + (this.width/2) + ' ,' + (this.height+40) + ')')
-    .attr('class', 'xText_bar')
+    .classed('xaxis_bar',true)
     .style('text-anchor', 'middle')
     .text('Median Income Level (Percent FPL)');
 
