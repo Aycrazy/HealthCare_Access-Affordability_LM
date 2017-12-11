@@ -58,7 +58,7 @@ function areaChart(area_data, options_area){
 
   var x = d3.scaleTime().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
-      z = d3.scaleOrdinal().range(['#ECF830',"#CC4678",'#160B97','#9B24A0','#F97A4F']);
+      z = d3.scaleOrdinal().range(['#C468CC','#CCBA97','#958E99','#FFDA68','#83C2CC']);
 
   var stack = d3.stack();
 
@@ -147,7 +147,7 @@ function areaChart(area_data, options_area){
     .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill', '#ECF830')
+    .attr('fill', '#C468CC')
 
   legend1_area.selectAll('text')
     .data(data)
@@ -170,7 +170,7 @@ function areaChart(area_data, options_area){
     .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill',"#CC4678")
+    .attr('fill', '#CCBA97')
 
   legend2_area.selectAll('text')
     .data(data)
@@ -193,7 +193,7 @@ function areaChart(area_data, options_area){
     .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill','#160B97')
+    .attr('fill', '#958E99')
 
   legend3_area.selectAll('text')
     .data(data)
@@ -216,7 +216,7 @@ function areaChart(area_data, options_area){
     .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill','#9B24A0')
+    .attr('fill', '#FFDA68')
 
   legend4_area.selectAll('text')
     .data(data)
@@ -239,7 +239,7 @@ function areaChart(area_data, options_area){
     .attr('y', height + 70)
     .attr('width', 15)
     .attr('height', 15)
-    .attr('fill','#F97A4F')
+    .attr('fill', '#83C2CC')
 
   legend5_area.selectAll('text')
     .data(data)
