@@ -52,10 +52,10 @@ function areaChart(area_data, options_area){
     .attr('height',height+margin.top+margin.bottom)
     .classed('area_temp',true);
 
-  //var unButton = d3.select('#uninsured');
+  var unButton = d3.select('#uninsured');
 
-  // unButton.append("button")
-  //   .text('Number Uninsured')
+  unButton.append("button")
+    .text('Number Uninsured')
 
   var x = d3.scaleTime().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
@@ -69,7 +69,6 @@ function areaChart(area_data, options_area){
 
   var keys = ['catastrophic','bronze','silver','gold','platinum'];
   
-  // do this down where the swich and case are d = ['01//01/2014', ]
 
   data = makeOrderVal(data,'area').sort(function(a,b){return a.date - b.date;})
   data = type(data,'area')

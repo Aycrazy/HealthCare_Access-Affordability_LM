@@ -71,6 +71,15 @@ text.year {
     top: 10px;  left: 120px;
 }
 
+#uninsured {
+    position: relative;
+    top: 10px;  left: 70px;
+}
+
+#controls_area{
+  margin-top:-20px;
+}
+
 .click-active, .active {
   opacity: 1.0;
   stroke-opacity: 1.0;
