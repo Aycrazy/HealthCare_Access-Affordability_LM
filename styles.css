@@ -118,15 +118,20 @@ g.yaxis_bar {
 }
 
 text.ltext_bar,
-text.ltext_area,
-text.xText_bar,
-text.xText_area,
-text.yText_bar
-text.yText_area {
-    font-size: 10px;
+text.ltext_area {
+  font-size: 12px;
     font-family: Lucidatypewriter, monospace;
     fill: #2d2e2e;
     font-style: italic;
+}
+
+text.xText_bar,
+text.xText_area,
+text.yText_bar,
+text.yText_area {
+    font-size: 12px;
+    font-family: Lucidatypewriter, monospace;
+    fill: #2d2e2e;
 }
 
 .tooltip_bar,
