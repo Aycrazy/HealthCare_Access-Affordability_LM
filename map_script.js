@@ -66,8 +66,6 @@ d3.json("state_level_geojson.json", function(error, state_map) {
 
 // when a state is clicked, it zooms in, prints the state name and abbreviation and classifies it as active
 function clicked(d) {
-  console.log('clicked ran');
-  console.log(this,'this in clicked');
   if (active.node() === this) return reset(); // if you click on the state again, reset the chart.
   active.classed("active", false);
   
@@ -77,9 +75,6 @@ function clicked(d) {
   state_name = d.properties.NAME;
   state_abbr = d.properties.STUSPS;
   value_bubble = d.properties.STUSPS;
-
-  console.log(active.node(),'this node');
-  console.log(state_name, state_abbr);
 
   var bounds = path_map.bounds(d),
       dx = bounds[1][0] - bounds[0][0],
@@ -107,7 +102,6 @@ function reset() {
   var state_name = 'all';
   var state_abbr = 'all';
   value_bubble = 'all';
-  console.log(state_name)
 
   map_svg.transition()
       .duration(2000)

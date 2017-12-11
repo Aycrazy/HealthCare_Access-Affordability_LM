@@ -9,9 +9,7 @@ var bump = d3.json('bump_chart_state_data.json', function (d){
 
 function changeStateBump(value){
 	options_bump.state_bump = value;
-	//console.log(options_bump, "line 11 bump")
 	if(options_bump.state_bump != 'all'){
-		console.log('i ran a state');
 		d3.selectAll(".bump_temp")
 		    .remove()
 		    .exit();
@@ -20,8 +18,7 @@ function changeStateBump(value){
     	dataset = d.filter(function(d) {return d.State == options_bump.state_bump;});
     	bc = bumpChart(dataset,options_bump) 
   		})}
-  	else{		
-  		console.log('i ran all');
+  	else{	
   		d3.selectAll(".bump_temp")
 		    .remove()
 		    .exit();
@@ -40,8 +37,6 @@ var bumpChart = function(chart_data, options_bump){
 	this.width = 960 - this.margin.left - this.margin.right;
 	this.height = 600 - this.margin.top - this.margin.bottom;
 
-	//console.log(this.data)
-	
 	//create chart
 	chart_bump = d3.select('#bump_chart')
 	  .append('svg')
@@ -104,8 +99,6 @@ var bumpChart = function(chart_data, options_bump){
       //.transition()
      	//.duration(1000);
 
-  console.log('worked2');
-
   // chart_bump.append("g")
   //     .attr("class", "y axis")
   //     .call(yAxis_bump)
@@ -117,9 +110,6 @@ var bumpChart = function(chart_data, options_bump){
   var counties = d3.map(this.data, function(d) {return d['County'];})
   	.keys();
 
-  console.log(this.data.filter(function(d) {
-      if(d.County == 'Illinois') {
-        return d;}}));
 
   var data = this.data;
 
@@ -220,8 +210,6 @@ chart_bump.append("path")
   	by_year_median_income = by_year_median_income.sort(function(a,b){
   		return a[1] - b[1]})
 
-  	console.log(by_year_median_income);
-
 
 	chart_bump.append("g")
 		.selectAll("text")
@@ -282,7 +270,7 @@ chart_bump.append("path")
 		.attr('width', 100)
 		.classed('bump_temp',true);
 
-	legend1_bump.selectAll('path')
+	legend1_bump
 	  	.append('rect')
 	    .attr('x', this.width)
 	    .attr('y', this.height/2 - 175)
@@ -290,11 +278,11 @@ chart_bump.append("path")
 	    .attr('height', 15)
 	    .attr('fill', "#009E73")
 
-	legend1_bump.selectAll('text')
+	legend1_bump
 	    .append('text')
 	    .attr('x', this.width+25)
 	      .attr('y', this.height/2 - 162)
-	      .attr('class', 'ltext_bump')
+	      .classed('ltext_bump',true)
 	      .text('<$25k')
 
 	  // create the 25-$50,000 legend
@@ -303,7 +291,7 @@ chart_bump.append("path")
 	    .attr('width', 100)
 	    .classed('bump_temp',true);
 
-	legend3_bump.selectAll('path')
+	legend3_bump
 	    .append('rect')
 	    .attr('x', this.width)
 	    .attr('y', this.height/2 - 117)
@@ -311,12 +299,13 @@ chart_bump.append("path")
 	    .attr('height', 15)
 	    .attr('fill',  "#0072B2")
 
-	legend3_bump.selectAll('text')
+	legend3_bump
 	    .append('text')
 	    .attr('x', this.width+25)
 	    .attr('y', this.height/2 - 105.5)
-	    .attr('class', 'ltext_bump')
+	    .classed('ltext_bump',true)
 	    .text('$25k-$50k')
+	    .style('font-family','monospace')
 
 	  // create the 50-$75,000 legend
 	var legend4_bump = chart_bump.append('g')
@@ -324,7 +313,7 @@ chart_bump.append("path")
 	    .attr('width', 100)
 	    .classed('bump_temp',true);
 
-	legend4_bump.selectAll('path')
+	legend4_bump
 	    .append('rect')
 	    .attr('x', this.width)
 	    .attr('y', this.height/2 - 50)
@@ -332,11 +321,11 @@ chart_bump.append("path")
 	    .attr('height', 15)
 	    .attr('fill', "#D55E00")
 
-	legend4_bump.selectAll('text')
+	legend4_bump
 	    .append('text')
 	    .attr('x', this.width+25)
 	    .attr('y', this.height/2 - 37.5)
-	    .attr('class', 'ltext_bump')
+	    .classed('ltext_bump',true)
 	    .text('$50k-$75k')
 
 	  // create the 75-$100,000 legend
@@ -345,7 +334,7 @@ chart_bump.append("path")
 	    .attr('width', 100)
 	    .classed('bump_temp',true);
 
-	legend5_bump.selectAll('path')
+	legend5_bump
 	    .append('rect')
 	    .attr('x', this.width)
 	    .attr('y', this.height/2 + 10)
@@ -353,11 +342,11 @@ chart_bump.append("path")
 	    .attr('height', 15)
 	    .attr('fill',  "#CC79A7")
 
-	legend5_bump.selectAll('text')
+	legend5_bump
 	    .append('text')
 	    .attr('x', this.width+25)
 	    .attr('y', this.height/2 +23)
-	    .attr('class', 'ltext_bump')
+	    .classed('ltext_bump',true)
 	    .text('$75k<')};
 
 

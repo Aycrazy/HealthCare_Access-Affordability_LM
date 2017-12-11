@@ -23,7 +23,6 @@ function changeStateArea(value){
         })}
 
     else{   
-        //console.log('i ran all');
         d3.selectAll(".area_temp")
           .remove()
           .exit();
@@ -100,12 +99,10 @@ function areaChart(area_data, options_area){
     .append("text")
       .attr("x", width - 6)
       .attr("y", function(d) { 
-        //console.log(d,'what am i');
         return f(y(d[d.length - 1][0] + d[d.length - 1][1] / 2)); })
       .attr("dy", ".25em")
       .style("font", "10px sans-serif")
       .style("text-anchor", "end");
-      //.text(function(d) { console.log(d.key,'key'); return d.key; });
 
   g.append("g")
       .attr("class", "axis axis--x")
@@ -253,7 +250,7 @@ function areaChart(area_data, options_area){
       .text('Platinum')
 
   // svg.append('text')
-  //   .attr("transform", "translate(" + ( margin.left ) + " ," + margin.top/1.7 + ")")
+  //  .attr("transform", "translate(" + ( margin.left ) + " ," + margin.top/1.7 + ")")
   //   .text("Area Chart of Metal Plans Purchased by Year " + options_area.state_area)
   //   .style('font-size','16')
   //   .style('font-weight', 'bold')
@@ -306,7 +303,6 @@ function lineChart(data){
 
   data = makeOrderVal(data,'line').sort(function(a,b){return a.year - b.year;})
 
-  console.log(data, 'line data');
 
   y.domain(d3.extent(data, function(d){ return d.num_uninsured;}));
 
@@ -353,14 +349,12 @@ function type(d, chartType) {
   columns = ['num_uninsured'];
     }
 
-  for (var i = 1, n = columns.length; i < n; ++i){ 
-    //console.log(d[columns[i]],'bug 263');
+  for (var i = 1, n = columns.length; i < n; ++i){
     d[columns[i]] = d[columns[i]];
   return d;}
 }
 
 function makeOrderVal(d, chartType){
-  console.log(d);
   if(chartType == 'area'){
 
     var parseDate=d3.timeParse('%m/%Y')
@@ -368,7 +362,6 @@ function makeOrderVal(d, chartType){
     d.forEach( function(e){
     switch(e.date){
       case 'December 2014':
-        //console.log('hello');
        e['date']= parseDate('12/2014') ;
        break;
 

@@ -18,8 +18,6 @@ var tool_tip_bubble;
 function initialize(error, data) {
     if (error) { throw error }
 
-    console.log(value_bubble, 'value 19')
-    
 
     if(value_bubble != 'all'){
       data = data.filter(function(d) {return d.state_name == value_bubble;});
@@ -183,7 +181,6 @@ function initialize(error, data) {
 
     //       //bubble_data = d3.map(x  = )
 
-    //       console.log( bubble_data, 'bubb_data');
 
     //       topicMenu.append("select")
     //             .selectAll("option")
@@ -239,7 +236,6 @@ function initialize(error, data) {
       .data(data[0].values)
       .enter().append('g')
       .attr('class', 'state')
-      //.attr('id',function (d) { //console.log(d.key.replace('','text'), 'EXP'); return d.key.toLowerCase().replace(' ','text') })
       .attr('id',function (d) { return d.key.replace('','bubble')})
       .style('filter', function (d) { return 'url(#gooeyCodeFilter' + d.key.replace(' ', '-') + ')' })
 
@@ -250,7 +246,7 @@ function initialize(error, data) {
         .style('fill', function (d) {return color(d.key) })
         .attr('fill-opacity', 0.5)
         .attr('stroke', "#cecece")
-        .on('click', function (d) { //console.log(d.state_name,'line 198 explode');
+        .on('click', function (d) { 
          exploded.add(d.key); blurTransition.add(d.key) })
         //.append('title').text(function (d) { return d.key })
 
@@ -293,22 +289,20 @@ function initialize(error, data) {
             .attr('fill', function (d) { return color(d.state_name) })
             .attr('fill-opacity', 0.5)
             .attr('stroke', "#cecece")
-            .on('click', function (d) {//console.log(d.state_name, d.county_name,'line 237 explode');
+            .on('click', function (d) {
              exploded.remove(d.state_name); blurTransition.add(d.state_name);})
 
         //enterCounties.append('title').text(function (d) { return d.county_name })
 
         counties = counties.merge(enterCounties)
 
-        //console.log(counties,'counties after merge');
+        
 
         var t =  d3.transition()
                     .ease(d3.easeLinear)
                     .duration(1400)
                      .delay(interval/2)
 
-        //console.log("before selecting .aggregate");
-        //console.log(exploded,"exploded")
 
         states.select('.aggregate')
             .transition(t)
@@ -322,7 +316,6 @@ function initialize(error, data) {
             
 
 
-        //console.log("after selecting .aggregate");
 
         counties
             .transition(t)
@@ -333,7 +326,6 @@ function initialize(error, data) {
                 return x((exploded.has(d.state_name) ? d : d.parent).avg_silver_27) })
             .attr('cy', function (d) {
                 var retval = y(f((exploded.has(d.state_name) ? d : d.parent).yes_aptc/(exploded.has(d.state_name) ? d : d.parent).total_plan_selections *100));
-                //console.log(retval);
                 if(retval){ return retval;}})
                         
          // Tooltips
@@ -344,7 +336,6 @@ function initialize(error, data) {
 
             bubble.selectAll("circle")
                 .on("mouseover", function(d) {  
-                  //console.log(exploded.size(), 'explode length');
                   if(year == '2017'){
                     if(!exploded.size()){
                       bubble.selectAll('.state');
@@ -490,19 +481,16 @@ function changeStateBubble(value_bubble){
   // for(key in all_abbr){
   //   if(key != value){
 
-  //      console.log(value,'VALUE');
 
   //      var active   = all_abbr[key].active ? false : true,
   //      newOpacity = active ? 0 : 1;
   //      // hide or show the elements
-  //      //console.log('#bubble'+key);
   //      d3.select('#bubble'+key).style("opacity", newOpacity);
   //      // update whether or not the elements are active
   //      all_abbr[key].active = active;
   //   }}
     value_bubble = value_bubble;
 
-    console.log(value_bubble,'value 508');
 
     d3.selectAll(".bubble_temp")
         .remove()
@@ -521,7 +509,6 @@ function changeStateBubble(value_bubble){
                 .transition()
                 .duration(1000)
                 .on("start",function(d){
-                  console.log(d.county_name);
                   if(!d.hasOwnProperty(value)){
                   d3.select(this)
                     .attr('opacity', 0);}

@@ -125,6 +125,10 @@ text.ltext_area {
     font-style: italic;
 }
 
+text.ltext_bump{
+  font-family:monospace;
+}
+
 text.xText_bar,
 text.xText_area,
 text.yText_bar,

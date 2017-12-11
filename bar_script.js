@@ -9,8 +9,7 @@ var bar = d3.json("bar_graph_data.json", function(d) {
 
 function changeStateBar(value){
   options_bar.state_bar = value;
-  //console.log(options_bar.state_bar, "line 10")
-  
+
   if(options_bar.state_bar != "All") {
     d3.selectAll(".bar_temp")
       .remove()
@@ -22,14 +21,12 @@ function changeStateBar(value){
     })}
   
   else{
-    //console.log("I'm running all!")
     d3.selectAll(".bar_temp")
       .remove()
       .exit();
 
     d3.json("bar_graph_data.json", function(d) { 
       dataset = d.filter(function(d) {return d.state == "all"; })
-      console.log(dataset, "line 30")
       barChart(dataset,options_bar);
 
   })}};
@@ -47,8 +44,8 @@ var barChart = function(chart_data, options_bar) {
   this.width = 550 - this.margin.left - this.margin.right;
   this.height = 400 - this.margin.top - this.margin.bottom;
   
-  //console.log(this.data, "in barChart")
-  
+
+
   //set up chart
   chart_bar = d3.select('#bar_chart')
     .append('svg')
