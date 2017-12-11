@@ -362,7 +362,7 @@ function initialize(error, data) {
                           "<br/>" + "Year: " + d.year)
                           .style("visibility", "visible");
 
-                        tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight + 5) + "px")
+                        tooltip_bubble.style("top", event.pageY - (tooltip_bubble.node().clientHeight*1.5 + 5) + "px")
                        .style("left", event.pageX - (tooltip_bubble.node().clientWidth)*4 + "px");
                       }
                     else{
