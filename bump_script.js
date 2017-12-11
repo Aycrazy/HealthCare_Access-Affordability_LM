@@ -84,8 +84,8 @@ var bumpChart = function(chart_data, options_bump){
       .range([3, 10]);
 
   var color = d3.scaleThreshold()
-    .domain([0, 25000, 50000, 75000])
-    .range(['#ECF830','#F97A4F', '#9B24A0', '#160B97']);
+    .domain([ 25000, 50000, 75000])
+    .range(['#ECF830','#F97A4F', '#9B24A0','#160B97']);
 
   // Axis
   var xAxis_bump = d3.axisBottom(x_bump);
@@ -148,7 +148,7 @@ chart_bump.append("path")
     .text( function(d){ if (d.year == 2010){return d.County;} if (d.year == 2017){return d.County;}})
     .attr("x", function(d) { return x_bump(d['year'])-15; })
     .attr("y", function(d) { return y_bump(d['position']); })
-    .style('fill',function(d){ return color(d.median_income)
+    .style('fill',function(d){console.log(color(d.median_income)); return color(d.median_income)
     })
     
     // replace spaces with - and remove '.' (from d.c. united)
