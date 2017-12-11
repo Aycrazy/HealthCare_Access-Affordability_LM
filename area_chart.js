@@ -116,23 +116,25 @@ function areaChart(area_data, options_area){
 
       .selectAll("text")
         .classed('xaxis_bar',true)
-        .attr("transform","translate(0,0)rotate(0)");
+        .attr("transform","translate(0,0)rotate(0)")
+        .style('font-family','Lucidatypewriter');;
 
   g.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y));
+      .attr("class", "yaxis_bar")
+      .call(d3.axisLeft(y))
+      .style('font-family','Lucidatypewriter');;
 
   g.append('text')             
-    .attr('transform', 'translate(' + (70) + ' ,' + (height+43) + ')')
-    .classed('xaxis_bar',true)    //.style('text-anchor', 'middle')
+    .attr('transform', 'translate(' + (width/2-30) + ' ,' + (height+43) + ')')
+    .classed('xText_bar',true)
     .text('Month/Year');
 
   // add y axis text
   g.append('text')
-    .attr('transform', 'rotate(-90)translate(-' + height + ',-15)')
-    .attr('xaxis_bar',true)
+    .attr('transform', 'rotate(-90)translate(-' + height/2 + ',-25)')
+    .classed('yText_bar',true)
     .attr('dy', '-2.5em')
-    //.style('text-anchor', 'middle')
+    .style('text-anchor', 'middle')
     .text('Number of Plans Purchased');
 
   // create catastrophic legend
